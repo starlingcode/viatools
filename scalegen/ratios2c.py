@@ -4,7 +4,7 @@ import numpy as np
 
 from math import gcd
 
-
+text_file = open("chromatic5prime.txt", "a")
 
 unison5prime = np.array([1, 1])
 min_second5prime = np.array([15, 16])
@@ -54,4 +54,24 @@ for i in range(0, 128):
 
     ratio_tag = chromatic5prime_tags[(i - 64) % 12] + str(octave)
 
-    print("#define " + ratio_tag + " {" + str(integer_part) + ", " + str(fractional_part) + ", " + str(fundamental_divisor) + "}")
+    text_file.write("#define " + ratio_tag + " {" + str(integer_part) + ", " + str(fractional_part) + ", " + str(fundamental_divisor) + "}\n")
+
+for i in range(0, 128):
+
+    octave = int((i - 64) / 12)
+
+    ratio_tag = chromatic5prime_tags[(i - 64) % 12] + str(octave)
+
+    if i == 0:
+        text_file.write("const ScaleNote chromatic5prime[128] = {" + ratio_tag + ", ")
+    elif i != 127:
+        if i%12 != 0:
+            text_file.write(ratio_tag + ", ")
+        else:
+            text_file.write(ratio_tag + ", \n")
+    else:
+        text_file.write(ratio_tag + "};")
+
+
+
+
