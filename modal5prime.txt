@@ -1,0 +1,694 @@
+#define ratio9_32 {18432, 0, 32}
+#define ratio8_1 {524288, 0, 1}
+#define ratio9_320 {1843, 858993459, 320}
+#define ratio80_4 {1310720, 0, 1}
+#define ratio15_32 {30720, 0, 32}
+#define ratio4_48 {5461, 1431655765, 12}
+#define ratio64_3 {1398101, 1431655765, 3}
+#define ratio9_256 {2304, 0, 256}
+#define ratio5_3 {109226, 2863311530, 3}
+#define ratio10_3 {218453, 1431655765, 3}
+#define ratio12_5 {157286, 1717986918, 5}
+#define ratio6_2 {196608, 0, 1}
+#define ratio16_3 {349525, 1431655765, 3}
+#define ratio80_3 {1747626, 2863311531, 3}
+#define ratio40_4 {655360, 0, 1}
+#define ratio15_8 {122880, 0, 8}
+#define ratio24_2 {786432, 0, 1}
+#define ratio10_4 {163840, 0, 2}
+#define ratio8_3 {174762, 2863311530, 3}
+#define ratio15_128 {7680, 0, 128}
+#define ratio256_15 {1118481, 286331153, 15}
+#define ratio8_160 {3276, 3435973836, 20}
+#define ratio240_8 {1966080, 0, 1}
+#define ratio9_160 {3686, 1717986918, 160}
+#define ratio25_72 {22755, 2386092942, 72}
+#define ratio2_1 {131072, 0, 1}
+#define ratio128_5 {1677721, 2576980378, 5}
+#define ratio192_5 {2516582, 1717986918, 5}
+#define ratio40_3 {873813, 1431655765, 3}
+#define ratio9_64 {9216, 0, 64}
+#define ratio36_8 {294912, 0, 2}
+#define ratio5_32 {10240, 0, 32}
+#define ratio18_5 {235929, 2576980377, 5}
+#define ratio9_5 {117964, 3435973836, 5}
+#define ratio16_5 {209715, 858993459, 5}
+#define ratio12_2 {393216, 0, 1}
+#define ratio9_8 {73728, 0, 8}
+#define ratio144_5 {1887436, 3435973837, 5}
+#define ratio1_1 {65536, 0, 1}
+#define ratio1_16 {4096, 0, 16}
+#define ratio36_5 {471859, 858993459, 5}
+#define ratio9_40 {14745, 2576980377, 40}
+#define ratio5_64 {5120, 0, 64}
+#define ratio18_8 {147456, 0, 4}
+#define ratio16_30 {34952, 2290649224, 15}
+#define ratio60_8 {491520, 0, 2}
+#define ratio6_10 {39321, 2576980377, 5}
+#define ratio96_5 {1258291, 858993459, 5}
+#define ratio5_192 {1706, 2863311530, 192}
+#define ratio3_16 {12288, 0, 16}
+#define ratio400_18 {1456355, 2386092942, 9}
+#define ratio20_4 {327680, 0, 1}
+#define ratio3_8 {24576, 0, 8}
+#define ratio144_8 {1179648, 0, 1}
+#define ratio128_15 {559240, 2290649224, 15}
+#define ratio3_128 {1536, 0, 128}
+#define ratio8_10 {52428, 3435973836, 5}
+#define ratio4_12 {21845, 1431655765, 3}
+#define ratio3_2 {98304, 0, 2}
+#define ratio5_24 {13653, 1431655765, 24}
+#define ratio48_2 {1572864, 0, 1}
+#define ratio30_8 {245760, 0, 4}
+#define ratio8_40 {13107, 858993459, 5}
+#define ratio6_160 {2457, 2576980377, 80}
+#define ratio120_8 {983040, 0, 1}
+#define ratio4_3 {87381, 1431655765, 3}
+#define ratio9_16 {36864, 0, 16}
+#define ratio32_5 {419430, 1717986918, 5}
+#define ratio4_1 {262144, 0, 1}
+#define ratio16_120 {8738, 572662306, 15}
+#define ratio100_18 {364088, 3817748707, 9}
+#define ratio16_60 {17476, 1145324612, 15}
+#define ratio72_5 {943718, 1717986918, 5}
+#define ratio48_5 {629145, 2576980377, 5}
+#define ratio1_2 {32768, 0, 2}
+#define ratio200_18 {728177, 3340530119, 9}
+#define ratio8_5 {104857, 2576980377, 5}
+#define ratio15_512 {1920, 0, 512}
+#define ratio16_480 {2184, 2290649224, 30}
+#define ratio64_15 {279620, 1145324612, 15}
+#define ratio1_8 {8192, 0, 8}
+#define ratio8_20 {26214, 1717986918, 5}
+#define ratio8_320 {1638, 1717986918, 40}
+#define ratio20_3 {436906, 2863311530, 3}
+#define ratio32_1 {2097152, 0, 1}
+#define ratio9_20 {29491, 858993459, 20}
+#define ratio25_576 {2844, 1908874353, 576}
+#define ratio4_24 {10922, 2863311530, 6}
+#define ratio25_36 {45511, 477218588, 36}
+#define ratio25_288 {5688, 3817748707, 288}
+#define ratio24_5 {314572, 3435973836, 5}
+#define ratio9_128 {4608, 0, 128}
+#define ratio5_48 {6826, 2863311530, 48}
+#define ratio25_144 {11377, 3340530119, 144}
+#define ratio16_1 {1048576, 0, 1}
+#define ratio16_15 {69905, 286331153, 15}
+#define ratio32_15 {139810, 572662306, 15}
+#define ratio4_96 {2730, 2863311530, 24}
+#define ratio25_18 {91022, 954437176, 18}
+#define ratio8_80 {6553, 2576980377, 10}
+#define ratio15_256 {3840, 0, 256}
+#define ratio5_6 {54613, 1431655765, 6}
+#define ratio5_96 {3413, 1431655765, 96}
+#define ratio512_15 {2236962, 572662306, 15}
+#define ratio1_4 {16384, 0, 4}
+#define ratio6_20 {19660, 3435973836, 10}
+#define ratio4_6 {43690, 2863311530, 3}
+#define ratio16_240 {4369, 286331153, 15}
+#define ratio6_40 {9830, 1717986918, 20}
+#define ratio5_8 {40960, 0, 8}
+#define ratio6_80 {4915, 858993459, 40}
+#define ratio6_5 {78643, 858993459, 5}
+#define ratio5_12 {27306, 2863311530, 12}
+#define ratio5_4 {81920, 0, 4}
+#define ratio5_16 {20480, 0, 16}
+#define ratio3_64 {3072, 0, 64}
+#define ratio9_80 {7372, 3435973836, 80}
+#define ratio5_128 {2560, 0, 128}
+#define ratio50_18 {182044, 1908874353, 9}
+#define ratio3_32 {6144, 0, 32}
+#define ratio32_3 {699050, 2863311530, 3}
+#define ratio288_8 {2359296, 0, 1}
+#define ratio64_5 {838860, 3435973837, 5}
+#define ratio15_64 {15360, 0, 64}
+#define ratio15_16 {61440, 0, 16}
+#define ratio9_10 {58982, 1717986918, 10}
+#define ratio72_8 {589824, 0, 1}
+#define ratio3_4 {49152, 0, 4}
+#define ratio1_32 {2048, 0, 32}
+const ScaleNote Chromatic5prime[128] = {ratio8_320, ratio5_192, ratio9_320, ratio15_512, ratio1_32, ratio16_480, ratio9_256, ratio6_160, ratio5_128, ratio4_96, ratio25_576, ratio3_64, ratio8_160, 
+ratio5_96, ratio9_160, ratio15_256, ratio1_16, ratio16_240, ratio9_128, ratio6_80, ratio5_64, ratio4_48, ratio25_288, ratio3_32, ratio8_80, 
+ratio5_48, ratio9_80, ratio15_128, ratio1_8, ratio16_120, ratio9_64, ratio6_40, ratio5_32, ratio4_24, ratio25_144, ratio3_16, ratio8_40, 
+ratio5_24, ratio9_40, ratio15_64, ratio1_4, ratio16_60, ratio9_32, ratio6_20, ratio5_16, ratio4_12, ratio25_72, ratio3_8, ratio8_20, 
+ratio5_12, ratio9_20, ratio15_32, ratio1_2, ratio16_30, ratio9_16, ratio6_10, ratio5_8, ratio4_6, ratio25_36, ratio3_4, ratio8_10, 
+ratio5_6, ratio9_10, ratio15_16, ratio1_1, ratio16_15, ratio9_8, ratio6_5, ratio5_4, ratio4_3, ratio25_18, ratio3_2, ratio8_5, 
+ratio5_3, ratio9_5, ratio15_8, ratio2_1, ratio32_15, ratio18_8, ratio12_5, ratio10_4, ratio8_3, ratio50_18, ratio6_2, ratio16_5, 
+ratio10_3, ratio18_5, ratio30_8, ratio4_1, ratio64_15, ratio36_8, ratio24_5, ratio20_4, ratio16_3, ratio100_18, ratio12_2, ratio32_5, 
+ratio20_3, ratio36_5, ratio60_8, ratio8_1, ratio128_15, ratio72_8, ratio48_5, ratio40_4, ratio32_3, ratio200_18, ratio24_2, ratio64_5, 
+ratio40_3, ratio72_5, ratio120_8, ratio16_1, ratio256_15, ratio144_8, ratio96_5, ratio80_4, ratio64_3, ratio400_18, ratio48_2, ratio128_5, 
+ratio80_3, ratio144_5, ratio240_8, ratio32_1, ratio512_15, ratio288_8, ratio192_5}; 
+
+const ScaleNote Major5prime[128] = {ratio3_128, ratio5_192, ratio5_192, ratio15_512, ratio1_32, ratio1_32, ratio9_256, ratio9_256, ratio5_128, ratio4_96, ratio4_96, ratio3_64, ratio3_64, 
+ratio5_96, ratio5_96, ratio15_256, ratio1_16, ratio1_16, ratio9_128, ratio9_128, ratio5_64, ratio4_48, ratio4_48, ratio3_32, ratio3_32, 
+ratio5_48, ratio5_48, ratio15_128, ratio1_8, ratio1_8, ratio9_64, ratio9_64, ratio5_32, ratio4_24, ratio4_24, ratio3_16, ratio3_16, 
+ratio5_24, ratio5_24, ratio15_64, ratio1_4, ratio1_4, ratio9_32, ratio9_32, ratio5_16, ratio4_12, ratio4_12, ratio3_8, ratio3_8, 
+ratio5_12, ratio5_12, ratio15_32, ratio1_2, ratio1_2, ratio9_16, ratio9_16, ratio5_8, ratio4_6, ratio4_6, ratio3_4, ratio3_4, 
+ratio5_6, ratio5_6, ratio15_16, ratio1_1, ratio1_1, ratio9_8, ratio9_8, ratio5_4, ratio4_3, ratio4_3, ratio3_2, ratio3_2, 
+ratio5_3, ratio5_3, ratio15_8, ratio2_1, ratio2_1, ratio18_8, ratio18_8, ratio10_4, ratio8_3, ratio8_3, ratio6_2, ratio6_2, 
+ratio10_3, ratio10_3, ratio30_8, ratio4_1, ratio4_1, ratio36_8, ratio36_8, ratio20_4, ratio16_3, ratio16_3, ratio12_2, ratio12_2, 
+ratio20_3, ratio20_3, ratio60_8, ratio8_1, ratio8_1, ratio72_8, ratio72_8, ratio40_4, ratio32_3, ratio32_3, ratio24_2, ratio24_2, 
+ratio40_3, ratio40_3, ratio120_8, ratio16_1, ratio16_1, ratio144_8, ratio144_8, ratio80_4, ratio64_3, ratio64_3, ratio48_2, ratio48_2, 
+ratio80_3, ratio80_3, ratio240_8, ratio32_1, ratio32_1, ratio288_8, ratio288_8}; 
+
+const ScaleNote Dorian5prime[128] = {ratio3_128, ratio5_192, ratio9_320, ratio9_320, ratio1_32, ratio1_32, ratio9_256, ratio9_256, ratio5_128, ratio5_128, ratio5_128, ratio3_64, ratio3_64, 
+ratio5_96, ratio9_160, ratio9_160, ratio1_16, ratio1_16, ratio9_128, ratio9_128, ratio5_64, ratio5_64, ratio5_64, ratio3_32, ratio3_32, 
+ratio5_48, ratio9_80, ratio9_80, ratio1_8, ratio1_8, ratio9_64, ratio9_64, ratio5_32, ratio5_32, ratio5_32, ratio3_16, ratio3_16, 
+ratio5_24, ratio9_40, ratio9_40, ratio1_4, ratio1_4, ratio9_32, ratio9_32, ratio5_16, ratio5_16, ratio5_16, ratio3_8, ratio3_8, 
+ratio5_12, ratio9_20, ratio9_20, ratio1_2, ratio1_2, ratio9_16, ratio9_16, ratio5_8, ratio5_8, ratio5_8, ratio3_4, ratio3_4, 
+ratio5_6, ratio9_10, ratio9_10, ratio1_1, ratio1_1, ratio9_8, ratio9_8, ratio5_4, ratio5_4, ratio5_4, ratio3_2, ratio3_2, 
+ratio5_3, ratio9_5, ratio9_5, ratio2_1, ratio2_1, ratio18_8, ratio18_8, ratio10_4, ratio10_4, ratio10_4, ratio6_2, ratio6_2, 
+ratio10_3, ratio18_5, ratio18_5, ratio4_1, ratio4_1, ratio36_8, ratio36_8, ratio20_4, ratio20_4, ratio20_4, ratio12_2, ratio12_2, 
+ratio20_3, ratio36_5, ratio36_5, ratio8_1, ratio8_1, ratio72_8, ratio72_8, ratio40_4, ratio40_4, ratio40_4, ratio24_2, ratio24_2, 
+ratio40_3, ratio72_5, ratio72_5, ratio16_1, ratio16_1, ratio144_8, ratio144_8, ratio80_4, ratio80_4, ratio80_4, ratio48_2, ratio48_2, 
+ratio80_3, ratio144_5, ratio144_5, ratio32_1, ratio32_1, ratio288_8, ratio288_8}; 
+
+const ScaleNote Phrygian5prime[128] = {ratio8_320, ratio8_320, ratio9_320, ratio9_320, ratio1_32, ratio16_480, ratio16_480, ratio6_160, ratio6_160, ratio4_96, ratio4_96, ratio3_64, ratio8_160, 
+ratio8_160, ratio9_160, ratio9_160, ratio1_16, ratio16_240, ratio16_240, ratio6_80, ratio6_80, ratio4_48, ratio4_48, ratio3_32, ratio8_80, 
+ratio8_80, ratio9_80, ratio9_80, ratio1_8, ratio16_120, ratio16_120, ratio6_40, ratio6_40, ratio4_24, ratio4_24, ratio3_16, ratio8_40, 
+ratio8_40, ratio9_40, ratio9_40, ratio1_4, ratio16_60, ratio16_60, ratio6_20, ratio6_20, ratio4_12, ratio4_12, ratio3_8, ratio8_20, 
+ratio8_20, ratio9_20, ratio9_20, ratio1_2, ratio16_30, ratio16_30, ratio6_10, ratio6_10, ratio4_6, ratio4_6, ratio3_4, ratio8_10, 
+ratio8_10, ratio9_10, ratio9_10, ratio1_1, ratio16_15, ratio16_15, ratio6_5, ratio6_5, ratio4_3, ratio4_3, ratio3_2, ratio8_5, 
+ratio8_5, ratio9_5, ratio9_5, ratio2_1, ratio32_15, ratio32_15, ratio12_5, ratio12_5, ratio8_3, ratio8_3, ratio6_2, ratio16_5, 
+ratio16_5, ratio18_5, ratio18_5, ratio4_1, ratio64_15, ratio64_15, ratio24_5, ratio24_5, ratio16_3, ratio16_3, ratio12_2, ratio32_5, 
+ratio32_5, ratio36_5, ratio36_5, ratio8_1, ratio128_15, ratio128_15, ratio48_5, ratio48_5, ratio32_3, ratio32_3, ratio24_2, ratio64_5, 
+ratio64_5, ratio72_5, ratio72_5, ratio16_1, ratio256_15, ratio256_15, ratio96_5, ratio96_5, ratio64_3, ratio64_3, ratio48_2, ratio128_5, 
+ratio128_5, ratio144_5, ratio144_5, ratio32_1, ratio512_15, ratio512_15, ratio192_5}; 
+
+const ScaleNote Lydian5prime[128] = {ratio3_128, ratio5_192, ratio5_192, ratio15_512, ratio1_32, ratio1_32, ratio9_256, ratio9_256, ratio5_128, ratio5_128, ratio25_576, ratio3_64, ratio3_64, 
+ratio5_96, ratio5_96, ratio15_256, ratio1_16, ratio1_16, ratio9_128, ratio9_128, ratio5_64, ratio5_64, ratio25_288, ratio3_32, ratio3_32, 
+ratio5_48, ratio5_48, ratio15_128, ratio1_8, ratio1_8, ratio9_64, ratio9_64, ratio5_32, ratio5_32, ratio25_144, ratio3_16, ratio3_16, 
+ratio5_24, ratio5_24, ratio15_64, ratio1_4, ratio1_4, ratio9_32, ratio9_32, ratio5_16, ratio5_16, ratio25_72, ratio3_8, ratio3_8, 
+ratio5_12, ratio5_12, ratio15_32, ratio1_2, ratio1_2, ratio9_16, ratio9_16, ratio5_8, ratio5_8, ratio25_36, ratio3_4, ratio3_4, 
+ratio5_6, ratio5_6, ratio15_16, ratio1_1, ratio1_1, ratio9_8, ratio9_8, ratio5_4, ratio5_4, ratio25_18, ratio3_2, ratio3_2, 
+ratio5_3, ratio5_3, ratio15_8, ratio2_1, ratio2_1, ratio18_8, ratio18_8, ratio10_4, ratio10_4, ratio50_18, ratio6_2, ratio6_2, 
+ratio10_3, ratio10_3, ratio30_8, ratio4_1, ratio4_1, ratio36_8, ratio36_8, ratio20_4, ratio20_4, ratio100_18, ratio12_2, ratio12_2, 
+ratio20_3, ratio20_3, ratio60_8, ratio8_1, ratio8_1, ratio72_8, ratio72_8, ratio40_4, ratio40_4, ratio200_18, ratio24_2, ratio24_2, 
+ratio40_3, ratio40_3, ratio120_8, ratio16_1, ratio16_1, ratio144_8, ratio144_8, ratio80_4, ratio80_4, ratio400_18, ratio48_2, ratio48_2, 
+ratio80_3, ratio80_3, ratio240_8, ratio32_1, ratio32_1, ratio288_8, ratio288_8}; 
+
+const ScaleNote Mixolydian5prime[128] = {ratio3_128, ratio5_192, ratio9_320, ratio9_320, ratio1_32, ratio1_32, ratio9_256, ratio9_256, ratio5_128, ratio4_96, ratio4_96, ratio3_64, ratio3_64, 
+ratio5_96, ratio9_160, ratio9_160, ratio1_16, ratio1_16, ratio9_128, ratio9_128, ratio5_64, ratio4_48, ratio4_48, ratio3_32, ratio3_32, 
+ratio5_48, ratio9_80, ratio9_80, ratio1_8, ratio1_8, ratio9_64, ratio9_64, ratio5_32, ratio4_24, ratio4_24, ratio3_16, ratio3_16, 
+ratio5_24, ratio9_40, ratio9_40, ratio1_4, ratio1_4, ratio9_32, ratio9_32, ratio5_16, ratio4_12, ratio4_12, ratio3_8, ratio3_8, 
+ratio5_12, ratio9_20, ratio9_20, ratio1_2, ratio1_2, ratio9_16, ratio9_16, ratio5_8, ratio4_6, ratio4_6, ratio3_4, ratio3_4, 
+ratio5_6, ratio9_10, ratio9_10, ratio1_1, ratio1_1, ratio9_8, ratio9_8, ratio5_4, ratio4_3, ratio4_3, ratio3_2, ratio3_2, 
+ratio5_3, ratio9_5, ratio9_5, ratio2_1, ratio2_1, ratio18_8, ratio18_8, ratio10_4, ratio8_3, ratio8_3, ratio6_2, ratio6_2, 
+ratio10_3, ratio18_5, ratio18_5, ratio4_1, ratio4_1, ratio36_8, ratio36_8, ratio20_4, ratio16_3, ratio16_3, ratio12_2, ratio12_2, 
+ratio20_3, ratio36_5, ratio36_5, ratio8_1, ratio8_1, ratio72_8, ratio72_8, ratio40_4, ratio32_3, ratio32_3, ratio24_2, ratio24_2, 
+ratio40_3, ratio72_5, ratio72_5, ratio16_1, ratio16_1, ratio144_8, ratio144_8, ratio80_4, ratio64_3, ratio64_3, ratio48_2, ratio48_2, 
+ratio80_3, ratio144_5, ratio144_5, ratio32_1, ratio32_1, ratio288_8, ratio288_8}; 
+
+const ScaleNote Aeolian5prime[128] = {ratio8_320, ratio8_320, ratio9_320, ratio9_320, ratio1_32, ratio1_32, ratio9_256, ratio6_160, ratio6_160, ratio4_96, ratio4_96, ratio3_64, ratio8_160, 
+ratio8_160, ratio9_160, ratio9_160, ratio1_16, ratio1_16, ratio9_128, ratio6_80, ratio6_80, ratio4_48, ratio4_48, ratio3_32, ratio8_80, 
+ratio8_80, ratio9_80, ratio9_80, ratio1_8, ratio1_8, ratio9_64, ratio6_40, ratio6_40, ratio4_24, ratio4_24, ratio3_16, ratio8_40, 
+ratio8_40, ratio9_40, ratio9_40, ratio1_4, ratio1_4, ratio9_32, ratio6_20, ratio6_20, ratio4_12, ratio4_12, ratio3_8, ratio8_20, 
+ratio8_20, ratio9_20, ratio9_20, ratio1_2, ratio1_2, ratio9_16, ratio6_10, ratio6_10, ratio4_6, ratio4_6, ratio3_4, ratio8_10, 
+ratio8_10, ratio9_10, ratio9_10, ratio1_1, ratio1_1, ratio9_8, ratio6_5, ratio6_5, ratio4_3, ratio4_3, ratio3_2, ratio8_5, 
+ratio8_5, ratio9_5, ratio9_5, ratio2_1, ratio2_1, ratio18_8, ratio12_5, ratio12_5, ratio8_3, ratio8_3, ratio6_2, ratio16_5, 
+ratio16_5, ratio18_5, ratio18_5, ratio4_1, ratio4_1, ratio36_8, ratio24_5, ratio24_5, ratio16_3, ratio16_3, ratio12_2, ratio32_5, 
+ratio32_5, ratio36_5, ratio36_5, ratio8_1, ratio8_1, ratio72_8, ratio48_5, ratio48_5, ratio32_3, ratio32_3, ratio24_2, ratio64_5, 
+ratio64_5, ratio72_5, ratio72_5, ratio16_1, ratio16_1, ratio144_8, ratio96_5, ratio96_5, ratio64_3, ratio64_3, ratio48_2, ratio128_5, 
+ratio128_5, ratio144_5, ratio144_5, ratio32_1, ratio32_1, ratio288_8, ratio192_5}; 
+
+const ScaleNote Locrian5prime[128] = {ratio8_320, ratio8_320, ratio9_320, ratio9_320, ratio1_32, ratio16_480, ratio16_480, ratio6_160, ratio6_160, ratio4_96, ratio25_576, ratio25_576, ratio8_160, 
+ratio8_160, ratio9_160, ratio9_160, ratio1_16, ratio16_240, ratio16_240, ratio6_80, ratio6_80, ratio4_48, ratio25_288, ratio25_288, ratio8_80, 
+ratio8_80, ratio9_80, ratio9_80, ratio1_8, ratio16_120, ratio16_120, ratio6_40, ratio6_40, ratio4_24, ratio25_144, ratio25_144, ratio8_40, 
+ratio8_40, ratio9_40, ratio9_40, ratio1_4, ratio16_60, ratio16_60, ratio6_20, ratio6_20, ratio4_12, ratio25_72, ratio25_72, ratio8_20, 
+ratio8_20, ratio9_20, ratio9_20, ratio1_2, ratio16_30, ratio16_30, ratio6_10, ratio6_10, ratio4_6, ratio25_36, ratio25_36, ratio8_10, 
+ratio8_10, ratio9_10, ratio9_10, ratio1_1, ratio16_15, ratio16_15, ratio6_5, ratio6_5, ratio4_3, ratio25_18, ratio25_18, ratio8_5, 
+ratio8_5, ratio9_5, ratio9_5, ratio2_1, ratio32_15, ratio32_15, ratio12_5, ratio12_5, ratio8_3, ratio50_18, ratio50_18, ratio16_5, 
+ratio16_5, ratio18_5, ratio18_5, ratio4_1, ratio64_15, ratio64_15, ratio24_5, ratio24_5, ratio16_3, ratio100_18, ratio100_18, ratio32_5, 
+ratio32_5, ratio36_5, ratio36_5, ratio8_1, ratio128_15, ratio128_15, ratio48_5, ratio48_5, ratio32_3, ratio200_18, ratio200_18, ratio64_5, 
+ratio64_5, ratio72_5, ratio72_5, ratio16_1, ratio256_15, ratio256_15, ratio96_5, ratio96_5, ratio64_3, ratio400_18, ratio400_18, ratio128_5, 
+ratio128_5, ratio144_5, ratio144_5, ratio32_1, ratio512_15, ratio512_15, ratio192_5}; 
+
+#define ratio1_8 {8192, 0, 8}
+#define ratio1_4 {16384, 0, 4}
+#define ratio9_160 {3686, 1717986918, 160}
+#define ratio16_480 {2184, 2290649224, 30}
+#define ratio1_16 {4096, 0, 16}
+#define ratio8_10 {52428, 3435973836, 5}
+#define ratio10_3 {218453, 1431655765, 3}
+#define ratio60_8 {491520, 0, 2}
+#define ratio9_10 {58982, 1717986918, 10}
+#define ratio10_4 {163840, 0, 2}
+#define ratio4_3 {87381, 1431655765, 3}
+#define ratio15_256 {3840, 0, 256}
+#define ratio1_32 {2048, 0, 32}
+#define ratio192_5 {2516582, 1717986918, 5}
+#define ratio1_2 {32768, 0, 2}
+#define ratio50_18 {182044, 1908874353, 9}
+#define ratio3_128 {1536, 0, 128}
+#define ratio6_20 {19660, 3435973836, 10}
+#define ratio4_12 {21845, 1431655765, 3}
+#define ratio2_1 {131072, 0, 1}
+#define ratio5_48 {6826, 2863311530, 48}
+#define ratio256_15 {1118481, 286331153, 15}
+#define ratio9_8 {73728, 0, 8}
+#define ratio9_128 {4608, 0, 128}
+#define ratio15_32 {30720, 0, 32}
+#define ratio32_1 {2097152, 0, 1}
+#define ratio144_8 {1179648, 0, 1}
+#define ratio16_30 {34952, 2290649224, 15}
+#define ratio4_48 {5461, 1431655765, 12}
+#define ratio5_128 {2560, 0, 128}
+#define ratio15_8 {122880, 0, 8}
+#define ratio48_5 {629145, 2576980377, 5}
+#define ratio12_2 {393216, 0, 1}
+#define ratio6_5 {78643, 858993459, 5}
+#define ratio5_8 {40960, 0, 8}
+#define ratio64_15 {279620, 1145324612, 15}
+#define ratio15_512 {1920, 0, 512}
+#define ratio12_5 {157286, 1717986918, 5}
+#define ratio30_8 {245760, 0, 4}
+#define ratio5_6 {54613, 1431655765, 6}
+#define ratio25_144 {11377, 3340530119, 144}
+#define ratio16_15 {69905, 286331153, 15}
+#define ratio4_1 {262144, 0, 1}
+#define ratio72_5 {943718, 1717986918, 5}
+#define ratio32_3 {699050, 2863311530, 3}
+#define ratio9_32 {18432, 0, 32}
+#define ratio8_20 {26214, 1717986918, 5}
+#define ratio80_3 {1747626, 2863311531, 3}
+#define ratio5_32 {10240, 0, 32}
+#define ratio3_2 {98304, 0, 2}
+#define ratio128_5 {1677721, 2576980378, 5}
+#define ratio3_4 {49152, 0, 4}
+#define ratio3_64 {3072, 0, 64}
+#define ratio9_40 {14745, 2576980377, 40}
+#define ratio15_64 {15360, 0, 64}
+#define ratio80_4 {1310720, 0, 1}
+#define ratio20_3 {436906, 2863311530, 3}
+#define ratio240_8 {1966080, 0, 1}
+#define ratio8_40 {13107, 858993459, 5}
+#define ratio5_192 {1706, 2863311530, 192}
+#define ratio20_4 {327680, 0, 1}
+#define ratio9_64 {9216, 0, 64}
+#define ratio3_16 {12288, 0, 16}
+#define ratio15_16 {61440, 0, 16}
+#define ratio16_120 {8738, 572662306, 15}
+#define ratio25_36 {45511, 477218588, 36}
+#define ratio16_3 {349525, 1431655765, 3}
+#define ratio8_80 {6553, 2576980377, 10}
+#define ratio6_80 {4915, 858993459, 40}
+#define ratio5_64 {5120, 0, 64}
+#define ratio1_1 {65536, 0, 1}
+#define ratio16_240 {4369, 286331153, 15}
+#define ratio64_5 {838860, 3435973837, 5}
+#define ratio24_2 {786432, 0, 1}
+#define ratio288_8 {2359296, 0, 1}
+#define ratio5_4 {81920, 0, 4}
+#define ratio400_18 {1456355, 2386092942, 9}
+#define ratio9_80 {7372, 3435973836, 80}
+#define ratio16_1 {1048576, 0, 1}
+#define ratio64_3 {1398101, 1431655765, 3}
+#define ratio9_16 {36864, 0, 16}
+#define ratio8_1 {524288, 0, 1}
+#define ratio6_10 {39321, 2576980377, 5}
+#define ratio120_8 {983040, 0, 1}
+#define ratio16_60 {17476, 1145324612, 15}
+#define ratio9_5 {117964, 3435973836, 5}
+#define ratio5_12 {27306, 2863311530, 12}
+#define ratio40_3 {873813, 1431655765, 3}
+#define ratio25_576 {2844, 1908874353, 576}
+#define ratio5_96 {3413, 1431655765, 96}
+#define ratio4_24 {10922, 2863311530, 6}
+#define ratio100_18 {364088, 3817748707, 9}
+#define ratio200_18 {728177, 3340530119, 9}
+#define ratio25_288 {5688, 3817748707, 288}
+#define ratio25_72 {22755, 2386092942, 72}
+#define ratio48_2 {1572864, 0, 1}
+#define ratio15_128 {7680, 0, 128}
+#define ratio9_20 {29491, 858993459, 20}
+#define ratio24_5 {314572, 3435973836, 5}
+#define ratio4_96 {2730, 2863311530, 24}
+#define ratio3_32 {6144, 0, 32}
+#define ratio8_160 {3276, 3435973836, 20}
+#define ratio128_15 {559240, 2290649224, 15}
+#define ratio18_5 {235929, 2576980377, 5}
+#define ratio5_16 {20480, 0, 16}
+#define ratio32_15 {139810, 572662306, 15}
+#define ratio9_256 {2304, 0, 256}
+#define ratio6_40 {9830, 1717986918, 20}
+#define ratio8_5 {104857, 2576980377, 5}
+#define ratio6_160 {2457, 2576980377, 80}
+#define ratio96_5 {1258291, 858993459, 5}
+#define ratio9_320 {1843, 858993459, 320}
+#define ratio18_8 {147456, 0, 4}
+#define ratio25_18 {91022, 954437176, 18}
+#define ratio16_5 {209715, 858993459, 5}
+#define ratio40_4 {655360, 0, 1}
+#define ratio4_6 {43690, 2863311530, 3}
+#define ratio3_8 {24576, 0, 8}
+#define ratio36_8 {294912, 0, 2}
+#define ratio144_5 {1887436, 3435973837, 5}
+#define ratio5_3 {109226, 2863311530, 3}
+#define ratio8_320 {1638, 1717986918, 40}
+#define ratio8_3 {174762, 2863311530, 3}
+#define ratio72_8 {589824, 0, 1}
+#define ratio32_5 {419430, 1717986918, 5}
+#define ratio6_2 {196608, 0, 1}
+#define ratio512_15 {2236962, 572662306, 15}
+#define ratio5_24 {13653, 1431655765, 24}
+#define ratio36_5 {471859, 858993459, 5}
+const ScaleNote Chromatic5prime[128] = {ratio8_320, ratio5_192, ratio9_320, ratio15_512, ratio1_32, ratio16_480, ratio9_256, ratio6_160, ratio5_128, ratio4_96, ratio25_576, ratio3_64, ratio8_160, 
+ratio5_96, ratio9_160, ratio15_256, ratio1_16, ratio16_240, ratio9_128, ratio6_80, ratio5_64, ratio4_48, ratio25_288, ratio3_32, ratio8_80, 
+ratio5_48, ratio9_80, ratio15_128, ratio1_8, ratio16_120, ratio9_64, ratio6_40, ratio5_32, ratio4_24, ratio25_144, ratio3_16, ratio8_40, 
+ratio5_24, ratio9_40, ratio15_64, ratio1_4, ratio16_60, ratio9_32, ratio6_20, ratio5_16, ratio4_12, ratio25_72, ratio3_8, ratio8_20, 
+ratio5_12, ratio9_20, ratio15_32, ratio1_2, ratio16_30, ratio9_16, ratio6_10, ratio5_8, ratio4_6, ratio25_36, ratio3_4, ratio8_10, 
+ratio5_6, ratio9_10, ratio15_16, ratio1_1, ratio16_15, ratio9_8, ratio6_5, ratio5_4, ratio4_3, ratio25_18, ratio3_2, ratio8_5, 
+ratio5_3, ratio9_5, ratio15_8, ratio2_1, ratio32_15, ratio18_8, ratio12_5, ratio10_4, ratio8_3, ratio50_18, ratio6_2, ratio16_5, 
+ratio10_3, ratio18_5, ratio30_8, ratio4_1, ratio64_15, ratio36_8, ratio24_5, ratio20_4, ratio16_3, ratio100_18, ratio12_2, ratio32_5, 
+ratio20_3, ratio36_5, ratio60_8, ratio8_1, ratio128_15, ratio72_8, ratio48_5, ratio40_4, ratio32_3, ratio200_18, ratio24_2, ratio64_5, 
+ratio40_3, ratio72_5, ratio120_8, ratio16_1, ratio256_15, ratio144_8, ratio96_5, ratio80_4, ratio64_3, ratio400_18, ratio48_2, ratio128_5, 
+ratio80_3, ratio144_5, ratio240_8, ratio32_1, ratio512_15, ratio288_8, ratio192_5}; 
+
+const ScaleNote Major5prime[128] = {ratio3_128, ratio5_192, ratio5_192, ratio15_512, ratio1_32, ratio1_32, ratio9_256, ratio9_256, ratio5_128, ratio4_96, ratio4_96, ratio3_64, ratio3_64, 
+ratio5_96, ratio5_96, ratio15_256, ratio1_16, ratio1_16, ratio9_128, ratio9_128, ratio5_64, ratio4_48, ratio4_48, ratio3_32, ratio3_32, 
+ratio5_48, ratio5_48, ratio15_128, ratio1_8, ratio1_8, ratio9_64, ratio9_64, ratio5_32, ratio4_24, ratio4_24, ratio3_16, ratio3_16, 
+ratio5_24, ratio5_24, ratio15_64, ratio1_4, ratio1_4, ratio9_32, ratio9_32, ratio5_16, ratio4_12, ratio4_12, ratio3_8, ratio3_8, 
+ratio5_12, ratio5_12, ratio15_32, ratio1_2, ratio1_2, ratio9_16, ratio9_16, ratio5_8, ratio4_6, ratio4_6, ratio3_4, ratio3_4, 
+ratio5_6, ratio5_6, ratio15_16, ratio1_1, ratio1_1, ratio9_8, ratio9_8, ratio5_4, ratio4_3, ratio4_3, ratio3_2, ratio3_2, 
+ratio5_3, ratio5_3, ratio15_8, ratio2_1, ratio2_1, ratio18_8, ratio18_8, ratio10_4, ratio8_3, ratio8_3, ratio6_2, ratio6_2, 
+ratio10_3, ratio10_3, ratio30_8, ratio4_1, ratio4_1, ratio36_8, ratio36_8, ratio20_4, ratio16_3, ratio16_3, ratio12_2, ratio12_2, 
+ratio20_3, ratio20_3, ratio60_8, ratio8_1, ratio8_1, ratio72_8, ratio72_8, ratio40_4, ratio32_3, ratio32_3, ratio24_2, ratio24_2, 
+ratio40_3, ratio40_3, ratio120_8, ratio16_1, ratio16_1, ratio144_8, ratio144_8, ratio80_4, ratio64_3, ratio64_3, ratio48_2, ratio48_2, 
+ratio80_3, ratio80_3, ratio240_8, ratio32_1, ratio32_1, ratio288_8, ratio288_8}; 
+
+const ScaleNote Dorian5prime[128] = {ratio3_128, ratio5_192, ratio9_320, ratio9_320, ratio1_32, ratio1_32, ratio9_256, ratio9_256, ratio5_128, ratio5_128, ratio5_128, ratio3_64, ratio3_64, 
+ratio5_96, ratio9_160, ratio9_160, ratio1_16, ratio1_16, ratio9_128, ratio9_128, ratio5_64, ratio5_64, ratio5_64, ratio3_32, ratio3_32, 
+ratio5_48, ratio9_80, ratio9_80, ratio1_8, ratio1_8, ratio9_64, ratio9_64, ratio5_32, ratio5_32, ratio5_32, ratio3_16, ratio3_16, 
+ratio5_24, ratio9_40, ratio9_40, ratio1_4, ratio1_4, ratio9_32, ratio9_32, ratio5_16, ratio5_16, ratio5_16, ratio3_8, ratio3_8, 
+ratio5_12, ratio9_20, ratio9_20, ratio1_2, ratio1_2, ratio9_16, ratio9_16, ratio5_8, ratio5_8, ratio5_8, ratio3_4, ratio3_4, 
+ratio5_6, ratio9_10, ratio9_10, ratio1_1, ratio1_1, ratio9_8, ratio9_8, ratio5_4, ratio5_4, ratio5_4, ratio3_2, ratio3_2, 
+ratio5_3, ratio9_5, ratio9_5, ratio2_1, ratio2_1, ratio18_8, ratio18_8, ratio10_4, ratio10_4, ratio10_4, ratio6_2, ratio6_2, 
+ratio10_3, ratio18_5, ratio18_5, ratio4_1, ratio4_1, ratio36_8, ratio36_8, ratio20_4, ratio20_4, ratio20_4, ratio12_2, ratio12_2, 
+ratio20_3, ratio36_5, ratio36_5, ratio8_1, ratio8_1, ratio72_8, ratio72_8, ratio40_4, ratio40_4, ratio40_4, ratio24_2, ratio24_2, 
+ratio40_3, ratio72_5, ratio72_5, ratio16_1, ratio16_1, ratio144_8, ratio144_8, ratio80_4, ratio80_4, ratio80_4, ratio48_2, ratio48_2, 
+ratio80_3, ratio144_5, ratio144_5, ratio32_1, ratio32_1, ratio288_8, ratio288_8}; 
+
+const ScaleNote Phrygian5prime[128] = {ratio8_320, ratio8_320, ratio9_320, ratio9_320, ratio1_32, ratio16_480, ratio16_480, ratio6_160, ratio6_160, ratio4_96, ratio4_96, ratio3_64, ratio8_160, 
+ratio8_160, ratio9_160, ratio9_160, ratio1_16, ratio16_240, ratio16_240, ratio6_80, ratio6_80, ratio4_48, ratio4_48, ratio3_32, ratio8_80, 
+ratio8_80, ratio9_80, ratio9_80, ratio1_8, ratio16_120, ratio16_120, ratio6_40, ratio6_40, ratio4_24, ratio4_24, ratio3_16, ratio8_40, 
+ratio8_40, ratio9_40, ratio9_40, ratio1_4, ratio16_60, ratio16_60, ratio6_20, ratio6_20, ratio4_12, ratio4_12, ratio3_8, ratio8_20, 
+ratio8_20, ratio9_20, ratio9_20, ratio1_2, ratio16_30, ratio16_30, ratio6_10, ratio6_10, ratio4_6, ratio4_6, ratio3_4, ratio8_10, 
+ratio8_10, ratio9_10, ratio9_10, ratio1_1, ratio16_15, ratio16_15, ratio6_5, ratio6_5, ratio4_3, ratio4_3, ratio3_2, ratio8_5, 
+ratio8_5, ratio9_5, ratio9_5, ratio2_1, ratio32_15, ratio32_15, ratio12_5, ratio12_5, ratio8_3, ratio8_3, ratio6_2, ratio16_5, 
+ratio16_5, ratio18_5, ratio18_5, ratio4_1, ratio64_15, ratio64_15, ratio24_5, ratio24_5, ratio16_3, ratio16_3, ratio12_2, ratio32_5, 
+ratio32_5, ratio36_5, ratio36_5, ratio8_1, ratio128_15, ratio128_15, ratio48_5, ratio48_5, ratio32_3, ratio32_3, ratio24_2, ratio64_5, 
+ratio64_5, ratio72_5, ratio72_5, ratio16_1, ratio256_15, ratio256_15, ratio96_5, ratio96_5, ratio64_3, ratio64_3, ratio48_2, ratio128_5, 
+ratio128_5, ratio144_5, ratio144_5, ratio32_1, ratio512_15, ratio512_15, ratio192_5}; 
+
+const ScaleNote Lydian5prime[128] = {ratio3_128, ratio5_192, ratio5_192, ratio15_512, ratio1_32, ratio1_32, ratio9_256, ratio9_256, ratio5_128, ratio5_128, ratio25_576, ratio3_64, ratio3_64, 
+ratio5_96, ratio5_96, ratio15_256, ratio1_16, ratio1_16, ratio9_128, ratio9_128, ratio5_64, ratio5_64, ratio25_288, ratio3_32, ratio3_32, 
+ratio5_48, ratio5_48, ratio15_128, ratio1_8, ratio1_8, ratio9_64, ratio9_64, ratio5_32, ratio5_32, ratio25_144, ratio3_16, ratio3_16, 
+ratio5_24, ratio5_24, ratio15_64, ratio1_4, ratio1_4, ratio9_32, ratio9_32, ratio5_16, ratio5_16, ratio25_72, ratio3_8, ratio3_8, 
+ratio5_12, ratio5_12, ratio15_32, ratio1_2, ratio1_2, ratio9_16, ratio9_16, ratio5_8, ratio5_8, ratio25_36, ratio3_4, ratio3_4, 
+ratio5_6, ratio5_6, ratio15_16, ratio1_1, ratio1_1, ratio9_8, ratio9_8, ratio5_4, ratio5_4, ratio25_18, ratio3_2, ratio3_2, 
+ratio5_3, ratio5_3, ratio15_8, ratio2_1, ratio2_1, ratio18_8, ratio18_8, ratio10_4, ratio10_4, ratio50_18, ratio6_2, ratio6_2, 
+ratio10_3, ratio10_3, ratio30_8, ratio4_1, ratio4_1, ratio36_8, ratio36_8, ratio20_4, ratio20_4, ratio100_18, ratio12_2, ratio12_2, 
+ratio20_3, ratio20_3, ratio60_8, ratio8_1, ratio8_1, ratio72_8, ratio72_8, ratio40_4, ratio40_4, ratio200_18, ratio24_2, ratio24_2, 
+ratio40_3, ratio40_3, ratio120_8, ratio16_1, ratio16_1, ratio144_8, ratio144_8, ratio80_4, ratio80_4, ratio400_18, ratio48_2, ratio48_2, 
+ratio80_3, ratio80_3, ratio240_8, ratio32_1, ratio32_1, ratio288_8, ratio288_8}; 
+
+const ScaleNote Mixolydian5prime[128] = {ratio3_128, ratio5_192, ratio9_320, ratio9_320, ratio1_32, ratio1_32, ratio9_256, ratio9_256, ratio5_128, ratio4_96, ratio4_96, ratio3_64, ratio3_64, 
+ratio5_96, ratio9_160, ratio9_160, ratio1_16, ratio1_16, ratio9_128, ratio9_128, ratio5_64, ratio4_48, ratio4_48, ratio3_32, ratio3_32, 
+ratio5_48, ratio9_80, ratio9_80, ratio1_8, ratio1_8, ratio9_64, ratio9_64, ratio5_32, ratio4_24, ratio4_24, ratio3_16, ratio3_16, 
+ratio5_24, ratio9_40, ratio9_40, ratio1_4, ratio1_4, ratio9_32, ratio9_32, ratio5_16, ratio4_12, ratio4_12, ratio3_8, ratio3_8, 
+ratio5_12, ratio9_20, ratio9_20, ratio1_2, ratio1_2, ratio9_16, ratio9_16, ratio5_8, ratio4_6, ratio4_6, ratio3_4, ratio3_4, 
+ratio5_6, ratio9_10, ratio9_10, ratio1_1, ratio1_1, ratio9_8, ratio9_8, ratio5_4, ratio4_3, ratio4_3, ratio3_2, ratio3_2, 
+ratio5_3, ratio9_5, ratio9_5, ratio2_1, ratio2_1, ratio18_8, ratio18_8, ratio10_4, ratio8_3, ratio8_3, ratio6_2, ratio6_2, 
+ratio10_3, ratio18_5, ratio18_5, ratio4_1, ratio4_1, ratio36_8, ratio36_8, ratio20_4, ratio16_3, ratio16_3, ratio12_2, ratio12_2, 
+ratio20_3, ratio36_5, ratio36_5, ratio8_1, ratio8_1, ratio72_8, ratio72_8, ratio40_4, ratio32_3, ratio32_3, ratio24_2, ratio24_2, 
+ratio40_3, ratio72_5, ratio72_5, ratio16_1, ratio16_1, ratio144_8, ratio144_8, ratio80_4, ratio64_3, ratio64_3, ratio48_2, ratio48_2, 
+ratio80_3, ratio144_5, ratio144_5, ratio32_1, ratio32_1, ratio288_8, ratio288_8}; 
+
+const ScaleNote Aeolian5prime[128] = {ratio8_320, ratio8_320, ratio9_320, ratio9_320, ratio1_32, ratio1_32, ratio9_256, ratio6_160, ratio6_160, ratio4_96, ratio4_96, ratio3_64, ratio8_160, 
+ratio8_160, ratio9_160, ratio9_160, ratio1_16, ratio1_16, ratio9_128, ratio6_80, ratio6_80, ratio4_48, ratio4_48, ratio3_32, ratio8_80, 
+ratio8_80, ratio9_80, ratio9_80, ratio1_8, ratio1_8, ratio9_64, ratio6_40, ratio6_40, ratio4_24, ratio4_24, ratio3_16, ratio8_40, 
+ratio8_40, ratio9_40, ratio9_40, ratio1_4, ratio1_4, ratio9_32, ratio6_20, ratio6_20, ratio4_12, ratio4_12, ratio3_8, ratio8_20, 
+ratio8_20, ratio9_20, ratio9_20, ratio1_2, ratio1_2, ratio9_16, ratio6_10, ratio6_10, ratio4_6, ratio4_6, ratio3_4, ratio8_10, 
+ratio8_10, ratio9_10, ratio9_10, ratio1_1, ratio1_1, ratio9_8, ratio6_5, ratio6_5, ratio4_3, ratio4_3, ratio3_2, ratio8_5, 
+ratio8_5, ratio9_5, ratio9_5, ratio2_1, ratio2_1, ratio18_8, ratio12_5, ratio12_5, ratio8_3, ratio8_3, ratio6_2, ratio16_5, 
+ratio16_5, ratio18_5, ratio18_5, ratio4_1, ratio4_1, ratio36_8, ratio24_5, ratio24_5, ratio16_3, ratio16_3, ratio12_2, ratio32_5, 
+ratio32_5, ratio36_5, ratio36_5, ratio8_1, ratio8_1, ratio72_8, ratio48_5, ratio48_5, ratio32_3, ratio32_3, ratio24_2, ratio64_5, 
+ratio64_5, ratio72_5, ratio72_5, ratio16_1, ratio16_1, ratio144_8, ratio96_5, ratio96_5, ratio64_3, ratio64_3, ratio48_2, ratio128_5, 
+ratio128_5, ratio144_5, ratio144_5, ratio32_1, ratio32_1, ratio288_8, ratio192_5}; 
+
+const ScaleNote Locrian5prime[128] = {ratio8_320, ratio8_320, ratio9_320, ratio9_320, ratio1_32, ratio16_480, ratio16_480, ratio6_160, ratio6_160, ratio4_96, ratio25_576, ratio25_576, ratio8_160, 
+ratio8_160, ratio9_160, ratio9_160, ratio1_16, ratio16_240, ratio16_240, ratio6_80, ratio6_80, ratio4_48, ratio25_288, ratio25_288, ratio8_80, 
+ratio8_80, ratio9_80, ratio9_80, ratio1_8, ratio16_120, ratio16_120, ratio6_40, ratio6_40, ratio4_24, ratio25_144, ratio25_144, ratio8_40, 
+ratio8_40, ratio9_40, ratio9_40, ratio1_4, ratio16_60, ratio16_60, ratio6_20, ratio6_20, ratio4_12, ratio25_72, ratio25_72, ratio8_20, 
+ratio8_20, ratio9_20, ratio9_20, ratio1_2, ratio16_30, ratio16_30, ratio6_10, ratio6_10, ratio4_6, ratio25_36, ratio25_36, ratio8_10, 
+ratio8_10, ratio9_10, ratio9_10, ratio1_1, ratio16_15, ratio16_15, ratio6_5, ratio6_5, ratio4_3, ratio25_18, ratio25_18, ratio8_5, 
+ratio8_5, ratio9_5, ratio9_5, ratio2_1, ratio32_15, ratio32_15, ratio12_5, ratio12_5, ratio8_3, ratio50_18, ratio50_18, ratio16_5, 
+ratio16_5, ratio18_5, ratio18_5, ratio4_1, ratio64_15, ratio64_15, ratio24_5, ratio24_5, ratio16_3, ratio100_18, ratio100_18, ratio32_5, 
+ratio32_5, ratio36_5, ratio36_5, ratio8_1, ratio128_15, ratio128_15, ratio48_5, ratio48_5, ratio32_3, ratio200_18, ratio200_18, ratio64_5, 
+ratio64_5, ratio72_5, ratio72_5, ratio16_1, ratio256_15, ratio256_15, ratio96_5, ratio96_5, ratio64_3, ratio400_18, ratio400_18, ratio128_5, 
+ratio128_5, ratio144_5, ratio144_5, ratio32_1, ratio512_15, ratio512_15, ratio192_5}; 
+
+Chromatic5prime}; 
+
+Major5prime}; 
+
+Dorian5prime}; 
+
+Phrygian5prime}; 
+
+Lydian5prime}; 
+
+Mixolydian5prime}; 
+
+Aeolian5prime}; 
+
+Locrian5prime}; 
+
+#define ratio48_5 {629145, 2576980377, 5}
+#define ratio15_16 {61440, 0, 16}
+#define ratio5_128 {2560, 0, 128}
+#define ratio9_160 {3686, 1717986918, 160}
+#define ratio9_20 {29491, 858993459, 20}
+#define ratio288_8 {2359296, 0, 1}
+#define ratio1_2 {32768, 0, 2}
+#define ratio9_16 {36864, 0, 16}
+#define ratio80_3 {1747626, 2863311531, 3}
+#define ratio8_80 {6553, 2576980377, 10}
+#define ratio64_3 {1398101, 1431655765, 3}
+#define ratio4_96 {2730, 2863311530, 24}
+#define ratio24_2 {786432, 0, 1}
+#define ratio36_8 {294912, 0, 2}
+#define ratio10_4 {163840, 0, 2}
+#define ratio240_8 {1966080, 0, 1}
+#define ratio1_4 {16384, 0, 4}
+#define ratio16_60 {17476, 1145324612, 15}
+#define ratio8_3 {174762, 2863311530, 3}
+#define ratio128_5 {1677721, 2576980378, 5}
+#define ratio4_3 {87381, 1431655765, 3}
+#define ratio3_128 {1536, 0, 128}
+#define ratio4_12 {21845, 1431655765, 3}
+#define ratio1_16 {4096, 0, 16}
+#define ratio1_32 {2048, 0, 32}
+#define ratio3_16 {12288, 0, 16}
+#define ratio9_128 {4608, 0, 128}
+#define ratio5_3 {109226, 2863311530, 3}
+#define ratio4_6 {43690, 2863311530, 3}
+#define ratio9_8 {73728, 0, 8}
+#define ratio8_160 {3276, 3435973836, 20}
+#define ratio5_4 {81920, 0, 4}
+#define ratio4_24 {10922, 2863311530, 6}
+#define ratio8_1 {524288, 0, 1}
+#define ratio72_8 {589824, 0, 1}
+#define ratio8_10 {52428, 3435973836, 5}
+#define ratio9_32 {18432, 0, 32}
+#define ratio15_64 {15360, 0, 64}
+#define ratio15_256 {3840, 0, 256}
+#define ratio25_72 {22755, 2386092942, 72}
+#define ratio9_64 {9216, 0, 64}
+#define ratio9_320 {1843, 858993459, 320}
+#define ratio24_5 {314572, 3435973836, 5}
+#define ratio3_2 {98304, 0, 2}
+#define ratio30_8 {245760, 0, 4}
+#define ratio15_32 {30720, 0, 32}
+#define ratio5_16 {20480, 0, 16}
+#define ratio64_15 {279620, 1145324612, 15}
+#define ratio16_30 {34952, 2290649224, 15}
+#define ratio32_3 {699050, 2863311530, 3}
+#define ratio6_2 {196608, 0, 1}
+#define ratio16_3 {349525, 1431655765, 3}
+#define ratio12_2 {393216, 0, 1}
+#define ratio3_8 {24576, 0, 8}
+#define ratio5_96 {3413, 1431655765, 96}
+#define ratio6_20 {19660, 3435973836, 10}
+#define ratio5_24 {13653, 1431655765, 24}
+#define ratio3_64 {3072, 0, 64}
+#define ratio6_5 {78643, 858993459, 5}
+#define ratio3_32 {6144, 0, 32}
+#define ratio32_5 {419430, 1717986918, 5}
+#define ratio25_576 {2844, 1908874353, 576}
+#define ratio8_320 {1638, 1717986918, 40}
+#define ratio256_15 {1118481, 286331153, 15}
+#define ratio12_5 {157286, 1717986918, 5}
+#define ratio8_20 {26214, 1717986918, 5}
+#define ratio9_256 {2304, 0, 256}
+#define ratio2_1 {131072, 0, 1}
+#define ratio200_18 {728177, 3340530119, 9}
+#define ratio5_12 {27306, 2863311530, 12}
+#define ratio400_18 {1456355, 2386092942, 9}
+#define ratio512_15 {2236962, 572662306, 15}
+#define ratio16_480 {2184, 2290649224, 30}
+#define ratio16_5 {209715, 858993459, 5}
+#define ratio72_5 {943718, 1717986918, 5}
+#define ratio6_10 {39321, 2576980377, 5}
+#define ratio80_4 {1310720, 0, 1}
+#define ratio40_3 {873813, 1431655765, 3}
+#define ratio48_2 {1572864, 0, 1}
+#define ratio16_120 {8738, 572662306, 15}
+#define ratio128_15 {559240, 2290649224, 15}
+#define ratio6_40 {9830, 1717986918, 20}
+#define ratio15_512 {1920, 0, 512}
+#define ratio5_8 {40960, 0, 8}
+#define ratio40_4 {655360, 0, 1}
+#define ratio20_3 {436906, 2863311530, 3}
+#define ratio96_5 {1258291, 858993459, 5}
+#define ratio18_5 {235929, 2576980377, 5}
+#define ratio4_48 {5461, 1431655765, 12}
+#define ratio5_48 {6826, 2863311530, 48}
+#define ratio9_5 {117964, 3435973836, 5}
+#define ratio50_18 {182044, 1908874353, 9}
+#define ratio16_240 {4369, 286331153, 15}
+#define ratio15_8 {122880, 0, 8}
+#define ratio192_5 {2516582, 1717986918, 5}
+#define ratio25_36 {45511, 477218588, 36}
+#define ratio1_8 {8192, 0, 8}
+#define ratio1_1 {65536, 0, 1}
+#define ratio4_1 {262144, 0, 1}
+#define ratio16_1 {1048576, 0, 1}
+#define ratio60_8 {491520, 0, 2}
+#define ratio15_128 {7680, 0, 128}
+#define ratio25_288 {5688, 3817748707, 288}
+#define ratio144_5 {1887436, 3435973837, 5}
+#define ratio20_4 {327680, 0, 1}
+#define ratio3_4 {49152, 0, 4}
+#define ratio6_160 {2457, 2576980377, 80}
+#define ratio8_5 {104857, 2576980377, 5}
+#define ratio9_10 {58982, 1717986918, 10}
+#define ratio36_5 {471859, 858993459, 5}
+#define ratio5_64 {5120, 0, 64}
+#define ratio64_5 {838860, 3435973837, 5}
+#define ratio10_3 {218453, 1431655765, 3}
+#define ratio120_8 {983040, 0, 1}
+#define ratio9_80 {7372, 3435973836, 80}
+#define ratio100_18 {364088, 3817748707, 9}
+#define ratio5_32 {10240, 0, 32}
+#define ratio5_6 {54613, 1431655765, 6}
+#define ratio32_15 {139810, 572662306, 15}
+#define ratio16_15 {69905, 286331153, 15}
+#define ratio18_8 {147456, 0, 4}
+#define ratio32_1 {2097152, 0, 1}
+#define ratio144_8 {1179648, 0, 1}
+#define ratio8_40 {13107, 858993459, 5}
+#define ratio6_80 {4915, 858993459, 40}
+#define ratio9_40 {14745, 2576980377, 40}
+#define ratio25_144 {11377, 3340530119, 144}
+#define ratio25_18 {91022, 954437176, 18}
+#define ratio5_192 {1706, 2863311530, 192}
+
+const ScaleNote Chromatic5prime[128] = {ratio8_320, ratio5_192, ratio9_320, ratio15_512, ratio1_32, ratio16_480, ratio9_256, ratio6_160, ratio5_128, ratio4_96, ratio25_576, ratio3_64, ratio8_160, 
+ratio5_96, ratio9_160, ratio15_256, ratio1_16, ratio16_240, ratio9_128, ratio6_80, ratio5_64, ratio4_48, ratio25_288, ratio3_32, ratio8_80, 
+ratio5_48, ratio9_80, ratio15_128, ratio1_8, ratio16_120, ratio9_64, ratio6_40, ratio5_32, ratio4_24, ratio25_144, ratio3_16, ratio8_40, 
+ratio5_24, ratio9_40, ratio15_64, ratio1_4, ratio16_60, ratio9_32, ratio6_20, ratio5_16, ratio4_12, ratio25_72, ratio3_8, ratio8_20, 
+ratio5_12, ratio9_20, ratio15_32, ratio1_2, ratio16_30, ratio9_16, ratio6_10, ratio5_8, ratio4_6, ratio25_36, ratio3_4, ratio8_10, 
+ratio5_6, ratio9_10, ratio15_16, ratio1_1, ratio16_15, ratio9_8, ratio6_5, ratio5_4, ratio4_3, ratio25_18, ratio3_2, ratio8_5, 
+ratio5_3, ratio9_5, ratio15_8, ratio2_1, ratio32_15, ratio18_8, ratio12_5, ratio10_4, ratio8_3, ratio50_18, ratio6_2, ratio16_5, 
+ratio10_3, ratio18_5, ratio30_8, ratio4_1, ratio64_15, ratio36_8, ratio24_5, ratio20_4, ratio16_3, ratio100_18, ratio12_2, ratio32_5, 
+ratio20_3, ratio36_5, ratio60_8, ratio8_1, ratio128_15, ratio72_8, ratio48_5, ratio40_4, ratio32_3, ratio200_18, ratio24_2, ratio64_5, 
+ratio40_3, ratio72_5, ratio120_8, ratio16_1, ratio256_15, ratio144_8, ratio96_5, ratio80_4, ratio64_3, ratio400_18, ratio48_2, ratio128_5, 
+ratio80_3, ratio144_5, ratio240_8, ratio32_1, ratio512_15, ratio288_8, ratio192_5}; 
+
+const ScaleNote Major5prime[128] = {ratio3_128, ratio5_192, ratio5_192, ratio15_512, ratio1_32, ratio1_32, ratio9_256, ratio9_256, ratio5_128, ratio4_96, ratio4_96, ratio3_64, ratio3_64, 
+ratio5_96, ratio5_96, ratio15_256, ratio1_16, ratio1_16, ratio9_128, ratio9_128, ratio5_64, ratio4_48, ratio4_48, ratio3_32, ratio3_32, 
+ratio5_48, ratio5_48, ratio15_128, ratio1_8, ratio1_8, ratio9_64, ratio9_64, ratio5_32, ratio4_24, ratio4_24, ratio3_16, ratio3_16, 
+ratio5_24, ratio5_24, ratio15_64, ratio1_4, ratio1_4, ratio9_32, ratio9_32, ratio5_16, ratio4_12, ratio4_12, ratio3_8, ratio3_8, 
+ratio5_12, ratio5_12, ratio15_32, ratio1_2, ratio1_2, ratio9_16, ratio9_16, ratio5_8, ratio4_6, ratio4_6, ratio3_4, ratio3_4, 
+ratio5_6, ratio5_6, ratio15_16, ratio1_1, ratio1_1, ratio9_8, ratio9_8, ratio5_4, ratio4_3, ratio4_3, ratio3_2, ratio3_2, 
+ratio5_3, ratio5_3, ratio15_8, ratio2_1, ratio2_1, ratio18_8, ratio18_8, ratio10_4, ratio8_3, ratio8_3, ratio6_2, ratio6_2, 
+ratio10_3, ratio10_3, ratio30_8, ratio4_1, ratio4_1, ratio36_8, ratio36_8, ratio20_4, ratio16_3, ratio16_3, ratio12_2, ratio12_2, 
+ratio20_3, ratio20_3, ratio60_8, ratio8_1, ratio8_1, ratio72_8, ratio72_8, ratio40_4, ratio32_3, ratio32_3, ratio24_2, ratio24_2, 
+ratio40_3, ratio40_3, ratio120_8, ratio16_1, ratio16_1, ratio144_8, ratio144_8, ratio80_4, ratio64_3, ratio64_3, ratio48_2, ratio48_2, 
+ratio80_3, ratio80_3, ratio240_8, ratio32_1, ratio32_1, ratio288_8, ratio288_8}; 
+
+const ScaleNote Dorian5prime[128] = {ratio3_128, ratio5_192, ratio9_320, ratio9_320, ratio1_32, ratio1_32, ratio9_256, ratio9_256, ratio5_128, ratio5_128, ratio5_128, ratio3_64, ratio3_64, 
+ratio5_96, ratio9_160, ratio9_160, ratio1_16, ratio1_16, ratio9_128, ratio9_128, ratio5_64, ratio5_64, ratio5_64, ratio3_32, ratio3_32, 
+ratio5_48, ratio9_80, ratio9_80, ratio1_8, ratio1_8, ratio9_64, ratio9_64, ratio5_32, ratio5_32, ratio5_32, ratio3_16, ratio3_16, 
+ratio5_24, ratio9_40, ratio9_40, ratio1_4, ratio1_4, ratio9_32, ratio9_32, ratio5_16, ratio5_16, ratio5_16, ratio3_8, ratio3_8, 
+ratio5_12, ratio9_20, ratio9_20, ratio1_2, ratio1_2, ratio9_16, ratio9_16, ratio5_8, ratio5_8, ratio5_8, ratio3_4, ratio3_4, 
+ratio5_6, ratio9_10, ratio9_10, ratio1_1, ratio1_1, ratio9_8, ratio9_8, ratio5_4, ratio5_4, ratio5_4, ratio3_2, ratio3_2, 
+ratio5_3, ratio9_5, ratio9_5, ratio2_1, ratio2_1, ratio18_8, ratio18_8, ratio10_4, ratio10_4, ratio10_4, ratio6_2, ratio6_2, 
+ratio10_3, ratio18_5, ratio18_5, ratio4_1, ratio4_1, ratio36_8, ratio36_8, ratio20_4, ratio20_4, ratio20_4, ratio12_2, ratio12_2, 
+ratio20_3, ratio36_5, ratio36_5, ratio8_1, ratio8_1, ratio72_8, ratio72_8, ratio40_4, ratio40_4, ratio40_4, ratio24_2, ratio24_2, 
+ratio40_3, ratio72_5, ratio72_5, ratio16_1, ratio16_1, ratio144_8, ratio144_8, ratio80_4, ratio80_4, ratio80_4, ratio48_2, ratio48_2, 
+ratio80_3, ratio144_5, ratio144_5, ratio32_1, ratio32_1, ratio288_8, ratio288_8}; 
+
+const ScaleNote Phrygian5prime[128] = {ratio8_320, ratio8_320, ratio9_320, ratio9_320, ratio1_32, ratio16_480, ratio16_480, ratio6_160, ratio6_160, ratio4_96, ratio4_96, ratio3_64, ratio8_160, 
+ratio8_160, ratio9_160, ratio9_160, ratio1_16, ratio16_240, ratio16_240, ratio6_80, ratio6_80, ratio4_48, ratio4_48, ratio3_32, ratio8_80, 
+ratio8_80, ratio9_80, ratio9_80, ratio1_8, ratio16_120, ratio16_120, ratio6_40, ratio6_40, ratio4_24, ratio4_24, ratio3_16, ratio8_40, 
+ratio8_40, ratio9_40, ratio9_40, ratio1_4, ratio16_60, ratio16_60, ratio6_20, ratio6_20, ratio4_12, ratio4_12, ratio3_8, ratio8_20, 
+ratio8_20, ratio9_20, ratio9_20, ratio1_2, ratio16_30, ratio16_30, ratio6_10, ratio6_10, ratio4_6, ratio4_6, ratio3_4, ratio8_10, 
+ratio8_10, ratio9_10, ratio9_10, ratio1_1, ratio16_15, ratio16_15, ratio6_5, ratio6_5, ratio4_3, ratio4_3, ratio3_2, ratio8_5, 
+ratio8_5, ratio9_5, ratio9_5, ratio2_1, ratio32_15, ratio32_15, ratio12_5, ratio12_5, ratio8_3, ratio8_3, ratio6_2, ratio16_5, 
+ratio16_5, ratio18_5, ratio18_5, ratio4_1, ratio64_15, ratio64_15, ratio24_5, ratio24_5, ratio16_3, ratio16_3, ratio12_2, ratio32_5, 
+ratio32_5, ratio36_5, ratio36_5, ratio8_1, ratio128_15, ratio128_15, ratio48_5, ratio48_5, ratio32_3, ratio32_3, ratio24_2, ratio64_5, 
+ratio64_5, ratio72_5, ratio72_5, ratio16_1, ratio256_15, ratio256_15, ratio96_5, ratio96_5, ratio64_3, ratio64_3, ratio48_2, ratio128_5, 
+ratio128_5, ratio144_5, ratio144_5, ratio32_1, ratio512_15, ratio512_15, ratio192_5}; 
+
+const ScaleNote Lydian5prime[128] = {ratio3_128, ratio5_192, ratio5_192, ratio15_512, ratio1_32, ratio1_32, ratio9_256, ratio9_256, ratio5_128, ratio5_128, ratio25_576, ratio3_64, ratio3_64, 
+ratio5_96, ratio5_96, ratio15_256, ratio1_16, ratio1_16, ratio9_128, ratio9_128, ratio5_64, ratio5_64, ratio25_288, ratio3_32, ratio3_32, 
+ratio5_48, ratio5_48, ratio15_128, ratio1_8, ratio1_8, ratio9_64, ratio9_64, ratio5_32, ratio5_32, ratio25_144, ratio3_16, ratio3_16, 
+ratio5_24, ratio5_24, ratio15_64, ratio1_4, ratio1_4, ratio9_32, ratio9_32, ratio5_16, ratio5_16, ratio25_72, ratio3_8, ratio3_8, 
+ratio5_12, ratio5_12, ratio15_32, ratio1_2, ratio1_2, ratio9_16, ratio9_16, ratio5_8, ratio5_8, ratio25_36, ratio3_4, ratio3_4, 
+ratio5_6, ratio5_6, ratio15_16, ratio1_1, ratio1_1, ratio9_8, ratio9_8, ratio5_4, ratio5_4, ratio25_18, ratio3_2, ratio3_2, 
+ratio5_3, ratio5_3, ratio15_8, ratio2_1, ratio2_1, ratio18_8, ratio18_8, ratio10_4, ratio10_4, ratio50_18, ratio6_2, ratio6_2, 
+ratio10_3, ratio10_3, ratio30_8, ratio4_1, ratio4_1, ratio36_8, ratio36_8, ratio20_4, ratio20_4, ratio100_18, ratio12_2, ratio12_2, 
+ratio20_3, ratio20_3, ratio60_8, ratio8_1, ratio8_1, ratio72_8, ratio72_8, ratio40_4, ratio40_4, ratio200_18, ratio24_2, ratio24_2, 
+ratio40_3, ratio40_3, ratio120_8, ratio16_1, ratio16_1, ratio144_8, ratio144_8, ratio80_4, ratio80_4, ratio400_18, ratio48_2, ratio48_2, 
+ratio80_3, ratio80_3, ratio240_8, ratio32_1, ratio32_1, ratio288_8, ratio288_8}; 
+
+const ScaleNote Mixolydian5prime[128] = {ratio3_128, ratio5_192, ratio9_320, ratio9_320, ratio1_32, ratio1_32, ratio9_256, ratio9_256, ratio5_128, ratio4_96, ratio4_96, ratio3_64, ratio3_64, 
+ratio5_96, ratio9_160, ratio9_160, ratio1_16, ratio1_16, ratio9_128, ratio9_128, ratio5_64, ratio4_48, ratio4_48, ratio3_32, ratio3_32, 
+ratio5_48, ratio9_80, ratio9_80, ratio1_8, ratio1_8, ratio9_64, ratio9_64, ratio5_32, ratio4_24, ratio4_24, ratio3_16, ratio3_16, 
+ratio5_24, ratio9_40, ratio9_40, ratio1_4, ratio1_4, ratio9_32, ratio9_32, ratio5_16, ratio4_12, ratio4_12, ratio3_8, ratio3_8, 
+ratio5_12, ratio9_20, ratio9_20, ratio1_2, ratio1_2, ratio9_16, ratio9_16, ratio5_8, ratio4_6, ratio4_6, ratio3_4, ratio3_4, 
+ratio5_6, ratio9_10, ratio9_10, ratio1_1, ratio1_1, ratio9_8, ratio9_8, ratio5_4, ratio4_3, ratio4_3, ratio3_2, ratio3_2, 
+ratio5_3, ratio9_5, ratio9_5, ratio2_1, ratio2_1, ratio18_8, ratio18_8, ratio10_4, ratio8_3, ratio8_3, ratio6_2, ratio6_2, 
+ratio10_3, ratio18_5, ratio18_5, ratio4_1, ratio4_1, ratio36_8, ratio36_8, ratio20_4, ratio16_3, ratio16_3, ratio12_2, ratio12_2, 
+ratio20_3, ratio36_5, ratio36_5, ratio8_1, ratio8_1, ratio72_8, ratio72_8, ratio40_4, ratio32_3, ratio32_3, ratio24_2, ratio24_2, 
+ratio40_3, ratio72_5, ratio72_5, ratio16_1, ratio16_1, ratio144_8, ratio144_8, ratio80_4, ratio64_3, ratio64_3, ratio48_2, ratio48_2, 
+ratio80_3, ratio144_5, ratio144_5, ratio32_1, ratio32_1, ratio288_8, ratio288_8}; 
+
+const ScaleNote Aeolian5prime[128] = {ratio8_320, ratio8_320, ratio9_320, ratio9_320, ratio1_32, ratio1_32, ratio9_256, ratio6_160, ratio6_160, ratio4_96, ratio4_96, ratio3_64, ratio8_160, 
+ratio8_160, ratio9_160, ratio9_160, ratio1_16, ratio1_16, ratio9_128, ratio6_80, ratio6_80, ratio4_48, ratio4_48, ratio3_32, ratio8_80, 
+ratio8_80, ratio9_80, ratio9_80, ratio1_8, ratio1_8, ratio9_64, ratio6_40, ratio6_40, ratio4_24, ratio4_24, ratio3_16, ratio8_40, 
+ratio8_40, ratio9_40, ratio9_40, ratio1_4, ratio1_4, ratio9_32, ratio6_20, ratio6_20, ratio4_12, ratio4_12, ratio3_8, ratio8_20, 
+ratio8_20, ratio9_20, ratio9_20, ratio1_2, ratio1_2, ratio9_16, ratio6_10, ratio6_10, ratio4_6, ratio4_6, ratio3_4, ratio8_10, 
+ratio8_10, ratio9_10, ratio9_10, ratio1_1, ratio1_1, ratio9_8, ratio6_5, ratio6_5, ratio4_3, ratio4_3, ratio3_2, ratio8_5, 
+ratio8_5, ratio9_5, ratio9_5, ratio2_1, ratio2_1, ratio18_8, ratio12_5, ratio12_5, ratio8_3, ratio8_3, ratio6_2, ratio16_5, 
+ratio16_5, ratio18_5, ratio18_5, ratio4_1, ratio4_1, ratio36_8, ratio24_5, ratio24_5, ratio16_3, ratio16_3, ratio12_2, ratio32_5, 
+ratio32_5, ratio36_5, ratio36_5, ratio8_1, ratio8_1, ratio72_8, ratio48_5, ratio48_5, ratio32_3, ratio32_3, ratio24_2, ratio64_5, 
+ratio64_5, ratio72_5, ratio72_5, ratio16_1, ratio16_1, ratio144_8, ratio96_5, ratio96_5, ratio64_3, ratio64_3, ratio48_2, ratio128_5, 
+ratio128_5, ratio144_5, ratio144_5, ratio32_1, ratio32_1, ratio288_8, ratio192_5}; 
+
+const ScaleNote Locrian5prime[128] = {ratio8_320, ratio8_320, ratio9_320, ratio9_320, ratio1_32, ratio16_480, ratio16_480, ratio6_160, ratio6_160, ratio4_96, ratio25_576, ratio25_576, ratio8_160, 
+ratio8_160, ratio9_160, ratio9_160, ratio1_16, ratio16_240, ratio16_240, ratio6_80, ratio6_80, ratio4_48, ratio25_288, ratio25_288, ratio8_80, 
+ratio8_80, ratio9_80, ratio9_80, ratio1_8, ratio16_120, ratio16_120, ratio6_40, ratio6_40, ratio4_24, ratio25_144, ratio25_144, ratio8_40, 
+ratio8_40, ratio9_40, ratio9_40, ratio1_4, ratio16_60, ratio16_60, ratio6_20, ratio6_20, ratio4_12, ratio25_72, ratio25_72, ratio8_20, 
+ratio8_20, ratio9_20, ratio9_20, ratio1_2, ratio16_30, ratio16_30, ratio6_10, ratio6_10, ratio4_6, ratio25_36, ratio25_36, ratio8_10, 
+ratio8_10, ratio9_10, ratio9_10, ratio1_1, ratio16_15, ratio16_15, ratio6_5, ratio6_5, ratio4_3, ratio25_18, ratio25_18, ratio8_5, 
+ratio8_5, ratio9_5, ratio9_5, ratio2_1, ratio32_15, ratio32_15, ratio12_5, ratio12_5, ratio8_3, ratio50_18, ratio50_18, ratio16_5, 
+ratio16_5, ratio18_5, ratio18_5, ratio4_1, ratio64_15, ratio64_15, ratio24_5, ratio24_5, ratio16_3, ratio100_18, ratio100_18, ratio32_5, 
+ratio32_5, ratio36_5, ratio36_5, ratio8_1, ratio128_15, ratio128_15, ratio48_5, ratio48_5, ratio32_3, ratio200_18, ratio200_18, ratio64_5, 
+ratio64_5, ratio72_5, ratio72_5, ratio16_1, ratio256_15, ratio256_15, ratio96_5, ratio96_5, ratio64_3, ratio400_18, ratio400_18, ratio128_5, 
+ratio128_5, ratio144_5, ratio144_5, ratio32_1, ratio512_15, ratio512_15, ratio192_5}; 
+
+
+const ScaleNote modal5prime[128] = {Chromatic5prime, Major5prime, Dorian5prime, Phrygian5prime, Lydian5prime, Mixolydian5prime, Aeolian5prime, Locrian5prime, 
