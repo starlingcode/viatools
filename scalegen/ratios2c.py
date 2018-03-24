@@ -4,7 +4,9 @@ import csv
 
 import math
 
-from scaleGenHelpers import makeScale1voct, makeScaleFullSpan
+from onevoltoctgenerator import makeScale1voct
+
+from fullspangenerator import makeScaleFullSpan
 
 scales = []
 
@@ -12,7 +14,7 @@ with open("ViaScales.csv", newline="\n") as csvfile:
     spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
     for row in spamreader:
         if row[0] != "":
-            scales.append([row[0], row[1], row[2]])
+            scales.append([row[0], row[1], row[2], row[3]])
 
 scale_holder = []
 global_pitch_set = set([])
@@ -23,6 +25,8 @@ for i in scales:
     is_1voct = i[1]
 
     is_pitch_class_set = i[2]
+
+    is_pretiled = i[3]
 
     if is_1voct == "on":
         scaleParser = makeScale1voct(scale_name)
