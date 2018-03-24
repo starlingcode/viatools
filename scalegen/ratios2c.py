@@ -43,15 +43,35 @@ for i in scales:
     scale_holder.append([full_scale, scale_tags, num_scales])
 
 
-text_file = open("ViaScales.txt", "w")
+text_file = open("scales.h", "w")
 text_file.truncate()
 
 #####################
 
+text_file.write('#include "stm32f3xx_hal.h"\n')
+text_file.write('#include "stm32f3xx.h"\n')
+text_file.write('#include "stm32f3xx_it.h"\n')
+text_file.write("\n\n\n")
+text_file.write("typedef struct {\n")
+text_file.write("	const uint32_t integerPart;\n")
+text_file.write("	const uint32_t fractionalPart;\n")
+text_file.write("	const uint32_t fundamentalDivision;\n")
+text_file.write("} ScaleNote;\n")
+text_file.write("\n\n\n")
+text_file.write("typedef struct {\n")
+text_file.write("	ScaleNote ***grid;\n")
+text_file.write("	uint32_t t2Bitshift;\n")
+text_file.write("	uint32_t oneVoltOct;\n")
+text_file.write("} Scale;\n")
+text_file.write("\n\n\n")
+text_file.write("Scale scaleGroup[16];\n")
+text_file.write("\n\n\n")
 for i in scales:
     scale_name = i[0]
     num_scales = scale_holder[scales.index(i)][2]
-    text_file.write("const ScaleNote *" + scale_name + "Grid[" + str(num_scales) + "];\n")
+    text_file.write("static const ScaleNote **" + scale_name + "Grid[" + str(num_scales) + "];\n")
+    text_file.write("Scale " + scale_name + ";\n")
+
 
 text_file.write("\n\n")
 
@@ -60,7 +80,7 @@ for i in global_pitch_set:
     integer_part = i[1]
     fractional_part = i[2]
     fundamental_divisor = i[3]
-    text_file.write("#define " + ratio_tag + " {" + str(integer_part) + ", " + str(fractional_part) + ", " + str(fundamental_divisor) + "}\n")
+    text_file.write("static const ScaleNote " + ratio_tag + " = {" + str(integer_part) + ", " + str(fractional_part) + ", " + str(fundamental_divisor) + "};\n")
 
 text_file.write("\n\n\n")
 
@@ -77,14 +97,14 @@ for s in scales:
             ratio_tag = str(full_scale[i][j][0])
 
             if j == 0:
-                text_file.write("const ScaleNote " + scale_tags[i] + "[128] = {" + ratio_tag + ", ")
+                text_file.write("static const ScaleNote *" + scale_tags[i] + "[128] = {&" + ratio_tag + ", ")
             elif j != 127:
                 if j%12 != 0:
-                    text_file.write(ratio_tag + ", ")
+                    text_file.write("&" + ratio_tag + ", ")
                 else:
-                    text_file.write(ratio_tag + ", \n")
+                    text_file.write("&" + ratio_tag + ", \n")
             else:
-                text_file.write(ratio_tag + "}; \n\n")
+                text_file.write("&" + ratio_tag + "}; \n\n")
 
     text_file.write("\n\n")
 
@@ -99,13 +119,29 @@ for s in scales:
     for i in range(len(scale_tags)):
 
         if i == 0:
-            text_file.write("const ScaleNote *" + scale_name + "Grid["+str(num_scales)+"] = {" + scale_tags[i] + ", ")
+            text_file.write("static const ScaleNote **" + scale_name + "Grid["+str(num_scales)+"] = {" + scale_tags[i] + ", ")
         elif i != (len(scale_tags) - 1):
             text_file.write(scale_tags[i] + ", ")
         else:
             text_file.write(scale_tags[i] + "}; \n\n")
 
 text_file.write("\n\n\n")
+
+text_file.close()
+
+text_file = open("scales.c", "w")
+text_file.truncate()
+
+text_file.write('#include "scales.h"\n')
+
+text_file.write('#include "main.h"\n')
+
+text_file.write('#include "stm32f3xx_hal.h"\n')
+text_file.write('#include "stm32f3xx.h"\n')
+text_file.write('#include "stm32f3xx_it.h"\n')
+
+text_file.write("\n\n\n")
+
 
 for s in scales:
     scale_name = s[0]
@@ -121,10 +157,9 @@ for s in scales:
     text_file.write("   .oneVoltOct = " + oneVoct_on + "};\n\n")
 
 text_file.write("void initializeScales() {\n")
-for s in scales:
-    scale_name = s[0]
-    scale_index = str(scales.index(s))
-    text_file.write("   scaleGroup[" + scale_index + "] = " + scale_name + ";\n")
+for i in range(0, 16):
+    scale_name = scales[i % len(scales)][0]
+    text_file.write("   scaleGroup[" + str(i) + "] = " + scale_name + ";\n")
 text_file.write("}\n")
 
 text_file.close()
