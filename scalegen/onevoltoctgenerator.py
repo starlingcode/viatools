@@ -149,6 +149,7 @@ def makeScale1voct(scale_name):
 
     print(tiles)
 
+
     full_scale = []
     full_row = []
     pitch_set = set([])
@@ -204,13 +205,14 @@ def makeScale1voct(scale_name):
             divisor = math.gcd(int(numerator_int), int(temp_denominator))
 
             fundamental_divisor = int(temp_denominator / divisor)
+	    
 
-            ratio_tag = "ratio" + str(numerator_int) + "_" + str(temp_denominator)
-
+            ratio_tag = "ratio" + str(int(numerator_int / divisor)) + "_" + str(int(temp_denominator / divisor))
+		
             fix32_calculation = int(numerator_int * 2 ** 48 / temp_denominator)
 
             integer_part = fix32_calculation >> 32
-
+		
             fractional_part = fix32_calculation - (integer_part << 32)
 
             ratio_holder = (ratio_tag, integer_part, fractional_part, fundamental_divisor)
