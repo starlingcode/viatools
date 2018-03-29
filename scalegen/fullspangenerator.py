@@ -50,7 +50,7 @@ def makeScaleFullSpan(scale_name):
 
             fundamental_divisor = int(denominator_int / divisor)
 
-            ratio_tag = "ratio" + str(numerator_int) + "_" + str(denominator_int)
+            ratio_tag = "ratio" + str(int(numerator_int / divisor)) + "_" + str(int(denominator_int/divisor))
 
             fix32_calculation = int(numerator_int * 2 ** 48 / denominator_int)
 

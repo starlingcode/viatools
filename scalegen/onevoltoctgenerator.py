@@ -173,7 +173,7 @@ def makeScale1voct(scale_name):
 
             fundamental_divisor = int(denominator_int / divisor)
 
-            ratio_tag = "ratio" + str(temp_numerator) + "_" + str(denominator_int)
+            ratio_tag = "ratio" + str(int(temp_numerator / divisor)) + "_" + str(int(denominator_int / divisor))
 
             fix32_calculation = int(temp_numerator * 2 ** 48 / denominator_int)
 
