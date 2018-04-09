@@ -205,7 +205,6 @@ def makeScale1voct(scale_name):
             divisor = math.gcd(int(numerator_int), int(temp_denominator))
 
             fundamental_divisor = int(temp_denominator / divisor)
-	    
 
             ratio_tag = "ratio" + str(int(numerator_int / divisor)) + "_" + str(int(temp_denominator / divisor))
 		

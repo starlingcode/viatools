@@ -42,7 +42,7 @@ def makeScaleFullSpan(scale_name):
 
         while j < 128:
 
-            numerator_int = int(ratio_table[row_pointer][int(j * len(i)/4096)][0])
+            numerator_int = int(ratio_table[row_pointer][int(j * len(i)/128)][0])
 
             denominator_int = int(ratio_table[row_pointer][int(j * len(i)/128)][1])
 
@@ -70,5 +70,7 @@ def makeScaleFullSpan(scale_name):
 
         full_scale.append(full_row)
         full_row = []
+
+    print(ratio_table)
 
     return [full_scale, pitch_set, scale_tags, num_scales]

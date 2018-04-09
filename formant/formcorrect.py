@@ -34,7 +34,7 @@ t3ubw = ([40.0, 80.0, 100.0])
 # soprano (rendered with 218.181818 Hz fundamental)
 sa = ([800.0, 1150.0, 2900.0, 3900.0, 4950.0])
 sabw = ([80.0, 90.0, 120.0, 130.0, 140.0])
-se = ([350.0, 2000.0, 2800.0, 3600.0, 4950.0])
+se = ([400.0, 2000.0, 2800.0, 3600.0, 4950.0])
 sebw = ([60.0, 100.0, 120.0, 150.0, 200.0])
 si = ([270.0, 2140.0, 2950.0, 3900.0, 4950.0])
 sibw = ([60.0, 90.0, 100.0, 120.0, 120.0])
@@ -71,15 +71,15 @@ def psos2tf(sos, g):
         A = np.convolve(A,As[i])
     return [B, A]
 
-F = np.asarray(ta) # formant frequencies (Hz)
-BW = np.asarray(tabw) # formant bandwidths (Hz)
-name = "tenorA"
-text_file = open("tenorA_formant.txt","a")
+F = np.asarray(tu) # formant frequencies (Hz)
+BW = np.asarray(tubw) # formant bandwidths (Hz)
+name = "tenorU257"
+text_file = open("tenor_formant.csv","a")
 
 f0 = 100 # fundamental pitch of excitation impulse
 nharm = 30 # number of harmonics in impulse
 nsamps = 8000 # number of samples to collect
-output_samples = 512 # number of samples per table (attack AND decay)
+output_samples = 513 # number of samples per table (attack AND decay)
 table_size = 257 # length of each wavetable
 nsamps = output_samples * 11 # number of samples to process. offset = 10 cycles, + output 
 fs = output_samples*f0 # sample rate
@@ -119,7 +119,7 @@ As = np.zeros((nsecs,3), dtype=complex)
 Bs = np.zeros((nsecs,3), dtype=complex)
 
 #complex-conjugate pairs are adjacent in r and p:
-for i in xrange (0, nsecs):
+for i in xrange(0, nsecs):
     k = i*2
     Bs[i] = [r[k]+r[k+1], -(r[k+1]*p[k]+r[k]*p[k+1]), 0]
     As[i] = [1, -(p[k]+p[k+1]), p[k]*p[k+1]]
@@ -143,17 +143,17 @@ for j in xrange(1, nharm+1):
  	 	harm = np.cos(map(lambda x: x*w0T*float(i), n))
   		sig = sig + harm
 	print(i)
-	sig = sig/np.max(sig)    
+	sig = sig/np.max(sig)
 sig = (sig * -1) + 1
 speech = np.zeros(nsamps)
 speech = signal.lfilter([1],A,sig);
 #plt.plot(n[offset:offset+output_samples], sig[offset:offset+output_samples])
 phasecorrection = output_samples - 52
-range = speech[8*output_samples:10*output_samples];
-offset = 8*output_samples + np.amin(np.argmax(range)); # for getting a result after the beginning
-out = speech[offset:offset + output_samples]; # retrieves our samples for a and r
+settled_range = speech[8*output_samples:10*output_samples]
+offset = 8*output_samples + np.amin(np.argmax(settled_range)) # for getting a result after the beginning
+out = speech[offset:offset + output_samples + 4] # retrieves our samples for a and r
 #plt.plot(out)
-out = np.add(out, abs(np.amin(out))) # shift so lowest value is 0
+out = np.add(out, -np.amin(out)) # shift so lowest value is 0
 out = np.multiply(out, 1/(np.max(out))) # divide by max for 0-1 normalization
 out = np.multiply(out, -1) # invert
 out = np.add(out, 1) # add 1 to flip the table
@@ -163,35 +163,25 @@ out = np.int0(out) # and constrain to integer
 #plt.plot(out[offset:offset+output_samples])
 plt.plot(out[0:output_samples])
 # attack
-text_file.write('static const uint16_t ')
-text_file.write(name)
-text_file.write(str(table_size))
-text_file.write('Atk')
-text_file.write('[')
-text_file.write(str(table_size))
-text_file.write('] = {')
+
+text_file.write(name + "Atk, ")
 
 for x in xrange(0, table_size):
         text_file.write(str(out[x]))
-        if x != table_size-1:
+        if x != table_size:
                	text_file.write(', ')
 
-text_file.write('};\n')
+text_file.write('\n')
 # decay
-text_file.write('static const uint16_t ')
-text_file.write(name)
-text_file.write(str(table_size))
-text_file.write('Rls')
-text_file.write('[')
-text_file.write(str(table_size))
-text_file.write('] = {')
 
-for x in reversed(xrange(table_size, output_samples)):
+text_file.write(name + "Rls, ")
+
+for x in reversed(xrange(table_size, output_samples + 1)):
        	text_file.write(str(out[x]))
        	if x != table_size:
                	text_file.write(', ')
 
-text_file.write('};\n')
+text_file.write('\n')
 
 plt.show()
 text_file.close()
