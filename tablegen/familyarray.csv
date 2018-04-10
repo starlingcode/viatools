@@ -8,7 +8,7 @@ audio,6,additive_tri_to_pulse
 audio,7,newBounce
 env,0,superEllipse1Sym
 env,1,superEllipse1Asym
-env,2,doubleLump2ndDegLinAtk
+env,2,testRMS
 env,3,lump2ndDegLinAtk
 env,4,steps
 env,5,sawBendLinAtk
