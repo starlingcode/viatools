@@ -16,29 +16,49 @@ def makeScale1voct(scale_name):
 
 
 
+    # # parse the csv for integer ratios and calculate an interval in terms of octaves
+    # with open(scale_name + ".csv", newline="\n") as csvfile:
+    #     spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+    #     for row in spamreader:
+    #         if row[0] != "":
+    #             if row[1] == "":
+    #                 scale_tags.append(row[0])
+    #                 print(row[0])
+    #             else:
+    #                 ratio = [int(row[0]), int(row[1])]cd
+    #                 ratio_subset.append(ratio)
+    #                 interval_subset.append(math.log(float(ratio[0] / ratio[1]), 2))
+    #
+    #         elif ratio_subset != []:
+    #             ratio_table.append(ratio_subset)
+    #             ratio_subset = []
+    #             interval_table.append(interval_subset)
+    #             interval_subset = []
+
     # parse the csv for integer ratios and calculate an interval in terms of octaves
+    # scale per row format
     with open(scale_name + ".csv", newline="\n") as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
         for row in spamreader:
             if row[0] != "":
-                if row[1] == "":
-                    scale_tags.append(row[0])
-                    print(row[0])
-                else:
-                    ratio = [int(row[0]), int(row[1])]
-                    ratio_subset.append(ratio)
-                    interval_subset.append(math.log(float(ratio[0] / ratio[1]), 2))
-
-            elif ratio_subset != []:
+                scale_tags.append(row[0])
+                #print(row[0])
+                for cell in row[1:]:
+                    if "/" in cell:
+                        delim1 = cell.index("/")
+                        if "-" in cell:
+                            delim2 = cell.index("-")
+                            ratio = [int(cell[0:delim1]), int(cell[delim1 + 1:delim2]), int(cell[delim2+1:])]
+                        else:
+                            ratio = [int(cell[0:delim1]), int(cell[delim1+1:])]
+                        ratio_subset.append(ratio)
+                        interval_subset.append(math.log(float(ratio[0] / ratio[1]), 2))
                 ratio_table.append(ratio_subset)
                 ratio_subset = []
                 interval_table.append(interval_subset)
                 interval_subset = []
 
     # Calculate octave bin for each interval in each scale and append to the first table
-
-    print(len(ratio_table))
-    print(len(interval_subset))
 
     row_pointer = 0
     octave_spans = []
@@ -67,11 +87,6 @@ def makeScale1voct(scale_name):
 
         octave_spans.append(octave_checker)
         row_pointer = row_pointer + 1
-
-    print(interval_table)
-    print(ratio_table)
-    print(scale_tags)
-    print(octave_spans)
 
     num_scales = len(scale_tags)
 
@@ -118,8 +133,6 @@ def makeScale1voct(scale_name):
         start_end_table.append(start_end_subset)
         start_end_subset = []
 
-    print(start_end_table)
-
     # generate the n octave sized tile for each row using the indices from above
 
     subtile = []
@@ -141,14 +154,11 @@ def makeScale1voct(scale_name):
 
             while idx <= last_index:
                 subtile.append(tuple(ratio_table[row_pointer][interval_pointer][0:2]))
-                idx += 1;
+                idx += 1
 
         tiles.append(subtile)
 
         subtile = []
-
-    print(tiles)
-
 
     full_scale = []
     full_row = []
@@ -207,11 +217,11 @@ def makeScale1voct(scale_name):
             fundamental_divisor = int(temp_denominator / divisor)
 
             ratio_tag = "ratio" + str(int(numerator_int / divisor)) + "_" + str(int(temp_denominator / divisor))
-		
+
             fix32_calculation = int(numerator_int * 2 ** 48 / temp_denominator)
 
             integer_part = fix32_calculation >> 32
-		
+
             fractional_part = fix32_calculation - (integer_part << 32)
 
             ratio_holder = (ratio_tag, integer_part, fractional_part, fundamental_divisor)
@@ -225,6 +235,8 @@ def makeScale1voct(scale_name):
 
         full_scale.append(full_row)
         full_row = []
+
+    print(full_scale)
 
     return [full_scale, pitch_set, scale_tags, num_scales]
 

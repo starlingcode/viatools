@@ -38,7 +38,7 @@ for i in scales:
     scale_tags = scaleParser[2]
     num_scales = scaleParser[3]
     
-    global_pitch_set = global_pitch_set|pitch_set
+    global_pitch_set = global_pitch_set | pitch_set
 
     scale_holder.append([full_scale, scale_tags, num_scales])
 
@@ -89,8 +89,11 @@ for s in scales:
 
     full_scale = scale_holder[scales.index(s)][0]
     scale_tags = scale_holder[scales.index(s)][1]
+    num_scales = scale_holder[scales.index(s)][2]
 
-    for i in range(0,num_scales):
+    print(num_scales)
+
+    for i in range(0, num_scales):
 
         for j in range(0, 128):
 
@@ -150,7 +153,7 @@ for s in scales:
     else:
         oneVoct_on = str(0)
     num_scales = scale_holder[scales.index(s)][2]
-    t2bitshift = str(int(math.log(4099//num_scales, 2)))
+    t2bitshift = str(int(math.log(4095//num_scales, 2)))
     text_file.write("Scale " + scale_name + " = {\n")
     text_file.write("   .grid = " + scale_name + "Grid,\n")
     text_file.write("   .t2Bitshift = " + t2bitshift +",\n")
