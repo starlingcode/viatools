@@ -11,25 +11,7 @@ def makeScaleFullSpan(scale_name):
     ratio_table = []
     scale_tags = []
 
-
-
-    # # parse the csv for integer ratios and calculate an interval in terms of octaves
-    # with open(scale_name + ".csv", newline="\n") as csvfile:
-    #     spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
-    #     for row in spamreader:
-    #         if row[0] != "":
-    #             if row[1] == "":
-    #                 scale_tags.append(row[0])
-    #                 print(row[0])
-    #             else:
-    #                 ratio = [int(row[0]), int(row[1])]
-    #                 ratio_subset.append(ratio)
-    #
-    #         elif ratio_subset != []:
-    #             ratio_table.append(ratio_subset)
-    #             ratio_subset = []
-
-    # parse the csv for integer ratios and calculate an interval in terms of octaves
+    # parse the csv for integer ratios
     # scale per row format
     with open(scale_name + ".csv", newline="\n") as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -53,6 +35,12 @@ def makeScaleFullSpan(scale_name):
     pitch_set = set([])
     full_scale = []
     full_row = []
+
+    # spread each row evenly across the full 128 index span
+
+    # calculate the ratio in Q16.48
+
+    # calcualte the PLL divisor if we didn't specify it in the CSV
 
     for i in ratio_table:
 
