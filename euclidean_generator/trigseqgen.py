@@ -40,6 +40,8 @@ def bjorklund(steps, pulses):
     pattern = pattern[i:] + pattern[0:i]
     return pattern
 
+# read csv and return
+
 def parse_csv_euclidean(bank_name, pattern_set):
 
     a_patterns = []
@@ -76,6 +78,8 @@ with open("euclidean_banks.csv", newline="\n") as csvfile:
 
 
 
+
+
 text_file = open("patterns.h", "w")
 text_file.truncate()
 
@@ -84,15 +88,12 @@ text_file.write('#include "stm32f3xx.h"\n')
 text_file.write('#include "stm32f3xx_it.h"\n')
 text_file.write("\n\n\n")
 text_file.write("typedef struct {\n")
-text_file.write("	const uint32_t *data;\n")
-text_file.write("	const uint32_t length;\n")
-text_file.write("} pattern;\n")
-text_file.write("\n\n")
-text_file.write("typedef struct {\n")
-text_file.write("	const pattern *aPatternBank;\n")
-text_file.write("	const pattern *bPatternBank;\n")
-text_file.write("	const uint32_t aLength;\n")
-text_file.write("	const uint32_t bLength;\n")
+text_file.write("	const uint32_t **aPatternBank;\n")
+text_file.write("	const uint32_t **bPatternBank;\n")
+text_file.write("	const uint32_t *aLengths;\n")
+text_file.write("	const uint32_t *bLengths;\n")
+text_file.write("	const uint32_t aNumPatterns;\n")
+text_file.write("	const uint32_t bNumPatterns;\n")
 text_file.write("} pattern_bank;\n")
 text_file.write("\n\n\n")
 
@@ -101,44 +102,63 @@ for i in current_pattern_set:
     pattern = list(i[1])
     length = len(pattern)
     for index in range(0, len(pattern)):
-        print(index)
         if index == 0:
             text_file.write(
-                "static const pattern " + tag + "[" + str(length) + "] = {{" + str(pattern[0]) + ", ")
+                "static const uint32_t " + tag + "[" + str(length) + "] = {" + str(pattern[0]) + ", ")
         elif index != (length - 1):
             text_file.write(str(pattern[index]) + ", ")
         else:
-            text_file.write(str(pattern[index]) + "}, " + str(length) + "}; \n\n")
+            text_file.write(str(pattern[index]) + "}; \n\n")
+
 text_file.write("\n\n\n")
 
 for i in banks:
     a_length = len(i[1])
     b_length = len(i[2])
     for index in range(0, a_length):
-        print(index)
         if index == 0:
             text_file.write(
-                "static const uint32_t *" + i[0] + "_a[" + str(length) + "] = {" + str(i[1][0][0]) + ", ")
+                "static const uint32_t *" + i[0] + "_a[" + str(a_length) + "] = {" + str(i[1][0][0]) + ", ")
         elif index != (a_length - 1):
             text_file.write(str(i[1][index][0]) + ", ")
         else:
             text_file.write(str(i[1][index][0]) + "}; \n\n")
 
     for index in range(0, b_length):
-        print(index)
         if index == 0:
             text_file.write(
-                "static const uint32_t *" + i[0] + "_b[" + str(length) + "] = {" + str(i[2][0][0]) + ", ")
+                "static const uint32_t *" + i[0] + "_b[" + str(b_length) + "] = {" + str(i[2][0][0]) + ", ")
         elif index != (b_length - 1):
             text_file.write(str(i[2][index][0]) + ", ")
         else:
             text_file.write(str(i[2][index][0]) + "}; \n\n")
 
+    for index in range(0, a_length):
+        if index == 0:
+            text_file.write(
+                "static const uint32_t " + i[0] + "_aLengths[" + str(a_length) + "] = {" + str(len(i[1][0][1])) + ", ")
+        elif index != (a_length - 1):
+            text_file.write(str(len(i[1][index][1])) + ", ")
+        else:
+            text_file.write(str(len(i[1][index][1])) + "}; \n\n")
+
+    for index in range(0, a_length):
+        if index == 0:
+            text_file.write(
+                "static const uint32_t " + i[0] + "_bLengths[" + str(a_length) + "] = {" + str(len(i[2][0][1])) + ", ")
+        elif index != (a_length - 1):
+            text_file.write(str(len(i[2][index][1])) + ", ")
+        else:
+            text_file.write(str(len(i[2][index][1])) + "}; \n\n")
+
+
     text_file.write("static const pattern_bank " + i[0] + " = {\n")
     text_file.write("   .aPatternBank = " + i[0] + "_a,\n")
     text_file.write("   .bPatternBank = " + i[0] + "_b,\n")
-    text_file.write("   .aLength = " + str(a_length) + ",\n")
-    text_file.write("   .bLength = " + str(b_length) + "};\n\n")
+    text_file.write("   .aLengths = " + i[0] + "_aLengths,\n")
+    text_file.write("   .bLengths = " + i[0] + "_bLengths,\n")
+    text_file.write("   .aNumPatterns = " + str(a_length) + ",\n")
+    text_file.write("   .bNumPatterns = " + str(b_length) + "};\n\n")
 
 
 
