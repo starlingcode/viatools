@@ -67,13 +67,18 @@ def parse_csv_euclidean(bank_name, pattern_set):
 current_pattern_set = set([])
 banks = []
 
+
 with open("euclidean_banks.csv", newline="\n") as csvfile:
     reader = csv.reader(csvfile, delimiter=',', quotechar='|')
     for row in reader:
+        this_bank = []
         if row[0] != "":
             results = parse_csv_euclidean(row[0], current_pattern_set)
             current_pattern_set = results[2]
-            banks.append([row[0], results[0], results[1]])
+            this_bank.append([row[0], results[0], results[1]])
+        banks.append(this_bank)
+        print(this_bank)
+        this_bank = []
 
 
 
@@ -95,7 +100,12 @@ text_file.write("	const uint32_t *bLengths;\n")
 text_file.write("	const uint32_t aNumPatterns;\n")
 text_file.write("	const uint32_t bNumPatterns;\n")
 text_file.write("} pattern_bank;\n")
-text_file.write("\n\n\n")
+text_file.write("\n\n")
+text_file.write("pattern_bank *patternBanks[8];\n")
+text_file.write("pattern_bank *currentBank;\n")
+text_file.write("\n\n")
+text_file.write("void initializePatterns(void);\n")
+text_file.write("\n\n")
 
 for i in current_pattern_set:
     tag = str(i[0])
@@ -111,55 +121,77 @@ for i in current_pattern_set:
             text_file.write(str(pattern[index]) + "}; \n\n")
 
 text_file.write("\n\n\n")
+text_file.write("//////////////////////////////////////////////////////// \n\n")
 
-for i in banks:
-    a_length = len(i[1])
-    b_length = len(i[2])
-    for index in range(0, a_length):
-        if index == 0:
-            text_file.write(
-                "static const uint32_t *" + i[0] + "_a[" + str(a_length) + "] = {" + str(i[1][0][0]) + ", ")
-        elif index != (a_length - 1):
-            text_file.write(str(i[1][index][0]) + ", ")
-        else:
-            text_file.write(str(i[1][index][0]) + "}; \n\n")
+for j in banks:
+    index = banks.index(j)
+    for i in banks[index]:
+        a_length = len(i[1])
+        b_length = len(i[2])
+        for index in range(0, a_length):
+            if index == 0:
+                text_file.write(
+                    "static const uint32_t *" + i[0] + "_a[" + str(a_length) + "] = {" + str(i[1][0][0]) + ", ")
+            elif index != (a_length - 1):
+                text_file.write(str(i[1][index][0]) + ", ")
+            else:
+                text_file.write(str(i[1][index][0]) + "}; \n\n")
 
-    for index in range(0, b_length):
-        if index == 0:
-            text_file.write(
-                "static const uint32_t *" + i[0] + "_b[" + str(b_length) + "] = {" + str(i[2][0][0]) + ", ")
-        elif index != (b_length - 1):
-            text_file.write(str(i[2][index][0]) + ", ")
-        else:
-            text_file.write(str(i[2][index][0]) + "}; \n\n")
+        for index in range(0, b_length):
+            if index == 0:
+                text_file.write(
+                    "static const uint32_t *" + i[0] + "_b[" + str(b_length) + "] = {" + str(i[2][0][0]) + ", ")
+            elif index != (b_length - 1):
+                text_file.write(str(i[2][index][0]) + ", ")
+            else:
+                text_file.write(str(i[2][index][0]) + "}; \n\n")
 
-    for index in range(0, a_length):
-        if index == 0:
-            text_file.write(
-                "static const uint32_t " + i[0] + "_aLengths[" + str(a_length) + "] = {" + str(len(i[1][0][1])) + ", ")
-        elif index != (a_length - 1):
-            text_file.write(str(len(i[1][index][1])) + ", ")
-        else:
-            text_file.write(str(len(i[1][index][1])) + "}; \n\n")
+        for index in range(0, a_length):
+            if index == 0:
+                text_file.write(
+                    "static const uint32_t " + i[0] + "_aLengths[" + str(a_length) + "] = {" + str(len(i[1][0][1])) + ", ")
+            elif index != (a_length - 1):
+                text_file.write(str(len(i[1][index][1])) + ", ")
+            else:
+                text_file.write(str(len(i[1][index][1])) + "}; \n\n")
 
-    for index in range(0, a_length):
-        if index == 0:
-            text_file.write(
-                "static const uint32_t " + i[0] + "_bLengths[" + str(a_length) + "] = {" + str(len(i[2][0][1])) + ", ")
-        elif index != (a_length - 1):
-            text_file.write(str(len(i[2][index][1])) + ", ")
-        else:
-            text_file.write(str(len(i[2][index][1])) + "}; \n\n")
+        for index in range(0, a_length):
+            if index == 0:
+                text_file.write(
+                    "static const uint32_t " + i[0] + "_bLengths[" + str(a_length) + "] = {" + str(len(i[2][0][1])) + ", ")
+            elif index != (a_length - 1):
+                text_file.write(str(len(i[2][index][1])) + ", ")
+            else:
+                text_file.write(str(len(i[2][index][1])) + "}; \n\n")
 
 
-    text_file.write("static const pattern_bank " + i[0] + " = {\n")
-    text_file.write("   .aPatternBank = " + i[0] + "_a,\n")
-    text_file.write("   .bPatternBank = " + i[0] + "_b,\n")
-    text_file.write("   .aLengths = " + i[0] + "_aLengths,\n")
-    text_file.write("   .bLengths = " + i[0] + "_bLengths,\n")
-    text_file.write("   .aNumPatterns = " + str(a_length) + ",\n")
-    text_file.write("   .bNumPatterns = " + str(b_length) + "};\n\n")
+        text_file.write("static const pattern_bank " + i[0] + " = {\n")
+        text_file.write("   .aPatternBank = " + i[0] + "_a,\n")
+        text_file.write("   .bPatternBank = " + i[0] + "_b,\n")
+        text_file.write("   .aLengths = " + i[0] + "_aLengths,\n")
+        text_file.write("   .bLengths = " + i[0] + "_bLengths,\n")
+        text_file.write("   .aNumPatterns = " + str(a_length) + ",\n")
+        text_file.write("   .bNumPatterns = " + str(b_length) + "};\n\n")
+        text_file.write("//////////////////////////////////////////////////////// \n\n")
 
+text_file.close()
+
+text_file = open("patterns.c", "w")
+text_file.truncate()
+
+text_file.write('#include "stm32f3xx_hal.h"\n')
+text_file.write('#include "stm32f3xx.h"\n')
+text_file.write('#include "stm32f3xx_it.h"\n')
+text_file.write('#include "patterns.h"\n\n\n')
+
+text_file.write("void initializePatterns() {\n")
+for j in banks:
+    bank_name = str(j[0][0])
+    index = banks.index(j)
+    text_file.write("   patternBanks[" + str(index) + "] = &" + bank_name + ";\n")
+text_file.write("}\n")
+
+text_file.close()
 
 
 
