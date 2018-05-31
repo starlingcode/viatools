@@ -1,0 +1,4 @@
+/Users/willmitchell/Documents/wavetablegentools/viaflash/CMakeFiles/rebuild_cache.dir
+/Users/willmitchell/Documents/wavetablegentools/viaflash/CMakeFiles/edit_cache.dir
+/Users/willmitchell/Documents/wavetablegentools/viaflash/CMakeFiles/viaflash.dir
+/Users/willmitchell/Documents/wavetablegentools/viaflash/CMakeFiles/viaflash_autogen.dir
