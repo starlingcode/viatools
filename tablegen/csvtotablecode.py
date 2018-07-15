@@ -30,11 +30,11 @@ with open('familyarray.csv', 'r') as csvfile:
     tablereader = csv.reader(csvfile, delimiter=',')
     for row in tablereader:
         if row[0] == "audio":
-            audio_families.append([row[0], row[1], row[2], row[3]])
+            audio_families.append([row[0], row[1], row[2]])
         elif row[0] == "env":
-            env_families.append([row[0], row[1], row[2], row[3]])
+            env_families.append([row[0], row[1], row[2]])
         elif row[0] == "seq":
-            seq_families.append([row[0], row[1], row[2], row[3]])
+            seq_families.append([row[0], row[1], row[2]])
 
 family_array = []
 family_array.append(audio_families)
@@ -47,7 +47,7 @@ for family in family_array:
     for i in family:
         families_used.add(i[2])
 
-print(families_used)
+# print(families_used)
 
 slopes_used = set([])
 
@@ -61,38 +61,62 @@ with open('familydefinitions.csv', 'r') as csvfile:
             slopes_used.add(row[1])
             slopes_used.add(row[2])
 
-print(slopes_used)
+# print(slopes_used)
 
 slopefamilies = []
 slopefamily = []
-tables_used = set([])
-
-with open('rowdefinitions.csv', 'r') as csvfile:
-            tablereader = csv.reader(csvfile, delimiter=',')
-            for row in tablereader:
-                if row[0] in slopes_used:
-                    for i in row:
-                        if str(i) != '':
-                            slopefamily.append(i)
-                            if row.index(i) != 0:
-                                tables_used.add(i)
-                    slopefamilies.append(slopefamily)
-                    slopefamily = []
-
-print(slopefamilies)
-
 tables = []
 table = []
 
-with open('tabledefinitions.csv', 'r') as csvfile:
-            tablereader = csv.reader(csvfile, delimiter=',')
-            for row in tablereader:
-                if row[0] in tables_used:
-                    for i in row:
-                        if str(i) != '':
-                            table.append(i)
-                    tables.append(table)
-                    table = []
+for slope in slopes_used:
+    with open('table_sample_defs/' + slope + '.csv', 'r') as csvfile:
+        slopereader = csv.reader(csvfile, delimiter=',')
+        rowcounter = 0
+        for row in slopereader:
+            if row[0] != '':
+                slopefamily.append(slope+str(rowcounter))
+                table.append(slope+str(rowcounter))
+                j = 0
+                while j < len(row) and row[j] != '':
+                    table.append(row[j])
+                    j += 1
+                    #print(row[j])
+                tables.append(table)
+                table = []
+            rowcounter += 1
+
+        slopefamilies.append(slopefamily)
+        slopefamily = []
+
+print(slopefamilies)
+print(tables)
+
+# with open('rowdefinitions.csv', 'r') as csvfile:
+#             tablereader = csv.reader(csvfile, delimiter=',')
+#             for row in tablereader:
+#                 if row[0] in slopes_used:
+#                     for i in row:
+#                         if str(i) != '':
+#                             slopefamily.append(i)
+#                             if row.index(i) != 0:
+#                                 tables_used.add(i)
+#                     slopefamilies.append(slopefamily)
+#                     slopefamily = []
+#
+# print(slopefamilies)
+#
+# tables = []
+# table = []
+#
+# with open('tabledefinitions.csv', 'r') as csvfile:
+#             tablereader = csv.reader(csvfile, delimiter=',')
+#             for row in tablereader:
+#                 if row[0] != "" and row[0] in tables_used:
+#                     for i in row:
+#                         if str(i) != '':
+#                             table.append(i)
+#                     tables.append(table)
+#                     table = []
 
 
 

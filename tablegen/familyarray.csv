@@ -6,7 +6,7 @@ audio,4,skipSaw
 audio,5,sinwavefold_257
 audio,6,additive_tri_to_pulse
 audio,7,newBounce
-env,0,superEllipse1Sym
+env,0,gamma257
 env,1,superEllipse1Asym
 env,2,testRMS
 env,3,lump2ndDegLinAtk

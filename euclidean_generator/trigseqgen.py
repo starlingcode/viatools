@@ -2,8 +2,6 @@ import sys
 import csv
 
 # from https://github.com/brianhouse/bjorklund
-
-
 def bjorklund(steps, pulses):
     steps = int(steps)
     pulses = int(pulses)
@@ -41,7 +39,6 @@ def bjorklund(steps, pulses):
     return pattern
 
 # read csv and return
-
 def parse_csv_euclidean(bank_name, pattern_set):
 
     a_patterns = []
@@ -52,15 +49,17 @@ def parse_csv_euclidean(bank_name, pattern_set):
         for row in reader:
             if row[0] != "":
                 a_pattern = [bank_name + "_" + str(row[0]) + "_" + str(row[1]),
-                             tuple(bjorklund(row[1], row[0]))]
+                             tuple(bjorklund(row[1], row[0])), float(row[0])/float(row[1])]
                 a_pattern = tuple(a_pattern)
                 a_patterns.append(a_pattern)
                 pattern_set.add(a_pattern)
                 b_pattern = [bank_name + "_" + str(row[2]) + "_" + str(row[3]),
-                             tuple(bjorklund(row[3], row[2]))]
+                             tuple(bjorklund(row[3], row[2])), float(row[2])/float(row[3])]
                 b_pattern = tuple(b_pattern)
                 b_patterns.append(b_pattern)
                 pattern_set.add(b_pattern)
+        a_patterns = sorted(a_patterns, key=lambda x: float(x[2]))
+        b_patterns = sorted(b_patterns, key=lambda x: float(x[2]))
     return [a_patterns, b_patterns, pattern_set]
 
 
@@ -77,8 +76,11 @@ with open("euclidean_banks.csv", newline="\n") as csvfile:
             current_pattern_set = results[2]
             this_bank.append([row[0], results[0], results[1]])
         banks.append(this_bank)
-        print(this_bank)
+        #print(this_bank)
         this_bank = []
+
+for bank in banks:
+    print(bank[0][2])
 
 
 
