@@ -3,199 +3,187 @@
 #include "stm32f3xx_hal.h"
 #include "stm32f3xx.h"
 #include "stm32f3xx_it.h"
+#include "modes.h"
 
 
 
-Family moogSquare = {
+const Family moogSquare = {
 	.attackFamily = moogSquareShiftAttackFamily,
 	.releaseFamily = moogSquareShiftReleaseFamily,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 0};
+	.tableLength = 256,
+	.familySize = 9};
 
 
-Family triOdd = {
+const Family triOdd = {
 	.attackFamily = trioddAttackFamily,
 	.releaseFamily = trioddReleaseFamily,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 0};
+	.tableLength = 256,
+	.familySize = 9};
 
 
-Family sawBend = {
+const Family sawBend = {
 	.attackFamily = sawBendAttackFamily,
 	.releaseFamily = sawBendReleaseFamily,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 0};
+	.tableLength = 256,
+	.familySize = 5};
 
 
-Family sawBendLinAtk = {
-	.attackFamily = allLinear5_5,
-	.releaseFamily = sawBendReleaseFamily,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 0};
-
-
-Family exciteBike = {
+const Family exciteBike = {
 	.attackFamily = exciteBikeAttackFamily,
 	.releaseFamily = exciteBikeReleaseFamily,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 0};
+	.tableLength = 256,
+	.familySize = 9};
 
 
-Family algerian = {
+const Family algerian = {
 	.attackFamily = algerianAttackFamily,
 	.releaseFamily = algerianReleaseFamily,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 0};
+	.tableLength = 256,
+	.familySize = 5};
 
 
-Family superEllipse1Asym = {
-	.attackFamily = superEllipse1AsymAttackFamily,
-	.releaseFamily = superEllipse1AsymReleaseFamily,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 0};
-
-
-Family steps = {
-	.attackFamily = stepsAttackFamily,
-	.releaseFamily = stepsReleaseFamily,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 0};
-
-
-Family impevens = {
+const Family impevens = {
 	.attackFamily = impshort,
 	.releaseFamily = impshort,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 0};
+	.tableLength = 256,
+	.familySize = 9};
 
 
-Family skipSaw = {
+const Family skipSaw = {
 	.attackFamily = skipsaw,
 	.releaseFamily = skipsaw,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 0};
+	.tableLength = 256,
+	.familySize = 5};
 
 
-Family lump2ndDegLinAtk = {
-	.attackFamily = allLinear129_5,
-	.releaseFamily = lump2ndDeg,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 0};
-
-
-Family threeBounceLinAtk = {
-	.attackFamily = allLinear65_3,
-	.releaseFamily = threeBounce,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 0};
-
-
-Family tenor257 = {
+const Family tenor257 = {
 	.attackFamily = tenor257Atk,
 	.releaseFamily = tenor257Rls,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 1};
+	.tableLength = 256,
+	.familySize = 5};
 
 
-Family linwavefold_257 = {
+const Family linwavefold_257 = {
 	.attackFamily = linwavefold_257_Family,
 	.releaseFamily = linwavefold_257_Family,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 0};
+	.tableLength = 256,
+	.familySize = 5};
 
 
-Family sinwavefold_257 = {
+const Family sinwavefold_257 = {
 	.attackFamily = sinwavefold_257_Family,
 	.releaseFamily = sinwavefold_257_Family,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 0};
+	.tableLength = 256,
+	.familySize = 9};
 
 
-Family additive_tri_to_pulse = {
+const Family additive_tri_to_pulse = {
 	.attackFamily = additive_tri_to_pulseFamily,
 	.releaseFamily = additive_tri_to_pulseFamily,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 0};
+	.tableLength = 256,
+	.familySize = 5};
 
 
-Family newBounce = {
+const Family newBounce = {
 	.attackFamily = newBounceFamily,
 	.releaseFamily = newBounceFamily,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 0};
+	.tableLength = 256,
+	.familySize = 5};
 
 
-Family soprano257 = {
+const Family soprano257 = {
 	.attackFamily = soprano257Atk,
 	.releaseFamily = soprano257Rls,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 1};
+	.tableLength = 256,
+	.familySize = 5};
 
 
-Family testRMS = {
+const Family testRMS = {
 	.attackFamily = testRMSRMSAtk,
 	.releaseFamily = testRMSRMSRls,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 0};
+	.tableLength = 256,
+	.familySize = 5};
 
 
-Family gamma257 = {
+const Family gamma257 = {
 	.attackFamily = gamma257Attack,
 	.releaseFamily = gamma257Attack,
-	.tableLength = 0,
-	.familySize = 0,
-	.bandlimitOff = 0};
+	.tableLength = 256,
+	.familySize = 9};
+
+
+const Family bounce_257 = {
+	.attackFamily = bounce_257_slopes,
+	.releaseFamily = bounce_257_slopes,
+	.tableLength = 256,
+	.familySize = 5};
+
+
+const Family circular_257 = {
+	.attackFamily = circular_257_slopes,
+	.releaseFamily = circular_257_slopes,
+	.tableLength = 256,
+	.familySize = 5};
+
+
+const Family quintic_outin2quintic_inout257 = {
+	.attackFamily = quintic_outin2quintic_inout257_slopes,
+	.releaseFamily = quintic_outin2quintic_inout257_slopes,
+	.tableLength = 256,
+	.familySize = 9};
+
+
+const Family quintic_out2quintic_in257 = {
+	.attackFamily = quintic_out2quintic_in257_slopes,
+	.releaseFamily = quintic_out2quintic_in257_slopes,
+	.tableLength = 256,
+	.familySize = 9};
+
+
+const Family quintic_inout2quintic_outin257 = {
+	.attackFamily = quintic_inout2quintic_outin257_slopes,
+	.releaseFamily = quintic_inout2quintic_outin257_slopes,
+	.tableLength = 256,
+	.familySize = 9};
+
+
+const Family quintic_in2quintic_out257 = {
+	.attackFamily = quintic_in2quintic_out257_slopes,
+	.releaseFamily = quintic_in2quintic_out257_slopes,
+	.tableLength = 256,
+	.familySize = 9};
 
 
 
 
 void fillFamilyArray(void) {
 
-	familyArray[audio][0] = tenor257;
-	familyArray[audio][1] = soprano257;
-	familyArray[audio][2] = impevens;
-	familyArray[audio][3] = linwavefold_257;
-	familyArray[audio][4] = skipSaw;
-	familyArray[audio][5] = sinwavefold_257;
-	familyArray[audio][6] = additive_tri_to_pulse;
-	familyArray[audio][7] = newBounce;
-	familyArray[env][0] = gamma257;
-	familyArray[env][1] = superEllipse1Asym;
-	familyArray[env][2] = testRMS;
-	familyArray[env][3] = lump2ndDegLinAtk;
-	familyArray[env][4] = steps;
-	familyArray[env][5] = sawBendLinAtk;
-	familyArray[env][6] = newBounce;
-	familyArray[env][7] = threeBounceLinAtk;
-	familyArray[seq][0] = skipSaw;
-	familyArray[seq][1] = exciteBike;
-	familyArray[seq][2] = newBounce;
-	familyArray[seq][3] = sawBend;
-	familyArray[seq][4] = triOdd;
-	familyArray[seq][5] = moogSquare;
-	familyArray[seq][6] = algerian;
-	familyArray[seq][7] = exciteBike;
+	familyArray[audio][0] = &tenor257;
+	familyArray[audio][1] = &soprano257;
+	familyArray[audio][2] = &impevens;
+	familyArray[audio][3] = &linwavefold_257;
+	familyArray[audio][4] = &skipSaw;
+	familyArray[audio][5] = &sinwavefold_257;
+	familyArray[audio][6] = &additive_tri_to_pulse;
+	familyArray[audio][7] = &newBounce;
+	familyArray[env][0] = &testRMS;
+	familyArray[env][1] = &gamma257;
+	familyArray[env][2] = &bounce_257;
+	familyArray[env][3] = &circular_257;
+	familyArray[env][4] = &quintic_outin2quintic_inout257;
+	familyArray[env][5] = &quintic_out2quintic_in257;
+	familyArray[env][6] = &quintic_inout2quintic_outin257;
+	familyArray[env][7] = &quintic_in2quintic_out257;
+	familyArray[seq][0] = &bounce_257;
+	familyArray[seq][1] = &exciteBike;
+	familyArray[seq][2] = &newBounce;
+	familyArray[seq][3] = &sawBend;
+	familyArray[seq][4] = &triOdd;
+	familyArray[seq][5] = &moogSquare;
+	familyArray[seq][6] = &algerian;
+	familyArray[seq][7] = &exciteBike;
 
-	currentFamily = familyArray[0][0];
+	currentFamily = *familyArray[0][0];
 	switchFamily();
 
 }
