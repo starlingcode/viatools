@@ -157,7 +157,7 @@ class Pattern:
                     else:
                         text_file.write(str(len(i[2][index][1])) + "}; \n\n")
 
-                text_file.write("static const pattern_bank " + i[0] + " = {\n")
+                text_file.write("static const dualBooleanSequence " + i[0] + " = {\n")
                 text_file.write("   .aPatternBank = " + i[0] + "_a,\n")
                 text_file.write("   .bPatternBank = " + i[0] + "_b,\n")
                 text_file.write("   .aLengths = " + i[0] + "_aLengths,\n")
@@ -172,7 +172,7 @@ class Pattern:
 
     def write_gateseq_source(self, banks):
 
-        text_file = open("generated_code/gateseq_pattern_init.c", "w")
+        text_file = open("generated_code/gateseq_pattern_init.cpp", "w")
         text_file.truncate()
 
         text_file.write('#include <gateseq.hpp>\n\n')

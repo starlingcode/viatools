@@ -1,0 +1,50 @@
+/*
+ * tables.h
+ *
+ *  Created on: Aug 18, 2018
+ *      Author: willmitchell
+ */
+
+#ifndef INC_TABLES_H_
+#define INC_TABLES_H_
+
+#include <sample_data.hpp>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+//
+typedef struct {
+	const uint16_t **attackSlope;
+	const uint16_t **releaseSlope;
+	uint32_t slopeLength;
+	uint32_t numWaveforms;
+} Wavetable;
+
+#ifdef __cplusplus
+}
+#endif
+
+// helper function to load the above array
+
+void loadTable(Wavetable * family);
+
+/*
+ *
+ * Assign tables of slopes
+ *
+ */
+
+static const uint16_t *allLinear[5] = {allLinear_Samples, allLinear_Samples, allLinear_Samples,
+		allLinear_Samples, allLinear_Samples};
+
+static const uint16_t *allExpo[5] = {sharpExpo, sharpExpo, sharpExpo,
+		sharpExpo, sharpExpo};
+
+static const uint16_t *impshort_5[9] = { impshort0, impshort1, impshort2,
+		impshort3, impshort4};
+
+
+
