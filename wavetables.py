@@ -55,7 +55,7 @@ class Wavetable:
 
     def read_sync_tables(self):
 
-        self.meta_tables = []
+        self.sync_tables = []
 
         with open('wavetable_resources/sync_tables.csv', 'r') as csvfile:
             tablereader = csv.reader(csvfile, delimiter=',')
@@ -67,7 +67,7 @@ class Wavetable:
 
     def read_scanner_tables(self):
 
-        self.meta_tables = []
+        self.scanner_tables = []
 
         with open('wavetable_resources/scanner_tables.csv', 'r') as csvfile:
             tablereader = csv.reader(csvfile, delimiter=',')

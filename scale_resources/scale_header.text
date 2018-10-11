@@ -1,0 +1,25 @@
+/*
+ * scales.h
+ *
+ *  Created on: Aug 18, 2018
+ *      Author: willmitchell
+ */
+
+#ifndef INC_SCALES_HPP_
+#define INC_SCALES_HPP_
+
+
+typedef struct {
+	const uint32_t integerPart;
+	const uint32_t fractionalPart;
+	const uint32_t fundamentalDivision;
+} ScaleNote;
+
+
+
+typedef struct {
+	const ScaleNote* const** grid;
+	const uint32_t t2Bitshift;
+	const uint32_t oneVoltOct;
+} Scale;
+
