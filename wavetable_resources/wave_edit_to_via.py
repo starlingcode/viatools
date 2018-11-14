@@ -41,4 +41,16 @@ for waveform in processed_table:
 print(attack_table)
 print(release_table)
 
+name = input("Enter the table name: ")
 
+with open("table_sample_defs/" + name + '_attack.csv', "w") as output:
+    output_write = csv.writer(output)
+    for row in attack_table:
+        print(len(row))
+        output_write.writerow(row)
+
+with open("table_sample_defs/" + name + '_release.csv', "w") as output:
+    output_write = csv.writer(output)
+    for row in release_table:
+        print(len(row))
+        output_write.writerow(row)

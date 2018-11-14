@@ -67,7 +67,7 @@ current_pattern_set = set([])
 banks = []
 
 
-with open("euclidean_banks.csv", newline="\n") as csvfile:
+with open("sequencer1banks.csv", newline="\n") as csvfile:
     reader = csv.reader(csvfile, delimiter=',', quotechar='|')
     for row in reader:
         this_bank = []

@@ -168,7 +168,7 @@ class Scales:
                 one_v_oct_on = str(0)
             num_scales = self.scale_holder[self.scales.index(s)][2]
             # calculate the size of the bitshift needed to scale the T2 control across full set of rows
-            t2bitshift = str(int(math.log(4095 // num_scales, 2)))
+            t2bitshift = str(int(math.log(4095 // num_scales, 2) + 1))
             text_file.write("static const Scale " + scale_name + " = {\n")
             text_file.write("   .grid = " + scale_name + "Grid,\n")
             text_file.write("   .t2Bitshift = " + t2bitshift + ",\n")

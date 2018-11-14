@@ -2,13 +2,10 @@
 #define SEQUENCERS_INC_BOOLEAN_SEQUENCES_H_
 
 typedef struct {
-	const uint32_t **aPatternBank;
-	const uint32_t **bPatternBank;
-	const uint32_t *aLengths;
-	const uint32_t *bLengths;
-	const uint32_t aNumPatterns;
-	const uint32_t bNumPatterns;
-} dualBooleanSequence;
+	const uint32_t **patternBank;
+	const uint32_t *lengths;
+	const uint32_t numPatterns;
+} booleanSequenceBank;
 
 /////////////////////////
 // Euclidean sequences //
