@@ -14,6 +14,11 @@ class Pattern:
         pulses = int(pulses)
         if pulses > steps:
             raise ValueError
+        if pulses == 0:
+            zero_pad = []
+            for i in range(0, steps):
+                zero_pad.append(0)
+            return zero_pad
         pattern = []
         counts = []
         remainders = []
