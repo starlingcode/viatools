@@ -91,7 +91,7 @@ def period_from_autocorr(sig):
     peak = argmax(corr[start:]) + start
     px, py = parabolic(corr, peak)
 
-    return px
+    return px, start
 
 
 def freq_from_HPS(sig, fs):

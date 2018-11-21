@@ -18,19 +18,13 @@ def spectral_resynthesize(file_name):
     file_shorthand = file_name.split("/")[-1]
 
     # number of additive partials
-    num_harmonics = 4096
+    num_harmonics = 256
+
+    # "lowpass filter" as multiple of fundamental
+    cutoff_overtone = 64
 
     # in case you need to make a noise record
     render_seconds = 4
-
-    # use autocorrelation?
-    use_auto_corr = True
-
-    # number of most significant frequencies from which to choose the lowest
-    fundamental_threshold = 16
-
-    # lower the detected fundamental frequency
-    period_multiply = 4
 
     # get the raw samples and sample rate of the wav file
     samples, samplerate = sf.read(file_name)
@@ -45,6 +39,13 @@ def spectral_resynthesize(file_name):
     else:
         for sample in samples:
             sample_buffer.append(sample)
+
+    results = freq_est.period_from_autocorr(sample_buffer)
+    base_period = int(results[0])
+
+    base_freq = samplerate/base_period
+
+    print(base_freq)
 
     window = scipy.signal.blackmanharris(len(sample_buffer))
 
@@ -84,54 +85,50 @@ def spectral_resynthesize(file_name):
         phase_shift = np.imag(value[1]) * 2 * np.pi
         freq = value[0]
 
-        print(freq)
-        print(amplitude)
+        if freq < (base_freq * cutoff_overtone):
 
-        write_array += np.sin(render_length/samplerate * 2 * np.pi * freq + phase_shift) * amplitude
+            write_array += np.sin(render_length/samplerate * 2 * np.pi * freq + phase_shift) * amplitude
 
     write_array = write_array / np.max(write_array)
 
+    results = freq_est.period_from_autocorr(sample_buffer)
+    peak_period = int(results[0])
+    start = results[1]
 
-    if use_auto_corr:
+    print("made it")
 
-        peak_period = int(freq_est.period_from_autocorr(sample_buffer))
+    in_fade = np.linspace(0.0, 1.0, peak_period)
+    out_fade = np.linspace(1.0, 0.0, peak_period)
 
-    else:
+    wavetable = write_array[start + peak_period: start + 2*peak_period] * out_fade
+    last_table = write_array[start:start + peak_period] * in_fade
 
-        # find the lowest frequency above a significance threshold
-
-        base = 20000
-
-        for freq in signficant_frequences[:fundamental_threshold]:
-
-            if freq[0] < base and freq[0] != 0:
-
-                base = freq[0]
-
-        peak_period = int(samplerate/base) * period_multiply
-
-    window = scipy.signal.tukey(peak_period)
-
-    wavetable = write_array[:peak_period] * window
+    wavetable += last_table
 
     repeat = 0
+
+    print(wavetable)
 
     wavetable_render = []
 
     while repeat < 500:
+
+        print(repeat)
 
         for sample in wavetable:
             wavetable_render.append(sample)
 
         repeat += 1
 
-    render = np.array(wavetable_render)
-
     wavetable_render = scipy.signal.resample(wavetable_render, 512*500)
+
+    print("resampled")
 
     read_position = 512*3
 
     wavetable = wavetable_render[read_position: read_position + 512]
+
+    print("made it again 2")
 
     # render
     sf.write("test_outputs/test_output_" + file_shorthand, write_array, samplerate)
@@ -139,7 +136,7 @@ def spectral_resynthesize(file_name):
     # render
     sf.write("wavetable_renders/wavetable_output_" + file_shorthand, wavetable_render, samplerate)
 
-    return wavetable
+    return wavetable, 0
 
 table = input('Which subfolder in table_input should I use to make a Via wavetable: ')
 
@@ -147,11 +144,16 @@ table_samples = []
 
 for sound in os.listdir("table_input/" + table):
 
-    print(sound)
+    if sound != ".DS_Store":
 
-    table_samples.append(spectral_resynthesize("table_input/" + table + "/" + sound))
+        print(sound)
 
-x = np.linspace(0, 512, 512)
+        analyze = spectral_resynthesize("table_input/" + table + "/" + sound)
+
+        table_samples.append(analyze[0])
+        print("spectral density = " + str(np.average(analyze[1])))
+
+x = np.linspace(0, 1024, 1024)
 
 with open("table_output/"+table+".csv", "w") as output:
 
@@ -159,6 +161,10 @@ with open("table_output/"+table+".csv", "w") as output:
 
     for table in table_samples:
         table_writer.writerow(table)
-        plt.plot(x, table)
+        two_tables = np.zeros(1024)
+        two_tables[:512] = table
+        two_tables[512:1024] = table
+        plt.plot(x, two_tables)
+
 
 plt.show()

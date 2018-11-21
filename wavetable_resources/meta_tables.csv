@@ -1,11 +1,11 @@
 0,0,trains
-0,1,soprano257
-0,2,impevens
-0,3,linwavefold_257
-0,4,skipSaw
+0,1,waterphone
+0,2,vox
+0,3,csound_formants
+0,4,impevens
 0,5,sinwavefold_257
-0,6,additive_tri_to_pulse
-0,7,newBounce
+0,6,linwavefold_257
+0,7,skipSaw
 1,0,testRMS
 1,1,gamma257
 1,2,bounce_257

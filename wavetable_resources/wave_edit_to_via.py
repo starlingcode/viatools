@@ -9,6 +9,8 @@ root.withdraw()
 
 wave_edit_csv = filedialog.askopenfilename()
 
+num_tables = input("How many tables? 3, 5, or 9?")
+
 raw_table = []
 
 with open(wave_edit_csv, "r") as csvfile:
@@ -21,7 +23,7 @@ with open(wave_edit_csv, "r") as csvfile:
 
 processed_table = []
 
-for waveform in raw_table[0:5]:
+for waveform in raw_table[0:int(num_tables)]:
     processed_waveform = signal.resample(waveform, 512)
     processed_waveform = np.roll(processed_waveform, -processed_waveform.argmin())
     processed_waveform -= np.amin(processed_waveform)

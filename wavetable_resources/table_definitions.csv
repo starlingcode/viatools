@@ -79,3 +79,6 @@ quintic_in2quintic_out257,quintic_in2quintic_out257_slopes,quintic_in2quintic_ou
 additive_linspread_257,additive_linspread_257_slopes,additive_linspread_257_slopes,0
 test_fm,test_fm_attack,test_fm_release,0
 trains,trains_attack,trains_release,0
+waterphone,waterphone_attack,waterphone_release,0
+vox,vox_attack,vox_release,0
+csound_formants,csound_formants_attack,csound_formants_release,0
