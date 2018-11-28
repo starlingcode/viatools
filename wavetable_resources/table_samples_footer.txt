@@ -1,6 +1,6 @@
-/*
+/**
  *
- * Phase distortion tables
+ * Phase distortion (PWM) tables
  *
  */
 

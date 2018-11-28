@@ -15,21 +15,21 @@ extern "C" {
 #endif
 
 
-//
+/// Wavetable data struct storing a wavetable as two halves, an attack and release, generated with (link)
 typedef struct {
+    /// Array of attack slopes, each an array of 16 bit sample values.
 	const uint16_t **attackSlope;
+	/// Array of release slopes, each an array of 16 bit sample values stored in reverse time order.
 	const uint16_t **releaseSlope;
+	/// Length in samples of each slope.
 	uint32_t slopeLength;
+	/// Number of slopes in the arrays.
 	uint32_t numWaveforms;
 } Wavetable;
 
 #ifdef __cplusplus
 }
 #endif
-
-// helper function to load the above array
-
-void loadTable(Wavetable * family);
 
 /*
  *

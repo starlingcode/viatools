@@ -4,6 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal import hilbert, savgol_filter, argrelextrema, resample
 from scipy.io import wavfile
+import os
+import csv
 
 def normalize_to_15bit(input):
     normalized = input - np.amin(input)
@@ -71,19 +73,43 @@ def calculate_rms(input_signal):
     
     return calc
 
+def csv_to_array(filename):
 
-family_name = "testRMS"
+    table = []
 
-sample_files = ["808kick16bit", "CLA76_1_16bit", "CLA76_CLA2A_1_16bit", "piano16bit", "bassplck16bit"]
+    with open(filename, "r") as csv_input:
 
-text_file = open(family_name + ".csv", "w")
-text_file.truncate()
+        table_reader = csv.reader(csv_input, delimiter=",")
+        for row in table_reader:
+            if row[0] != "":
+                table.append(row)
+
+    return table
+
+def array_to_csv(table, filename):
+
+    with open(filename, "w") as csv_output:
+
+        table_writer = csv.writer(csv_output, delimiter=",")
+        for row in table:
+            table_writer.writerow(row)
+
+family_name = input("which table: ")
+
+sample_files = []
+
+for root, dirs, files in os.walk("input/" + family_name):
+    for file in files:
+        sample_files.append(file)
+
+attack_tables = []
+release_tables = []
 
 for sample_file in sample_files:
 
     table_size = 257
 
-    sample_rate, sample_data = wavfile.read(sample_file + ".wav")
+    sample_rate, sample_data = wavfile.read("input/" + family_name + "/" + sample_file)
 
     signal = sample_data
 
@@ -119,7 +145,6 @@ for sample_file in sample_files:
     hilbert_rms_release = savgol_filter(hilbert_rms_release, 37, 2, 0, 1.0, 0, "nearest")
     hilbert_rms_release = normalize_to_15bit(hilbert_rms_release)
 
-
     hilbert_attack = make_attack_slope(amplitude_envelope, table_size)
     hilbert_attack = savgol_filter(hilbert_attack, 37, 2, 0, 1.0, 0, "nearest")
     hilbert_attack = normalize_to_15bit(hilbert_attack)
@@ -130,7 +155,13 @@ for sample_file in sample_files:
     rms_attack = savgol_filter(rms_attack, 37, 2, 0, 1.0, 0, "nearest")
     rms_attack = normalize_to_15bit(rms_attack)
 
+    print(len(rms_attack))
+    print(len(rms_release))
 
+    attack_tables.append([int(i) for i in rms_attack])
+    release = [int(i) for i in rms_release]
+    release.reverse()
+    release_tables.append(release)
 
     fig = plt.figure()
     ax0 = fig.add_subplot(311)
@@ -155,41 +186,14 @@ for sample_file in sample_files:
     ax2.plot(slope_length, rms_attack, label='rms')
     ax2.set_xlabel("time in samples")
     ax2.legend()
-    plt.show()
 
-    # attack
-    text_file.write(sample_file)
-    text_file.write('RMSAtk,')
-    for x in range(0, table_size):
-            text_file.write(str(int(rms_attack[x])))
-            if x != table_size-1:
-                    text_file.write(',')
+print(attack_tables)
+print(release_tables)
 
-    text_file.write('\n')
+array_to_csv(attack_tables, "output/" + family_name + "_attack.csv")
+array_to_csv(release_tables, "output/" + family_name + "_release.csv")
 
-    text_file.write(sample_file)
-    text_file.write('RMSRls,')
-
-    for x in range(0, table_size):
-            text_file.write(str(int(rms_release[table_size - 1 - x])))
-            if x != table_size-1:
-                    text_file.write(',')
-
-    text_file.write('\n')
-
-text_file.write(family_name + "RMSAtk,")
-
-for sample in sample_files:
-    text_file.write(sample + "RMSAtk,")
-
-text_file.write("\n")
-
-text_file.write(family_name + "RMSRls,")
-
-for sample in sample_files:
-    text_file.write(sample + "RMSRls,")
-
-
+plt.show()
 
 # # attack
 # text_file.write('static const uint16_t ')

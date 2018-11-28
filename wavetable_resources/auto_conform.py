@@ -15,16 +15,16 @@ from matplotlib import pyplot as plt
 
 def csv_to_array(filename):
 
-    table = []
+    this_table = []
 
     with open(filename, "r") as csv_input:
 
         table_reader = csv.reader(csv_input, delimiter=",")
         for row in table_reader:
             if row[0] != "":
-                table.append(row)
+                this_table.append(row)
 
-    return table
+    return this_table
 
 def array_to_csv(table, filename):
 
@@ -34,21 +34,15 @@ def array_to_csv(table, filename):
         for row in table:
             table_writer.writerow(row)
 
-def centroid(signal):
 
-    spectrum = abs(rfft(signal))
-    weighting_function = linspace(1, 32, len(spectrum))
-    normalized_spectrum = spectrum / sum(spectrum * weighting_function)  # like a probability mass function
-    normalized_frequencies = linspace(0, 1, len(spectrum))
-    spectral_centroid = sum(normalized_frequencies * normalized_spectrum)
+# messagebox.showinfo("Attack", "Hi, please specify the attack table CSV")
+# attack_file = filedialog.askopenfilename(message="")
+#
+# messagebox.showinfo("Release", "Great, now please specify the release table CSV")
+# release_file = filedialog.askopenfilename(message="")
 
-    return spectral_centroid
-
-messagebox.showinfo("Attack", "Hi, please specify the attack table CSV")
-attack_file = filedialog.askopenfilename(message="")
-
-messagebox.showinfo("Release", "Great, now please specify the release table CSV")
-release_file = filedialog.askopenfilename(message="")
+attack_file = "table_sample_defs/trains_attack.csv"
+release_file = "table_sample_defs/trains_release.csv"
 
 attack_table = csv_to_array(attack_file)
 release_table = csv_to_array(release_file)
@@ -72,39 +66,20 @@ for index, table in enumerate(attack_table):
 
     release = release_table[index][1:]
 
-    release.reverse()
-
-    print(release)
-
-    for sample in release:
+    for sample in reversed(release):
         full_table.append(int(sample))
 
     tables.append(full_table)
 
-print(attack_table)
-
 x = np.linspace(0, 512, 512)
 
-density_per_index = []
+for table in tables:
 
-for index, table in enumerate(tables):
+    plt.plot(x, table)
 
-    density_per_index.append([np.average(centroid(table)), index])
+    max_index = np.argmax(table)
 
-density_per_index.sort(key=lambda pair: pair[0])
-
-reordered_attack = []
-reordered_release = []
-
-for record in density_per_index:
-
-    print(attack_table[record[1]])
-    print(release_table[record[1]])
-
-    reordered_attack.append(attack_table[record[1]])
-    reordered_release.append(release_table[record[1]])
-
-array_to_csv(reordered_attack, attack_file)
-array_to_csv(reordered_release, release_file)
+    print(max_index)
 
 
+plt.show()
