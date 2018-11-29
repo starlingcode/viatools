@@ -1,6 +1,6 @@
 import csv
 import math
-
+import os
 
 class Scales:
 
@@ -105,6 +105,8 @@ class Scales:
             num_scales = self.scale_holder[self.scales.index(s)][2]
 
             print(num_scales)
+            print(scale_tags)
+            print(s[0])
 
             for i in range(0, num_scales):
 
@@ -202,32 +204,34 @@ class Scales:
 
         # parse the csv for integer ratios and calculate an interval in terms of octaves
 
-        with open("scale_resources/scale_defs/" + scale_name + ".csv", newline="\n") as csvfile:
-            spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
-            for row in spamreader:
-                if row[0] != "":
-                    # the first column is the string identifier for the row
-                    scale_tags.append(row[0])
-                    # each following column contains a ratio
-                    for cell in row[1:]:
-                        # a required slash separates numerator from denominator
-                        if "/" in cell:
-                            delim1 = cell.index("/")
-                            # an optional dash separates the ratio from the PLL divider
-                            if "-" in cell:
-                                delim2 = cell.index("-")
-                                ratio = [int(cell[0:delim1]), int(cell[delim1 + 1:delim2]), int(cell[delim2 + 1:])]
-                            else:
-                                ratio = [int(cell[0:delim1]), int(cell[delim1 + 1:])]
-                            # store the ratio as a list
-                            ratio_subset.append(ratio)
-                            # calculate the interval from the fundamental (1/1) in octaves
-                            interval_subset.append(math.log(float(ratio[0] / ratio[1]), 2))
-                    # collect the rows of ratios and intervals
-                    ratio_table.append(ratio_subset)
-                    ratio_subset = []
-                    interval_table.append(interval_subset)
-                    interval_subset = []
+        for root, dirs, files in os.walk("scale_resources/scale_defs/" + scale_name):
+            for file in files:
+                with open("scale_resources/scale_defs/" + scale_name + "/" + file, newline="\n") as csvfile:
+                    spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+                    for row in spamreader:
+                        if row[0] != "":
+                            # the first column is the string identifier for the row
+                            scale_tags.append(file.rstrip(".csv"))
+                            # each following column contains a ratio
+                            for cell in row:
+                                # a required slash separates numerator from denominator
+                                if "/" in cell:
+                                    delim1 = cell.index("/")
+                                    # an optional dash separates the ratio from the PLL divider
+                                    if "-" in cell:
+                                        delim2 = cell.index("-")
+                                        ratio = [int(cell[0:delim1]), int(cell[delim1 + 1:delim2]), int(cell[delim2 + 1:])]
+                                    else:
+                                        ratio = [int(cell[0:delim1]), int(cell[delim1 + 1:])]
+                                    # store the ratio as a list
+                                    ratio_subset.append(ratio)
+                                    # calculate the interval from the fundamental (1/1) in octaves
+                                    interval_subset.append(math.log(float(ratio[0] / ratio[1]), 2))
+                            # collect the rows of ratios and intervals
+                ratio_table.append(ratio_subset)
+                ratio_subset = []
+                interval_table.append(interval_subset)
+                interval_subset = []
 
         # Calculate octave bin for each interval in each scale and append to the first table
 
@@ -235,6 +239,15 @@ class Scales:
         octave_spans = []
 
         for i in interval_table:
+
+            row_pointer = interval_table.index(i)
+
+            print(scale_tags[row_pointer])
+            print(scale_name)
+
+            # figure out the octave relation to the fundamental that forms a lower bound
+
+            lower_bound = 8
 
             # assume that the highest interval is less than 8 octaves lower than the fundamental
 
@@ -338,6 +351,8 @@ class Scales:
         for i in ratio_table:
 
             row_pointer = ratio_table.index(i)
+
+            print(scale_tags[row_pointer])
 
             for j in ratio_table[row_pointer]:
 
@@ -450,23 +465,23 @@ class Scales:
 
         # parse the csv for integer ratios
         # scale per row format
-        with open("scale_resources/scale_defs/" + scale_name + ".csv", newline="\n") as csvfile:
-            spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
-            for row in spamreader:
-                if row[0] != "":
-                    scale_tags.append(row[0])
-                    print(row[0])
-                    for cell in row[1:]:
-                        if "/" in cell:
-                            delim1 = cell.index("/")
-                            if "-" in cell:
-                                delim2 = cell.index("-")
-                                ratio = [int(cell[0:delim1]), int(cell[delim1 + 1:delim2]), int(cell[delim2 + 1:])]
-                            else:
-                                ratio = [int(cell[0:delim1]), int(cell[delim1 + 1:])]
-                            ratio_subset.append(ratio)
-                    ratio_table.append(ratio_subset)
-                    ratio_subset = []
+        for root, dirs, files in os.walk("scale_resources/scale_defs/" + scale_name):
+            for file in files:
+                with open("scale_resources/scale_defs/" + scale_name + "/" + file, newline="\n") as csvfile:
+                    scale_tags.append(file.rstrip(".csv"))
+                    spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+                    for row in spamreader:
+                        for cell in row:
+                            if "/" in cell:
+                                delim1 = cell.index("/")
+                                if "-" in cell:
+                                    delim2 = cell.index("-")
+                                    ratio = [int(cell[0:delim1]), int(cell[delim1 + 1:delim2]), int(cell[delim2 + 1:])]
+                                else:
+                                    ratio = [int(cell[0:delim1]), int(cell[delim1 + 1:])]
+                                ratio_subset.append(ratio)
+                ratio_table.append(ratio_subset)
+                ratio_subset = []
 
         num_scales = len(scale_tags)
         pitch_set = set([])
@@ -486,6 +501,8 @@ class Scales:
             j = 0
 
             while j < 128:
+
+                print(scale_tags[row_pointer])
 
                 numerator_int = int(ratio_table[row_pointer][int(j * len(i) / 128)][0])
 
