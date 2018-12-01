@@ -17,9 +17,7 @@ class Scales:
             spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
             for row in spamreader:
                 if row[0] != "":
-                    self.scales.append([row[0], row[1], row[2], row[3]])
-
-        print(self.scales)
+                    self.scales.append([row[0], row[1]])
 
     def parse_scale_set(self):
 
@@ -29,21 +27,25 @@ class Scales:
         # iterate through the scales and parse the CSV for each scale with the appropriate function
         # see fullspangenerator.py and onevoltoctgenerator.py for details on the parsing
 
-        for i in self.scales:
+        for pitch_class_set in self.scales:
 
-            scale_name = i[0]
+            scale_name = pitch_class_set[0]
 
-            is_1voct = i[1]
-
-            # not yet implemented
-            # is_pitch_class_set = i[2]
+            parse_type = pitch_class_set[1]
 
             # not yet implemented
-            # is_pretiled = i[3]
+            # is_pitch_class_set = pitch_class_set[2]
+
+            # not yet implemented
+            # is_pretiled = pitch_class_set[3]
 
             # call the the CSV parsing function
-            if is_1voct == "on":
+            if parse_type == "1":
                 scale_parser = self.generate_tiled(scale_name)
+            elif parse_type == "2":
+                scale_parser = self.generate_ascending_descending(scale_name)
+            elif parse_type == "3":
+                scale_parser = self.generate_inversion_walk(scale_name)
             else:
                 scale_parser = self.generate_full_span(scale_name)
 
@@ -52,6 +54,10 @@ class Scales:
 
             # the actual ratios comprising the scale in a 2d array
             full_scale = scale_parser[0]
+
+            if parse_type == "1":
+
+                print(full_scale)
 
             # the ratio data, reduced to a set
             pitch_set = scale_parser[1]
@@ -84,11 +90,11 @@ class Scales:
 
         # write all the ratios used throughout our scales
 
-        for i in self.global_pitch_set:
-            ratio_tag = i[0]
-            integer_part = i[1]
-            fractional_part = i[2]
-            fundamental_divisor = i[3]
+        for pitch_class_set in self.global_pitch_set:
+            ratio_tag = pitch_class_set[0]
+            integer_part = pitch_class_set[1]
+            fractional_part = pitch_class_set[2]
+            fundamental_divisor = pitch_class_set[3]
             text_file.write("static const ScaleNote " + ratio_tag + " = {" + str(integer_part) + ", " + str(
                 fractional_part) + ", " + str(fundamental_divisor) + "};\n")
 
@@ -104,27 +110,23 @@ class Scales:
             scale_tags = self.scale_holder[self.scales.index(s)][1]
             num_scales = self.scale_holder[self.scales.index(s)][2]
 
-            print(num_scales)
-            print(scale_tags)
-            print(s[0])
-
-            for i in range(0, num_scales):
+            for pitch_class_set in range(0, num_scales):
 
                 # see if the row has been defined yet
 
-                if scale_tags[i] not in scale_set:
+                if scale_tags[pitch_class_set] not in scale_set:
 
                     # if not, print the 128 value array of pointers to the ratio structs defined earlier
 
-                    for j in range(0, 128):
+                    for grid_index in range(0, 128):
 
-                        ratio_tag = str(full_scale[i][j][0])
+                        ratio_tag = str(full_scale[pitch_class_set][grid_index][0])
 
-                        if j == 0:
+                        if grid_index == 0:
                             text_file.write(
-                                "static const ScaleNote * const " + scale_tags[i] + "[128] = {&" + ratio_tag + ", ")
-                        elif j != 127:
-                            if j % 12 != 0:
+                                "static const ScaleNote * const " + scale_tags[pitch_class_set] + "[128] = {&" + ratio_tag + ", ")
+                        elif grid_index != 127:
+                            if grid_index % 12 != 0:
                                 text_file.write("&" + ratio_tag + ", ")
                             else:
                                 text_file.write("&" + ratio_tag + ", \n")
@@ -133,7 +135,7 @@ class Scales:
 
                 # add the scale we just printed to the set to avoid defining it again
 
-                scale_set.add(scale_tags[i])
+                scale_set.add(scale_tags[pitch_class_set])
 
             text_file.write("\n\n")
 
@@ -147,16 +149,16 @@ class Scales:
             num_scales = self.scale_holder[self.scales.index(s)][2]
             scale_name = s[0]
 
-            for i in range(len(scale_tags)):
+            for pitch_class_set in range(len(scale_tags)):
 
-                if i == 0:
+                if pitch_class_set == 0:
                     text_file.write(
                         "static const ScaleNote* const*" + scale_name + "Grid[" + str(num_scales) + "] = {" + scale_tags[
-                            i] + ", ")
-                elif i != (len(scale_tags) - 1):
-                    text_file.write(scale_tags[i] + ", ")
+                            pitch_class_set] + ", ")
+                elif pitch_class_set != (len(scale_tags) - 1):
+                    text_file.write(scale_tags[pitch_class_set] + ", ")
                 else:
-                    text_file.write(scale_tags[i] + "}; \n\n")
+                    text_file.write(scale_tags[pitch_class_set] + "}; \n\n")
 
         text_file.write("\n\n\n")
 
@@ -164,7 +166,7 @@ class Scales:
 
         for s in self.scales:
             scale_name = s[0]
-            if s[1] == "on":
+            if s[1] == "1":
                 one_v_oct_on = str(1)
             else:
                 one_v_oct_on = str(0)
@@ -188,9 +190,9 @@ class Scales:
         text_file.write("\n#include \"sync.hpp\"\n\n")
 
         text_file.write("void ViaSync::initializeScales() {\n")
-        for i in range(0, 16):
-            scale_name = self.scales[i][0]
-            text_file.write("   scaleArray[" + str(int(i/4)) + "][" + str(i % 4) + "] = &" + scale_name + ";\n")
+        for pitch_class_set in range(0, 16):
+            scale_name = self.scales[pitch_class_set][0]
+            text_file.write("   scaleArray[" + str(int(pitch_class_set/4)) + "][" + str(pitch_class_set % 4) + "] = &" + scale_name + ";\n")
         text_file.write("}\n")
 
     def generate_tiled(self, scale_name):
@@ -238,12 +240,9 @@ class Scales:
         row_pointer = 0
         octave_spans = []
 
-        for i in interval_table:
+        for pitch_class_set in interval_table:
 
-            row_pointer = interval_table.index(i)
-
-            print(scale_tags[row_pointer])
-            print(scale_name)
+            row_pointer = interval_table.index(pitch_class_set)
 
             # figure out the octave relation to the fundamental that forms a lower bound
 
@@ -271,7 +270,7 @@ class Scales:
 
             interval_pointer = 0
 
-            for j in interval_table[row_pointer]:
+            for grid_index in interval_table[row_pointer]:
                 # iterate through our intervals and define them in semi-tones by multiplying by 12
 
                 ratio_table[row_pointer][interval_pointer].append(
@@ -296,9 +295,9 @@ class Scales:
         start_end_table = []
         start_end_subset = []
 
-        for i in ratio_table:
+        for pitch_class_set in ratio_table:
 
-            row_pointer = ratio_table.index(i)
+            row_pointer = ratio_table.index(pitch_class_set)
 
             # figure out the octave relation to the fundamental that forms a lower bound
 
@@ -311,9 +310,9 @@ class Scales:
 
             pad = -lower_bound * 12
 
-            for j in ratio_table[row_pointer]:
+            for grid_index in ratio_table[row_pointer]:
 
-                interval_pointer = ratio_table[row_pointer].index(j)
+                interval_pointer = ratio_table[row_pointer].index(grid_index)
 
                 # set the start and end indices to the average between the interval and the ones above and below
                 # since we epressed our intervals in semitones, that translates naturally to tile indices
@@ -348,15 +347,13 @@ class Scales:
         subtile = []
         tiles = []
 
-        for i in ratio_table:
+        for pitch_class_set in ratio_table:
 
-            row_pointer = ratio_table.index(i)
+            row_pointer = ratio_table.index(pitch_class_set)
 
-            print(scale_tags[row_pointer])
+            for grid_index in ratio_table[row_pointer]:
 
-            for j in ratio_table[row_pointer]:
-
-                interval_pointer = ratio_table[row_pointer].index(j)
+                interval_pointer = ratio_table[row_pointer].index(grid_index)
 
                 starting_index = start_end_table[row_pointer][interval_pointer][0]
 
@@ -380,19 +377,19 @@ class Scales:
         full_row = []
         pitch_set = set([])
 
-        for i in tiles:
+        for pitch_class_set in tiles:
 
-            row_pointer = tiles.index(i)
+            row_pointer = tiles.index(pitch_class_set)
 
-            j = 0
+            grid_index = 0
 
-            while j < 64:
+            while grid_index < 64:
 
-                octave = int(j // len(i)) * octave_spans[row_pointer]
+                octave = int(grid_index // len(pitch_class_set)) * octave_spans[row_pointer]
 
-                numerator_int = int(tiles[row_pointer][j % len(i)][0])
+                numerator_int = int(tiles[row_pointer][grid_index % len(pitch_class_set)][0])
 
-                denominator_int = int(tiles[row_pointer][j % len(i)][1])
+                denominator_int = int(tiles[row_pointer][grid_index % len(pitch_class_set)][1])
 
                 temp_numerator = numerator_int * 2 ** octave
 
@@ -415,16 +412,16 @@ class Scales:
 
                 full_row.append(ratio_holder)
 
-                j += 1
+                grid_index += 1
 
-            j = 63
+            grid_index = 63
 
-            while j >= 0:
-                octave = abs((j - 64) // len(i)) * octave_spans[row_pointer]
+            while grid_index >= 0:
+                octave = abs((grid_index - 64) // len(pitch_class_set)) * octave_spans[row_pointer]
 
-                numerator_int = int(tiles[row_pointer][(len(i) - (64 - j)) % len(i)][0])
+                numerator_int = int(tiles[row_pointer][(len(pitch_class_set) - (64 - grid_index)) % len(pitch_class_set)][0])
 
-                denominator_int = int(tiles[row_pointer][(len(i) - (64 - j)) % len(i)][1])
+                denominator_int = int(tiles[row_pointer][(len(pitch_class_set) - (64 - grid_index)) % len(pitch_class_set)][1])
 
                 temp_denominator = denominator_int * 2 ** octave
 
@@ -444,7 +441,7 @@ class Scales:
 
                 full_row.insert(0, ratio_holder)
 
-                j -= 1
+                grid_index -= 1
 
                 if ratio_holder not in pitch_set:
                     pitch_set.add(ratio_holder)
@@ -494,24 +491,22 @@ class Scales:
 
         # calcualte the PLL divisor if we didn't specify it in the CSV
 
-        for i in ratio_table:
+        for pitch_class_set in ratio_table:
 
-            row_pointer = ratio_table.index(i)
+            row_pointer = ratio_table.index(pitch_class_set)
 
-            j = 0
+            grid_index = 0
 
-            while j < 128:
+            while grid_index < 128:
 
-                print(scale_tags[row_pointer])
+                numerator_int = int(ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)][0])
 
-                numerator_int = int(ratio_table[row_pointer][int(j * len(i) / 128)][0])
-
-                denominator_int = int(ratio_table[row_pointer][int(j * len(i) / 128)][1])
+                denominator_int = int(ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)][1])
 
                 divisor = math.gcd(int(numerator_int), int(denominator_int))
 
-                if len(ratio_table[row_pointer][int(j * len(i) / 128)]) == 3:
-                    fundamental_divisor = ratio_table[row_pointer][int(j * len(i) / 128)][2]
+                if len(ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)]) == 3:
+                    fundamental_divisor = ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)][2]
                     ratio_tag = "ratio" + str(int(numerator_int / divisor)) + "_" + str(
                         int(denominator_int / divisor)) + "_" + str(fundamental_divisor)
 
@@ -532,11 +527,220 @@ class Scales:
 
                 full_row.append(ratio_holder)
 
-                j += 1
+                grid_index += 1
 
             full_scale.append(full_row)
             full_row = []
 
+        return [full_scale, pitch_set, scale_tags, num_scales]
+
+    def generate_ascending_descending(self, scale_name):
+
+        # initialize lists to parse the csv
+        ratio_subset = []
+        ratio_table = []
+        scale_tags = []
+
+        row_counter = "skip"
+        stored_row = []
+        stored_tag = ""
+
+        # parse the csv for integer ratios
+        # scale per row format
+        for root, dirs, files in os.walk("scale_resources/scale_defs/" + scale_name):
+            for file in files:
+                print(file)
+                with open("scale_resources/scale_defs/" + scale_name + "/" + file, newline="\n") as csvfile:
+                    spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+                    for row in spamreader:
+                        for cell in row:
+                            if "/" in cell:
+                                delim1 = cell.index("/")
+                                if "-" in cell:
+                                    delim2 = cell.index("-")
+                                    ratio = [int(cell[0:delim1]), int(cell[delim1 + 1:delim2]), int(cell[delim2 + 1:])]
+                                else:
+                                    ratio = [int(cell[0:delim1]), int(cell[delim1 + 1:])]
+                                ratio_subset.append(ratio)
+
+                ratio_subset.sort(key=lambda x: x[0] / x[1])
+
+                if row_counter == "skip":
+                    row_counter = "use"
+                    for ratio in ratio_subset:
+                        stored_row.append(ratio)
+                    stored_tag = file.rstrip(".csv")
+                    ratio_subset = []
+                else:
+                    scale_tags.append(stored_tag + "_vs_" + file.rstrip(".csv"))
+                    ratio_subset.reverse()
+                    for ratio in ratio_subset:
+                        stored_row.append(ratio)
+                    ratio_table.append(stored_row)
+                    ratio_subset = []
+                    stored_row = []
+                    row_counter = "skip"
+
+
+
+        num_scales = len(scale_tags)
+        pitch_set = set([])
+        full_scale = []
+        full_row = []
+
+        # spread each row evenly across the full 128 index span
+
+        # calculate the ratio in Q16.48
+
+        # calcualte the PLL divisor if we didn't specify it in the CSV
+
+        for pitch_class_set in ratio_table:
+
+            row_pointer = ratio_table.index(pitch_class_set)
+
+            grid_index = 0
+
+            while grid_index < 128:
+
+                numerator_int = int(ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)][0])
+
+                denominator_int = int(ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)][1])
+
+                divisor = math.gcd(int(numerator_int), int(denominator_int))
+
+                if len(ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)]) == 3:
+                    fundamental_divisor = ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)][2]
+                    ratio_tag = "ratio" + str(int(numerator_int / divisor)) + "_" + str(
+                        int(denominator_int / divisor)) + "_" + str(fundamental_divisor)
+
+                else:
+                    fundamental_divisor = int(denominator_int / divisor)
+                    ratio_tag = "ratio" + str(int(numerator_int / divisor)) + "_" + str(int(denominator_int / divisor))
+
+                fix32_calculation = int(numerator_int * 2 ** 48 / denominator_int)
+
+                integer_part = fix32_calculation >> 32
+
+                fractional_part = fix32_calculation - (integer_part << 32)
+
+                ratio_holder = (ratio_tag, integer_part, fractional_part, fundamental_divisor)
+
+                if ratio_holder not in pitch_set:
+                    pitch_set.add(ratio_holder)
+
+                full_row.append(ratio_holder)
+
+                grid_index += 1
+
+            full_scale.append(full_row)
+            full_row = []
+
+        return [full_scale, pitch_set, scale_tags, num_scales]
+
+    def generate_inversion_walk(self, scale_name):
+
+        # initialize lists to parse the csv
+        ratio_subset = []
+        ratio_table = []
+        scale_tags = []
+
+        stored_row = []
+
+        # parse the csv for integer ratios
+        # scale per row format
+        for root, dirs, files in os.walk("scale_resources/scale_defs/" + scale_name):
+            for file in files:
+                with open("scale_resources/scale_defs/" + scale_name + "/" + file, newline="\n") as csvfile:
+                    spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+                    for row in spamreader:
+                        for cell in row:
+                            if "/" in cell:
+                                delim1 = cell.index("/")
+                                if "-" in cell:
+                                    delim2 = cell.index("-")
+                                    ratio = [int(cell[0:delim1]), int(cell[delim1 + 1:delim2]), int(cell[delim2 + 1:])]
+                                else:
+                                    ratio = [int(cell[0:delim1]), int(cell[delim1 + 1:])]
+                                ratio_subset.append(ratio)
+
+                ratio_subset.sort(key=lambda x: x[0] / x[1])
+
+                scale_tags.append(file.rstrip(".csv") + "inversion_walk")
+
+                octave_span = int(math.log(ratio_subset[-1][0]/ratio_subset[-1][1], 2)) - int(math.log(ratio_subset[0][0]/ratio_subset[0][1], 2))
+                octave_span += 1
+                print(octave_span)
+                inversion = []
+
+                for position, ratio in enumerate(ratio_subset):
+
+                    for ratio in ratio_subset[position:]:
+                        inversion.append(ratio)
+
+                    if position > 0:
+                        for ratio in ratio_subset[0:position]:
+                            translated_ratio = []
+                            translated_ratio.append(ratio[0])
+                            translated_ratio.append(ratio[1])
+                            translated_ratio[0] *= 2**octave_span
+                            inversion.append(translated_ratio)
+
+                ratio_table.append(inversion)
+                ratio_subset = []
+                stored_row = []
+
         print(ratio_table)
+
+        num_scales = len(scale_tags)
+        pitch_set = set([])
+        full_scale = []
+        full_row = []
+
+        # spread each row evenly across the full 128 index span
+
+        # calculate the ratio in Q16.48
+
+        # calcualte the PLL divisor if we didn't specify it in the CSV
+
+        for pitch_class_set in ratio_table:
+
+            row_pointer = ratio_table.index(pitch_class_set)
+
+            grid_index = 0
+
+            while grid_index < 128:
+
+                numerator_int = int(ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)][0])
+
+                denominator_int = int(ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)][1])
+
+                divisor = math.gcd(int(numerator_int), int(denominator_int))
+
+                if len(ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)]) == 3:
+                    fundamental_divisor = ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)][2]
+                    ratio_tag = "ratio" + str(int(numerator_int / divisor)) + "_" + str(
+                        int(denominator_int / divisor)) + "_" + str(fundamental_divisor)
+
+                else:
+                    fundamental_divisor = int(denominator_int / divisor)
+                    ratio_tag = "ratio" + str(int(numerator_int / divisor)) + "_" + str(int(denominator_int / divisor))
+
+                fix32_calculation = int(numerator_int * 2 ** 48 / denominator_int)
+
+                integer_part = fix32_calculation >> 32
+
+                fractional_part = fix32_calculation - (integer_part << 32)
+
+                ratio_holder = (ratio_tag, integer_part, fractional_part, fundamental_divisor)
+
+                if ratio_holder not in pitch_set:
+                    pitch_set.add(ratio_holder)
+
+                full_row.append(ratio_holder)
+
+                grid_index += 1
+
+            full_scale.append(full_row)
+            full_row = []
 
         return [full_scale, pitch_set, scale_tags, num_scales]
