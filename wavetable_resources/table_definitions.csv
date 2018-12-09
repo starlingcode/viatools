@@ -68,6 +68,7 @@ sinwavefold_257,sinwavefold_257_Family,sinwavefold_257_Family,0
 additive_tri_to_pulse,additive_tri_to_pulseFamily,additive_tri_to_pulseFamily,0
 newBounce,newBounceFamily,newBounceFamily,0
 soprano257,soprano257Atk,soprano257Rls,0
+soprano257_rev,soprano257Atk_rev,soprano257Rls_rev,0
 testRMS,allLinear129_5,testRMSRMSRls,0
 gamma257,gamma257Attack,gamma257Attack,0
 bounce_257,bounce_257_slopes,bounce_257_slopes,0
@@ -82,3 +83,12 @@ trains,trains_attack,trains_release,0
 waterphone,waterphone_attack,waterphone_release,0
 vox,vox_attack,vox_release,0
 csound_formants,csound_formants_attack,csound_formants_release,0
+triangle_comb,triangle_comb_attack,triangle_comb_release,0
+square_comb,square_comb_attack,square_comb_release,0
+saw_comb,saw_comb_attack,saw_comb_release,0
+saw_comb_filter,saw_comb_filter_attack,saw_comb_filter_release,0
+tanh_res,tanh_res_attack,tanh_res_release,0
+hyperbolic_shapers,hyperbolic_shapers_attack,hyperbolic_shapers_release,0
+bitcrush,bitcrush_attack,bitcrush_release,0
+new_steps,new_steps_attack,new_steps_release,0
+bessel,bessel_attack,bessel_release,0

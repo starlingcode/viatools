@@ -1,8 +1,8 @@
-	0,0,tenor257
-	0,1,soprano257
-	0,2,algerian
-	0,3,linwavefold_257
-	0,4,skipSaw
-	0,5,imp_5
-	0,6,test_fm
-	0,7,newBounce
+0,0,hyperbolic_shapers
+0,1,tanh_res
+0,2,newBounce
+0,3,bessel
+0,4,test_fm
+0,5,soprano257
+0,6,bitcrush
+0,7,new_steps

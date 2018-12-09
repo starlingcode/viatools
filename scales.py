@@ -213,7 +213,7 @@ class Scales:
                     for row in spamreader:
                         if row[0] != "":
                             # the first column is the string identifier for the row
-                            scale_tags.append(file.rstrip(".csv"))
+                            scale_tags.append(file[:-4])
                             # each following column contains a ratio
                             for cell in row:
                                 # a required slash separates numerator from denominator
@@ -534,6 +534,88 @@ class Scales:
 
         return [full_scale, pitch_set, scale_tags, num_scales]
 
+
+    def generate_full_span(self, scale_name):
+
+        # initialize lists to parse the csv
+        ratio_subset = []
+        ratio_table = []
+        scale_tags = []
+
+        # parse the csv for integer ratios
+        # scale per row format
+        for root, dirs, files in os.walk("scale_resources/scale_defs/" + scale_name):
+            for file in files:
+                with open("scale_resources/scale_defs/" + scale_name + "/" + file, newline="\n") as csvfile:
+                    scale_tags.append(file.rstrip(".csv"))
+                    spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+                    for row in spamreader:
+                        for cell in row:
+                            if "/" in cell:
+                                delim1 = cell.index("/")
+                                if "-" in cell:
+                                    delim2 = cell.index("-")
+                                    ratio = [int(cell[0:delim1]), int(cell[delim1 + 1:delim2]), int(cell[delim2 + 1:])]
+                                else:
+                                    ratio = [int(cell[0:delim1]), int(cell[delim1 + 1:])]
+                                ratio_subset.append(ratio)
+                ratio_table.append(ratio_subset)
+                ratio_subset = []
+
+        num_scales = len(scale_tags)
+        pitch_set = set([])
+        full_scale = []
+        full_row = []
+
+        # spread each row evenly across the full 128 index span
+
+        # calculate the ratio in Q16.48
+
+        # calcualte the PLL divisor if we didn't specify it in the CSV
+
+        for pitch_class_set in ratio_table:
+
+            row_pointer = ratio_table.index(pitch_class_set)
+
+            grid_index = 0
+
+            while grid_index < 128:
+
+                numerator_int = int(ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)][0])
+
+                denominator_int = int(ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)][1])
+
+                divisor = math.gcd(int(numerator_int), int(denominator_int))
+
+                if len(ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)]) == 3:
+                    fundamental_divisor = ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)][2]
+                    ratio_tag = "ratio" + str(int(numerator_int / divisor)) + "_" + str(
+                        int(denominator_int / divisor)) + "_" + str(fundamental_divisor)
+
+                else:
+                    fundamental_divisor = int(denominator_int / divisor)
+                    ratio_tag = "ratio" + str(int(numerator_int / divisor)) + "_" + str(int(denominator_int / divisor))
+
+                fix32_calculation = int(numerator_int * 2 ** 48 / denominator_int)
+
+                integer_part = fix32_calculation >> 32
+
+                fractional_part = fix32_calculation - (integer_part << 32)
+
+                ratio_holder = (ratio_tag, integer_part, fractional_part, fundamental_divisor)
+
+                if ratio_holder not in pitch_set:
+                    pitch_set.add(ratio_holder)
+
+                full_row.append(ratio_holder)
+
+                grid_index += 1
+
+            full_scale.append(full_row)
+            full_row = []
+
+        return [full_scale, pitch_set, scale_tags, num_scales]
+
     def generate_ascending_descending(self, scale_name):
 
         # initialize lists to parse the csv
@@ -682,7 +764,7 @@ class Scales:
                             translated_ratio = []
                             translated_ratio.append(ratio[0])
                             translated_ratio.append(ratio[1])
-                            translated_ratio[0] *= 2**octave_span
+                            translated_ratio[0] *= 2
                             inversion.append(translated_ratio)
 
                 ratio_table.append(inversion)
