@@ -6,11 +6,11 @@
 0,5,sinwavefold_257
 0,6,linwavefold_257
 0,7,skipSaw
-1,0,testRMS
-1,1,gamma257
-1,2,bounce_257
+1,0,sharpLinSym
+1,1,gammaAsym
+1,2,sharpLinSym
 1,3,circular_257
-1,4,sharpExpoSym
+1,4,doubleLump3rdDegLinAtk
 1,5,quintic_out2quintic_in257
 1,6,quintic_inout2quintic_outin257
 1,7,newBounce
@@ -19,6 +19,6 @@
 2,2,newBounce
 2,3,sawBend
 2,4,triOdd
-2,5,moogSquare
+2,5,steps
 2,6,algerian
 2,7,exciteBike

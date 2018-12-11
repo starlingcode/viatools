@@ -11,11 +11,11 @@ void ViaMeta::fillWavetableArray(void) {
 	wavetableArray[0][5] = &sinwavefold_257;
 	wavetableArray[0][6] = &linwavefold_257;
 	wavetableArray[0][7] = &skipSaw;
-	wavetableArray[1][0] = &testRMS;
-	wavetableArray[1][1] = &gamma257;
-	wavetableArray[1][2] = &bounce_257;
+	wavetableArray[1][0] = &sharpLinSym;
+	wavetableArray[1][1] = &gammaAsym;
+	wavetableArray[1][2] = &sharpLinSym;
 	wavetableArray[1][3] = &circular_257;
-	wavetableArray[1][4] = &sharpExpoSym;
+	wavetableArray[1][4] = &doubleLump3rdDegLinAtk;
 	wavetableArray[1][5] = &quintic_out2quintic_in257;
 	wavetableArray[1][6] = &quintic_inout2quintic_outin257;
 	wavetableArray[1][7] = &newBounce;
@@ -24,7 +24,7 @@ void ViaMeta::fillWavetableArray(void) {
 	wavetableArray[2][2] = &newBounce;
 	wavetableArray[2][3] = &sawBend;
 	wavetableArray[2][4] = &triOdd;
-	wavetableArray[2][5] = &moogSquare;
+	wavetableArray[2][5] = &steps;
 	wavetableArray[2][6] = &algerian;
 	wavetableArray[2][7] = &exciteBike;
 }

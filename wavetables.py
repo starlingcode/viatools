@@ -241,7 +241,7 @@ class Wavetable:
         text_file.write('void ViaScanner::fillWavetableArray(void) {\n\n')
 
         for table in self.scanner_tables:
-                text_file.write('\twavetableArray[' + table[1] + '] = &' + table[2] + ';\n')
+                text_file.write('\twavetableArray[' + table[0] + '][' + table[1] + '] = &' + table[2] + ';\n')
 
         text_file.write("}\n\n")
 
