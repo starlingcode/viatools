@@ -95,3 +95,4 @@ bitcrush,bitcrush_attack,bitcrush_release,0
 new_steps,new_steps_attack,new_steps_release,0
 bessel,bessel_attack,bessel_release,0
 sin_phase_shift,sin_phase_shift_attack,sin_phase_shift_release,0
+filter_test,filter_test_attack,filter_test_release,0

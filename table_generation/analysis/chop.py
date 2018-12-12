@@ -35,35 +35,67 @@ else:
 
 results = freq_est.period_from_autocorr(sample_buffer)
 peak_period = int(results[0])
-start = results[1]
+
+sampling_interval = int(len(sample_buffer)/10)
+
+start_points = []
+
+for i in range(1, 10):
+
+    start_points.append(sampling_interval * i)
 
 in_fade = np.linspace(0.0, 1.0, peak_period)
 out_fade = np.linspace(1.0, 0.0, peak_period)
 
-wavetable = sample_buffer[start + peak_period: start + 2 * peak_period] * out_fade
-last_table = sample_buffer[start:start + peak_period] * in_fade
+table_samples = []
 
-wavetable += last_table
+for offset, start in enumerate(start_points):
 
-repeat = 0
+    wavetable = sample_buffer[start + peak_period: start + 2 * peak_period] * out_fade
+    last_table = sample_buffer[start:start + peak_period] * in_fade
 
-wavetable_render = []
+    wavetable += last_table
 
-while repeat < 500:
+    repeat = 0
 
-    for sample in wavetable:
-        wavetable_render.append(sample)
+    wavetable_render = []
 
-    repeat += 1
+    while repeat < 500:
 
-render = np.array(wavetable_render)
+        for sample in wavetable:
+            wavetable_render.append(sample)
 
-wavetable_render = scipy.signal.resample(wavetable_render, 512 * 500)
+        repeat += 1
 
-read_position = 512 * 3
+    render = np.array(wavetable_render)
 
-wavetable = wavetable_render[read_position: read_position + 512]
+    wavetable_render = scipy.signal.resample(wavetable_render, 512 * 500)
 
-# render
-sf.write("test_chop1, wavetable_render, samplerate)
+    # render_freq = 512/(samplerate * .5)
+    #
+    # cutoff = render_freq * 16
+    #
+    # b, a = signal.butter(8, cutoff)
+    #
+    # wavetable_render = signal.lfilter(b, a, wavetable_render)
+
+    read_position = 512 * 3
+
+    wavetable = wavetable_render[read_position: read_position + 512]
+
+    table_samples.append(wavetable)
+
+    # render
+    sf.write("test_outputs/test_chop" + str(offset) + ".wav", wavetable_render, samplerate)
+
+table = input("What shall we call it?")
+
+with open("table_output/" + table + ".csv", "w") as output:
+
+    table_writer = csv.writer(output, delimiter=",")
+
+    for table in table_samples:
+
+        table_writer.writerow(table)
+
 
