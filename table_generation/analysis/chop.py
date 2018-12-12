@@ -49,6 +49,10 @@ out_fade = np.linspace(1.0, 0.0, peak_period)
 
 table_samples = []
 
+renders = []
+
+
+
 for offset, start in enumerate(start_points):
 
     wavetable = sample_buffer[start + peak_period: start + 2 * peak_period] * out_fade
@@ -85,17 +89,37 @@ for offset, start in enumerate(start_points):
 
     table_samples.append(wavetable)
 
-    # render
-    sf.write("test_outputs/test_chop" + str(offset) + ".wav", wavetable_render, samplerate)
+    offset = np.max(wavetable_render) - abs(np.min(wavetable_render))
+    wavetable_render -= offset/2
+    wavetable_render *= 1/np.max(wavetable_render)
+    zero_index = np.argmin(wavetable_render)
+    np.roll(wavetable_render, -zero_index)
+    renders.append(wavetable_render)
 
-table = input("What shall we call it?")
 
-with open("table_output/" + table + ".csv", "w") as output:
+table_name = input("What shall we call it?")
+
+with open("table_output/" + table_name + ".csv", "w") as output:
 
     table_writer = csv.writer(output, delimiter=",")
 
     for table in table_samples:
 
         table_writer.writerow(table)
+
+render_output = np.zeros(512 * 500)
+
+for index in range(0, 512 * 500):
+
+    phasor = 8 * (index/(512 * 500))
+
+    base_table = int(phasor)
+    frac = phasor - base_table
+
+    render_output[index] = (1 - frac) * renders[base_table][index] + frac * renders[base_table + 1][index]
+
+sf.write("test_outputs/" + table_name + ".wav", render_output, samplerate)
+
+
 
 
