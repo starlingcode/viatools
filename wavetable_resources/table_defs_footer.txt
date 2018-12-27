@@ -1,13 +1,5 @@
 
 
-static const Wavetable imp_5 = { .attackSlope = impshort_5, .releaseSlope =
-		impshort, .slopeLength = 256, .numWaveforms = 5 };
-
-static const Wavetable drum =
-		{ .attackSlope = allLinear, .releaseSlope =
-				allExpo, .slopeLength = 256,
-				.numWaveforms = 5 };
-
 /// Load each sample from flash to ram with bitshift by 3 and store in bottom halfword.
 /// Store difference between sample and corresponding sample in adjacent waveform in top halfword
 

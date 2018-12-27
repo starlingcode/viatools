@@ -190,8 +190,25 @@ for sample_file in sample_files:
 print(attack_tables)
 print(release_tables)
 
-array_to_csv(attack_tables, "output/" + family_name + "_attack.csv")
-array_to_csv(release_tables, "output/" + family_name + "_release.csv")
+release_integrals = []
+
+for table in release_tables:
+    sum = 0
+    for i in table:
+        sum += i
+    release_integrals.append(sum)
+
+sorted_indices = sorted(range(len(release_tables)), key=lambda k: release_integrals[k])
+
+sorted_attacks = []
+sorted_releases = []
+
+for i in sorted_indices:
+    sorted_attacks.append(attack_tables[i])
+    sorted_releases.append(release_tables[i])
+
+array_to_csv(sorted_attacks, "output/" + family_name + "_attack.csv")
+array_to_csv(sorted_releases, "output/" + family_name + "_release.csv")
 
 plt.show()
 

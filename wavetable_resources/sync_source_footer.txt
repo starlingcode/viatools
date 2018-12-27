@@ -1,0 +1,18 @@
+
+// declare functions to set the currently active tables
+void ViaSync::switchWavetable(const Wavetable * table) {
+	wavetableSet.loadWavetableWithDiff(table, (uint32_t *) wavetableRead);
+	syncWavetable.tableSize = table->numWaveforms - 1;
+}
+
+// declare functions to set the currently active tables
+void ViaSync::switchWavetableGlobal(const Wavetable * table) {
+	wavetableSet.loadWavetableWithDiff(table, (uint32_t *) wavetableRead);
+	syncWavetable.tableSize = table->numWaveforms - 1;
+}
+
+//// declare functions to set the currently active tables
+//void ViaSync::initPhaseDistTable(void) {
+//	loadPhaseDistTable(&phaseDistPWM, phaseDistRead);
+//}
+

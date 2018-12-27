@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt, mpld3
 from mpl_toolkits.mplot3d import axes3d
 from matplotlib import cm
 import csv
@@ -88,7 +88,16 @@ for table in tables:
     plt.axis('off')
     subplot_hack += 1
 
+fig = plt.figure(5)
+subplot_hack = 331
 
+for table in tables:
+    ax = fig.add_subplot(subplot_hack)
+    fft_reading = np.abs(np.fft.rfft(table))
+    fft_reading = np.log(fft_reading[:128])
+    plt.plot(fft_reading)
+    plt.axis('off')
+    subplot_hack += 1
 
 plt.show()
 
