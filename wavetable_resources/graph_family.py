@@ -69,9 +69,14 @@ plt.axis('off')
 
 fig = plt.figure(2)
 ax = fig.add_subplot(111, projection='3d')
+ax.set_facecolor((0, 0, 0))
+ax.view_init(elev=85, azim=-50)
+fig.subplots_adjust(top=1, bottom=0, left=0, right=1)
 
-ax.plot_wireframe(X, Y, Z, rcount=morph_size, ccount=256, alpha=0.4, cmap=cm.coolwarm)
+ax.plot_wireframe(X, Y, Z, rcount=morph_size, ccount=256, alpha=0.4, color=(240/256, 200/256, 50/256))
 plt.axis('off')
+
+fig.savefig('test_wireframe.svg', transparent=True)
 
 fig = plt.figure(3)
 ax = fig.add_subplot(111, projection='3d')
@@ -79,14 +84,18 @@ ax = fig.add_subplot(111, projection='3d')
 ax.plot_surface(X, Y, Z, rcount=morph_size, ccount=256, alpha=0.8, cmap=cm.coolwarm)
 plt.axis('off')
 
-fig = plt.figure(4)
+fig = plt.figure(4, facecolor='black')
 subplot_hack = 331
 
 for table in tables:
     ax = fig.add_subplot(subplot_hack)
-    plt.plot(table)
+    ax.set_facecolor((0, 0, 0))
+    fig.subplots_adjust(top=1, bottom=0, left=0, right=1)
+    plt.plot(table, color=(240/256, 200/256, 50/256), linewidth=2)
     plt.axis('off')
     subplot_hack += 1
+
+fig.savefig('test_waveforms.svg', transparent=True)
 
 fig = plt.figure(5)
 subplot_hack = 331

@@ -2,23 +2,24 @@
 0,1,additive_pairs,additive
 0,2,linwavefold_257,multiplying
 0,3,skipSaw,multiplying
-0,4,csound_formants,modeled system
-0,5,perlin,mathematical waveshaping
-0,6,trains,sampled spectrum
-0,7,vox,sampled sepectrum
+0,4,new_perlin,mathematical waveshaping
+0,5,csound_formants,modeled system
+0,6,vox,sampled sepectrum
+0,7,trains,sampled spectrum
 1,0,gammaAsym,trad envelope asym
 1,1,sharpLinSym,trad envelope sym
 1,2,circular_257,plataued sym
 1,3,quintic_outinAsym,plataued asym
-1,4,doubleLump3rdDegLinAtk,lump 1
-1,5,lump2ndDegLinAtk,lump 2
-1,6,testRMS2,sampled dynamics
-1,7,testRMS,sampled dynamics
-2,0,skipSaw,sequenced simple modulation
-2,1,euclidean_test,sequenced simple modulation
-2,2,bounce,physical system
-2,3,bounce_257,physical system
-2,4,sawBend,shapeshifting/waveshaping lfo
-2,5,exciteBike,shapeshifting/waveshaping lfo
+1,4,fixed_lump,lump 1
+1,5,moving_lump,lump 2
+1,6,compressor,modeled dynamics
+1,7,fake_adsr,modeled dynamics
+2,0,skipSaw,sequenced simple modulation, x
+2,1,euclidean_test,sequenced simple modulation, x
+2,2,bounce,physical system, x
+2,3,bounce_257,physical system, x
+2,4,mountains,shapeshifting/waveshaping lfo
+2,5,half_sines,shapeshifting/waveshaping lfo
 2,6,newest_steps,stepped modulation
 2,7,block_test,stepped modulation
+3,0,drum,special

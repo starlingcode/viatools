@@ -5,6 +5,7 @@ class Pattern:
     # pattern_data = ("tag", (pattern), float density)
 
     all_patterns = set([])
+    pattern_dict = {}
     seq1_bank = []
     seq2_bank = []
 
@@ -101,6 +102,7 @@ class Pattern:
 
         for pattern in self.all_patterns:
             tag = str(pattern[0])
+            self.pattern_dict[tag] = [pattern]
             pattern = list(pattern[1])
             length = len(pattern)
             for index in range(0, len(pattern)):
@@ -124,7 +126,9 @@ class Pattern:
             for pattern_set in self.seq1_bank[index]:
                 if pattern_set[0] not in banks_written:
                     num_patterns = len(pattern_set[1])
+                    print(pattern_set[0])
                     for index in range(0, num_patterns):
+                        print(str(self.pattern_dict[pattern_set[1][index][0]]))
                         if index == 0:
                             text_file.write(
                                 "static const uint32_t *" + pattern_set[0] + "[" + str(num_patterns) + "] = {" + str(pattern_set[1][0][0]) + ", ")
@@ -156,7 +160,9 @@ class Pattern:
             for pattern_set in self.seq2_bank[index]:
                 if pattern_set[0] not in banks_written:
                     num_patterns = len(pattern_set[1])
+                    print(pattern_set[0])
                     for index in range(0, num_patterns):
+                        print(str(self.pattern_dict[pattern_set[1][index][0]]))
                         if index == 0:
                             text_file.write(
                                 "static const uint32_t *" + pattern_set[0] + "[" + str(num_patterns) + "] = {" + str(pattern_set[1][0][0]) + ", ")

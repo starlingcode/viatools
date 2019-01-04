@@ -2,11 +2,11 @@ import csv
 import numpy as np
 import os
 
-family_name = "rhythm_integers"
+family_name = "mult_three_integers"
 
 os.mkdir("scale_defs/" + family_name)
 
-choices = [1, 2, 3, 4, 6, 9, 12, 16, 24]
+choices = [3, 6, 9, 12, 15, 18, 21, 24]
 
 family = []
 

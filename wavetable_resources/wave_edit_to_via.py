@@ -9,7 +9,7 @@ root.withdraw()
 
 wave_edit_csv = filedialog.askopenfilename()
 
-num_tables = input("How many tables? 3, 5, or 9? ")
+num_tables = input("How many tables? 9 at the most please. ")
 
 raw_table = []
 
