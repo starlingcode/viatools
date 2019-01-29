@@ -4,6 +4,30 @@ from mpl_toolkits.mplot3d import axes3d
 from matplotlib import cm
 import csv
 
+
+def is_number(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
+
+def samples_csv_to_array(filename):
+
+    table = []
+
+    with open(filename, "r") as csv_input:
+
+        table_reader = csv.reader(csv_input, delimiter=",")
+        for row in table_reader:
+            if row[0] != "":
+                if is_number(row[0]):
+                    table.append(row)
+                else:
+                    table.append(row[1:])
+
+    return table
+
 def csv_to_array(filename):
 
     table = []
@@ -30,8 +54,8 @@ table_to_plot = input("Which table should we look at? ")
 attack_file = table_defs[table_to_plot][0]
 release_file = table_defs[table_to_plot][1]
 
-attack_table = csv_to_array("table_sample_defs/" + attack_file + ".csv")
-release_table = csv_to_array("table_sample_defs/" + release_file + ".csv")
+attack_table = samples_csv_to_array("table_sample_defs/" + attack_file + ".csv")
+release_table = samples_csv_to_array("table_sample_defs/" + release_file + ".csv")
 
 tables = []
 

@@ -115,7 +115,7 @@ class Wavetable:
                 slopereader = csv.reader(csvfile, delimiter=',')
                 rowcounter = 0
                 for row in slopereader:
-                    if row[0] != '':
+                    if row[0] != '' and rowcounter < 5:
                         slope_table.append(slope_tag + str(rowcounter))
                         slope = []
                         for cell in row:

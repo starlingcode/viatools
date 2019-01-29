@@ -14,10 +14,10 @@
 1,5,moving_lump,lump 2
 1,6,compressor,modeled dynamics
 1,7,fake_adsr,modeled dynamics
-2,0,skipSaw,sequenced simple modulation, x
-2,1,euclidean_test,sequenced simple modulation, x
-2,2,bounce,physical system, x
-2,3,bounce_257,physical system, x
+2,0,new_waves,sequenced simple modulation, x
+2,1,euc_odd_sharp,sequenced simple modulation, x
+2,2,rubberband,physical system, x
+2,3,newest_bounce,physical system, x
 2,4,mountains,shapeshifting/waveshaping lfo
 2,5,half_sines,shapeshifting/waveshaping lfo
 2,6,newest_steps,stepped modulation

@@ -115,3 +115,10 @@ half_sines,half_sines_attack,half_sines_release,0
 mountains,mountains_attack,mountains_release,0
 windowed_additive,windowed_additive_attack,windowed_additive_attack,0
 additive_evens,additive_evens_attack,additive_evens_attack,0
+new_waves_sym,new_waves_attack,new_waves_attack,0
+rubberband,rubberband_attacks,rubberband_attacks,0
+newest_bounce,newest_bounce_attack,newest_bounce_release,0
+euc_odd,euc_odd_attacks,euc_odd_releases,0
+euc_odd_sharp,euc_odd_sharp_attacks,euc_odd_sharp_releases,0
+new_waves,new_waves_attack,new_waves_release,0
+block_slope,block_slope_attack,block_slope_release,0

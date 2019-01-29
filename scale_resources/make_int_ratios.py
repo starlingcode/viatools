@@ -6,7 +6,7 @@ family_name = "mult_three_integers"
 
 os.mkdir("scale_defs/" + family_name)
 
-choices = [3, 6, 9, 12, 15, 18, 21, 24]
+choices = [1, 2, 4, 8, 16, 32, 21, 24]
 
 family = []
 

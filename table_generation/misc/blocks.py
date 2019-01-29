@@ -19,8 +19,8 @@ print(unit_step)
 
 for row in rows:
     render = []
-    for i in row:
-        for j in range(0, 32):
+    for i in row[:8]:
+        for j in range(0, 64):
             render.append(i*unit_step - 1)
     renders.append(render)
 

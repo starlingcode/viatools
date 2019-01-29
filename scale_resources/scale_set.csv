@@ -10,7 +10,7 @@ modesofroot,1,needs eval
 tetrad_inversions,1,needs sorting
 harmonic_entropy,1,
 bohlenPeircevoct,0,needs paring and full scale
-simpleRhythms,0,good
-simpleRhythms16,0,needs eval
-rhythmDivisionsReset,0,needs eval
-polyResets,0,NEEDS WORK
+rhythm_integers,0,good
+no_triplets,0,needs eval
+triplets,0,needs eval
+poly_div_resets,0,NEEDS WORK

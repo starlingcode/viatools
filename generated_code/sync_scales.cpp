@@ -14,8 +14,8 @@ void ViaSync::initializeScales() {
    scaleArray[2][1] = &tetrad_inversions;
    scaleArray[2][2] = &harmonic_entropy;
    scaleArray[2][3] = &bohlenPeircevoct;
-   scaleArray[3][0] = &simpleRhythms;
-   scaleArray[3][1] = &simpleRhythms16;
-   scaleArray[3][2] = &rhythmDivisionsReset;
-   scaleArray[3][3] = &polyResets;
+   scaleArray[3][0] = &rhythm_integers;
+   scaleArray[3][1] = &no_triplets;
+   scaleArray[3][2] = &triplets;
+   scaleArray[3][3] = &poly_div_resets;
 }
