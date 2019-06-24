@@ -1,4 +1,6 @@
 
+target_sample_rate = 48000
+
 expo_table = []
 
 for i in range(0, 4095):
@@ -8,19 +10,19 @@ for i in range(0, 4095):
 
 audio_base_freq = 1/(2**5) * (expo_table[2048]/expo_table[0])/2**2
 
-audio_lowest_freq = audio_base_freq * (50000/512)
+audio_lowest_freq = audio_base_freq * (target_sample_rate/512)
 
-target_freq = 16.35
+target_freq = 16.352
 
 audio_scaling_factor = target_freq/audio_lowest_freq
 
 print("Audio scaling factor is: " + str(audio_scaling_factor * 65536))
 
-drum_base_freq = (expo_table[1024]/expo_table[0])/(2**5) * (expo_table[2048]/expo_table[0])/2**6
+drum_base_freq = (expo_table[1024]/expo_table[0])/(2**5) * (expo_table[2048]/expo_table[0])/2**5 * 1.5
 
-drum_lowest_freq = drum_base_freq * (50000/512)
+drum_lowest_freq = drum_base_freq * (target_sample_rate/512)
 
-target_freq = 16.35
+target_freq = 32.703
 
 drum_scaling_factor = target_freq/drum_lowest_freq
 

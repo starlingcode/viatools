@@ -10,7 +10,9 @@ print(result[4095])
 
 differences = np.roll(result, 1) - result
 
-plt.plot(result)
+differences *= 2**16
+
+# plt.plot(result)
 plt.plot(differences)
 
 packed_array = []
@@ -24,7 +26,9 @@ output_file.write("static constexpr int big_sine[4095] = ")
 
 for index, sample in enumerate(result):
 
-    output_file.write(str(sample) + ", ")
+    write = sample | differences[index]
+
+    output_file.write(str(write) + ", ")
 
 output_file.write(str(result[0]) + "; ")
 

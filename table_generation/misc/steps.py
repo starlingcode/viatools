@@ -2,18 +2,31 @@ import csv
 from matplotlib import pyplot as plt
 
 
+# row0 = [0, 1]
+# row1 = [0, 1, 2, 1]
+# row2 = [0, 1, 2, 3, 2, 1]
+# row3 = [0, 1, 2, 3, 4, 3, 2, 1]
+# row4 = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1]
+# row5 = [0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1]
+# row6 = [0, 1, 2, 3, 4, 5, 6, 7, 6, 5, 4, 3, 2, 1]
+# row7 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 7, 6, 5, 4, 3, 2, 1]
+# row8 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+
 row0 = [0, 1]
 row1 = [0, 1, 2, 1]
 row2 = [0, 1, 2, 3, 2, 1]
 row3 = [0, 1, 2, 3, 4, 3, 2, 1]
-row4 = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1]
-row5 = [0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1]
-row6 = [0, 1, 2, 3, 4, 5, 6, 7, 6, 5, 4, 3, 2, 1]
-row7 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 7, 6, 5, 4, 3, 2, 1]
-row8 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+row4 = [0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1]
+row5 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 7, 6, 5, 4, 3, 2, 1]
+
+# row0 = [0, 1]
+# row1 = [0, 1, 2]
+# row2 = [0, 1, 2, 3]
+# row3 = [0, 1, 2, 3, 4]
+# row4 = [0, 1, 2, 3, 4, 5]
 
 
-rows = [row0, row1, row2, row3, row4, row5, row6, row7, row8]
+rows = [row0, row1, row2, row3, row4, row5]
 
 renders = []
 
@@ -39,7 +52,11 @@ for row in rows:
     renders.append(render)
 
 
-file_name = "steps"
+# file_name = "steps"
+
+# file_name = "staircase"
+
+file_name = "rhythm_steps"
 
 with open("output/" + file_name + ".csv", "w") as output_file:
     output_write = csv.writer(output_file)

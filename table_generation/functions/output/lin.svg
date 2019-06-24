@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with matplotlib (http://matplotlib.org/) -->
+<svg height="300.690125pt" version="1.1" viewBox="0 0 413.8325 300.690125" width="413.8325pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+*{stroke-linecap:butt;stroke-linejoin:round;}
+  </style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 300.690125 
+L 413.8325 300.690125 
+L 413.8325 0 
+L 0 0 
+z
+" style="fill:none;"/>
+  </g>
+  <g id="axes_1">
+   <g id="line2d_1">
+    <path clip-path="url(#pdd1c720554)" d="M 62.245227 264.716 
+L 65.177898 262.534346 
+L 386.899773 22.796 
+L 386.899773 22.796 
+" style="fill:none;stroke:#efc732;stroke-linecap:square;stroke-width:1.5;"/>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pdd1c720554">
+   <rect height="266.112" width="357.12" x="46.0125" y="10.7"/>
+  </clipPath>
+ </defs>
+</svg>

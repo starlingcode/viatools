@@ -122,3 +122,8 @@ euc_odd,euc_odd_attacks,euc_odd_releases,0
 euc_odd_sharp,euc_odd_sharp_attacks,euc_odd_sharp_releases,0
 new_waves,new_waves_attack,new_waves_release,0
 block_slope,block_slope_attack,block_slope_release,0
+staircase,staircase_attack,staircase_release,0
+rhythm_steps,rhythm_steps_attack,rhythm_steps_release,0
+gammaAsymSlim,gammaAsymSlimAttackFamily,gammaAsymSlimReleaseFamily,0
+sharpExpoSymSlim,sharpExpoSymSlimAttackFamily,sharpExpoSymSlimAttackFamily,0
+trains_slim,trains_slim_attack,trains_slim_release,0

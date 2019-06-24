@@ -9,10 +9,10 @@
 	2,0,additive_pairs,audio,additive
 	2,1,moogSquare,audio,common waveforms
 	2,2,test_fm,audio,mathematical
-	2,3,trains,audio,physical system
-	3,0,sharpExpoSym,lfo,simple contour
-	3,1,gammaAsym,traditional contour
-	3,2,newest_steps,lfo,stepped
+	2,3,trains_slim,audio,physical system
+	3,0,sharpExpoSymSlim,lfo,simple contour
+	3,1,gammaAsymSlim,traditional contour
+	3,2,rhythm_steps,lfo,stepped
 	3,3,block_test,lfo,stepped
 	4,0,triOdd,both,multiplying
 	4,1,sinwavefold_257,both,multiplying
