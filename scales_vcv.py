@@ -55,6 +55,10 @@ class Scales:
             # the actual ratios comprising the scale in a 2d array
             full_scale = scale_parser[0]
 
+            if parse_type == "1":
+
+                print(full_scale)
+
             # the ratio data, reduced to a set
             pitch_set = scale_parser[1]
 
@@ -67,116 +71,8 @@ class Scales:
             # add the pitch set to the global pitch set that we are collecting
             self.global_pitch_set = self.global_pitch_set | pitch_set
 
-            print(scale_tags)
-
             # the "scale holder" array translates this data to the code generation routine below
-            self.scale_holder.append([full_scale, scale_tags, num_scales, scale_parser[4]])
-
-    def write_vcvrack_key(self):
-
-        text_file = open("generated_code/sync_scale_rack_key.hpp", "w")
-        text_file.truncate()
-
-        stub = open("scale_resources/scale_header.txt", "r")
-
-        for line in stub:
-            text_file.write(line)
-
-        stub.close()
-
-        text_file.write("\n\n")
-
-        num_bytes = 0
-        word_size = 4
-
-        # initialize an empty set to make sure we don't define any scale rows more than once
-
-        scale_set = set([])
-
-        for s in self.scales:
-
-            full_scale = self.scale_holder[self.scales.index(s)][0]
-            scale_tags = self.scale_holder[self.scales.index(s)][1]
-            num_scales = self.scale_holder[self.scales.index(s)][2]
-            key = self.scale_holder[self.scales.index(s)][3]
-
-            for pitch_class_set in range(0, num_scales):
-
-                # see if the row has been defined yet
-
-                if scale_tags[pitch_class_set] not in scale_set:
-
-                    # if not, print the 128 value array of pointers to the ratio structs defined earlier
-
-                    for grid_index in range(0, 128):
-
-                        ratio_tag = str(key[pitch_class_set][grid_index])
-
-                        num_bytes += word_size;
-
-                        if grid_index == 0:
-                            text_file.write(
-                                "std::string " + scale_tags[pitch_class_set] + "[128] = {\"" + ratio_tag + "\", ")
-                        elif grid_index != 127:
-                            if grid_index % 12 != 0:
-                                text_file.write("\"" + ratio_tag + "\", ")
-                            else:
-                                text_file.write("\"" + ratio_tag + "\", \n")
-                        else:
-                            text_file.write("\"" + ratio_tag + "\"}; \n\n")
-
-                # add the scale we just printed to the set to avoid defining it again
-
-                scale_set.add(scale_tags[pitch_class_set])
-
-            text_file.write("\n\n")
-
-        text_file.write("\n\n\n")
-
-        # define the "grids" used by our scales by specifying a set of rows as defined above
-
-        for s in self.scales:
-
-            scale_tags = self.scale_holder[self.scales.index(s)][1]
-            num_scales = self.scale_holder[self.scales.index(s)][2]
-            scale_name = s[0]
-
-            for pitch_class_set in range(len(scale_tags)):
-
-                num_bytes += word_size
-
-                if pitch_class_set == 0:
-                    text_file.write(
-                        "std::string* " + scale_name + "Grid[" + str(num_scales) + "] = {" + scale_tags[
-                            pitch_class_set] + ", ")
-                elif pitch_class_set != (len(scale_tags) - 1):
-                    text_file.write(scale_tags[pitch_class_set] + ", ")
-                else:
-                    text_file.write(scale_tags[pitch_class_set] + "}; \n\n")
-
-        text_file.write("\n\n\n")
-
-        # define the actual scale structs
-
-        # for s in self.scales:
-        #     scale_name = s[0]
-        #     if s[1] == "1":
-        #         one_v_oct_on = str(1)
-        #     else:
-        #         one_v_oct_on = str(0)
-        #     num_scales = self.scale_holder[self.scales.index(s)][2]
-        #     # calculate the size of the bitshift needed to scale the T2 control across full set of rows
-        #     t2bitshift = str(int(math.log(4095 // num_scales, 2) + 1))
-        #     text_file.write("static const Scale " + scale_name + " = {\n")
-        #     text_file.write("   .grid = " + scale_name + "Grid,\n")
-        #     text_file.write("   .t2Bitshift = " + t2bitshift + ",\n")
-        #     text_file.write("   .oneVoltOct = " + one_v_oct_on + "};\n\n")
-
-        text_file.write("#endif /* INC_SCALES_HPP_ */")
-
-        print("These should take up ~ " + str(num_bytes) + " bytes")
-
-        text_file.close()
+            self.scale_holder.append([full_scale, scale_tags, num_scales])
 
     def write_scale_header(self):
 
@@ -321,7 +217,7 @@ class Scales:
         # parse the csv for integer ratios and calculate an interval in terms of octaves
 
         for root, dirs, files in os.walk("scale_resources/scale_defs/" + scale_name):
-            for file in sorted(files):
+            for file in files:
                 with open("scale_resources/scale_defs/" + scale_name + "/" + file, newline="\n") as csvfile:
                     spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
                     for row in spamreader:
@@ -461,8 +357,6 @@ class Scales:
         subtile = []
         tiles = []
 
-        raw_ratios = []
-
         for pitch_class_set in ratio_table:
 
             row_pointer = ratio_table.index(pitch_class_set)
@@ -485,8 +379,6 @@ class Scales:
 
             subtile = []
 
-        # print(tiles)
-
         # use those tiles to map out a 1vOct space across 128 indices (10 and 2/3 octaves)
         # precalculate the ratio to fix48
         # calculate the fundamental divisor if it was not specified in the scale CSV
@@ -496,8 +388,6 @@ class Scales:
         pitch_set = set([])
 
         for pitch_class_set in tiles:
-
-            raw_ratio_row = []
 
             row_pointer = tiles.index(pitch_class_set)
 
@@ -512,8 +402,6 @@ class Scales:
                 denominator_int = int(tiles[row_pointer][grid_index % len(pitch_class_set)][1])
 
                 temp_numerator = numerator_int * 2 ** octave
-
-                raw_ratio_row.append(str(temp_numerator) + "/" + str(denominator_int))
 
                 divisor = math.gcd(int(temp_numerator), int(denominator_int))
 
@@ -547,8 +435,6 @@ class Scales:
 
                 temp_denominator = denominator_int * 2 ** octave
 
-                raw_ratio_row.append(str(numerator_int) + "/" + str(temp_denominator))
-
                 divisor = math.gcd(int(numerator_int), int(temp_denominator))
 
                 fundamental_divisor = int(temp_denominator / divisor)
@@ -570,14 +456,12 @@ class Scales:
                 if ratio_holder not in pitch_set:
                     pitch_set.add(ratio_holder)
 
-            raw_ratio_row.reverse()
-
-            raw_ratios.append(raw_ratio_row)
-
             full_scale.append(full_row)
             full_row = []
 
-        return [full_scale, pitch_set, scale_tags, num_scales, raw_ratios]
+        print(full_scale)
+
+        return [full_scale, pitch_set, scale_tags, num_scales]
 
     def generate_full_span(self, scale_name):
 
@@ -589,7 +473,7 @@ class Scales:
         # parse the csv for integer ratios
         # scale per row format
         for root, dirs, files in os.walk("scale_resources/scale_defs/" + scale_name):
-            for file in sorted(files):
+            for file in files:
                 with open("scale_resources/scale_defs/" + scale_name + "/" + file, newline="\n") as csvfile:
                     scale_tags.append(file.rstrip(".csv"))
                     spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -606,8 +490,6 @@ class Scales:
                 ratio_table.append(ratio_subset)
                 ratio_subset = []
 
-        # print(ratio_table)
-
         num_scales = len(scale_tags)
         pitch_set = set([])
         full_scale = []
@@ -619,11 +501,7 @@ class Scales:
 
         # calcualte the PLL divisor if we didn't specify it in the CSV
 
-        raw_ratios = []
-
         for pitch_class_set in ratio_table:
-
-            raw_ratio_row = []
 
             row_pointer = ratio_table.index(pitch_class_set)
 
@@ -634,8 +512,6 @@ class Scales:
                 numerator_int = int(ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)][0])
 
                 denominator_int = int(ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)][1])
-
-                raw_ratio_row.append(str(numerator_int) + "/" + str(denominator_int))
 
                 divisor = math.gcd(int(numerator_int), int(denominator_int))
 
@@ -665,9 +541,8 @@ class Scales:
 
             full_scale.append(full_row)
             full_row = []
-            raw_ratios.append(raw_ratio_row)
 
-        return [full_scale, pitch_set, scale_tags, num_scales, raw_ratios]
+        return [full_scale, pitch_set, scale_tags, num_scales]
 
     def generate_ascending_descending(self, scale_name):
 
@@ -683,7 +558,8 @@ class Scales:
         # parse the csv for integer ratios
         # scale per row format
         for root, dirs, files in os.walk("scale_resources/scale_defs/" + scale_name):
-            for file in sorted(files):
+            for file in files:
+                print(file)
                 with open("scale_resources/scale_defs/" + scale_name + "/" + file, newline="\n") as csvfile:
                     spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
                     for row in spamreader:
@@ -715,7 +591,7 @@ class Scales:
                     stored_row = []
                     row_counter = "skip"
 
-        # print(ratio_table)
+
 
         num_scales = len(scale_tags)
         pitch_set = set([])
@@ -728,11 +604,7 @@ class Scales:
 
         # calcualte the PLL divisor if we didn't specify it in the CSV
 
-        raw_ratios = []
-
         for pitch_class_set in ratio_table:
-
-            raw_ratio_row = []
 
             row_pointer = ratio_table.index(pitch_class_set)
 
@@ -745,8 +617,6 @@ class Scales:
                 denominator_int = int(ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)][1])
 
                 divisor = math.gcd(int(numerator_int), int(denominator_int))
-
-                raw_ratio_row.append(str(numerator_int) + "/" + str(denominator_int))
 
                 if len(ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)]) == 3:
                     fundamental_divisor = ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)][2]
@@ -774,11 +644,8 @@ class Scales:
 
             full_scale.append(full_row)
             full_row = []
-            raw_ratios.append(raw_ratio_row)
 
-        # print(raw_ratios)
-
-        return [full_scale, pitch_set, scale_tags, num_scales, raw_ratios]
+        return [full_scale, pitch_set, scale_tags, num_scales]
 
     def generate_inversion_walk(self, scale_name):
 
@@ -792,7 +659,7 @@ class Scales:
         # parse the csv for integer ratios
         # scale per row format
         for root, dirs, files in os.walk("scale_resources/scale_defs/" + scale_name):
-            for file in sorted(files):
+            for file in files:
                 with open("scale_resources/scale_defs/" + scale_name + "/" + file, newline="\n") as csvfile:
                     spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
                     for row in spamreader:
@@ -812,6 +679,7 @@ class Scales:
 
                 octave_span = int(math.log(ratio_subset[-1][0]/ratio_subset[-1][1], 2)) - int(math.log(ratio_subset[0][0]/ratio_subset[0][1], 2))
                 octave_span += 1
+                print(octave_span)
                 inversion = []
 
                 for position, ratio in enumerate(ratio_subset):
@@ -831,7 +699,7 @@ class Scales:
                 ratio_subset = []
                 stored_row = []
 
-        # print(ratio_table)
+        print(ratio_table)
 
         num_scales = len(scale_tags)
         pitch_set = set([])
@@ -844,11 +712,7 @@ class Scales:
 
         # calcualte the PLL divisor if we didn't specify it in the CSV
 
-        raw_ratios = []
-
         for pitch_class_set in ratio_table:
-
-            raw_ratio_row = []
 
             row_pointer = ratio_table.index(pitch_class_set)
 
@@ -859,8 +723,6 @@ class Scales:
                 numerator_int = int(ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)][0])
 
                 denominator_int = int(ratio_table[row_pointer][int(grid_index * len(pitch_class_set) / 128)][1])
-
-                raw_ratio_row.append(str(numerator_int) + "/" + str(denominator_int))
 
                 divisor = math.gcd(int(numerator_int), int(denominator_int))
 
@@ -890,8 +752,5 @@ class Scales:
 
             full_scale.append(full_row)
             full_row = []
-            raw_ratios.append(raw_ratio_row)
 
-        # print(raw_ratios)
-
-        return [full_scale, pitch_set, scale_tags, num_scales, raw_ratios]
+        return [full_scale, pitch_set, scale_tags, num_scales]

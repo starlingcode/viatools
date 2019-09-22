@@ -25,26 +25,26 @@ void ViaSync::fillWavetableArray(void) {
 	wavetableArrayGlobal[3] = &wavetableSet.skipSaw;
 }
 
-constexpr Wavetable SyncWavetableSet::csound_formants;
-constexpr Wavetable SyncWavetableSet::moogSquare;
-constexpr Wavetable SyncWavetableSet::impevens;
-constexpr Wavetable SyncWavetableSet::circular_257;
-constexpr Wavetable SyncWavetableSet::new_perlin;
-constexpr Wavetable SyncWavetableSet::additive_evens;
 constexpr Wavetable SyncWavetableSet::trains_slim;
+constexpr Wavetable SyncWavetableSet::circular_257;
+constexpr Wavetable SyncWavetableSet::csound_formants;
+constexpr Wavetable SyncWavetableSet::impevens;
+constexpr Wavetable SyncWavetableSet::additive_evens;
 constexpr Wavetable SyncWavetableSet::sharpExpoSymSlim;
+constexpr Wavetable SyncWavetableSet::additive_pairs;
+constexpr Wavetable SyncWavetableSet::gammaAsymSlim;
+constexpr Wavetable SyncWavetableSet::test_fm;
+constexpr Wavetable SyncWavetableSet::triOdd;
+constexpr Wavetable SyncWavetableSet::skipSaw;
+constexpr Wavetable SyncWavetableSet::new_perlin;
+constexpr Wavetable SyncWavetableSet::sinwavefold_257;
+constexpr Wavetable SyncWavetableSet::new_waves;
+constexpr Wavetable SyncWavetableSet::newest_bounce;
 constexpr Wavetable SyncWavetableSet::rhythm_steps;
 constexpr Wavetable SyncWavetableSet::euc_odd_sharp;
-constexpr Wavetable SyncWavetableSet::gammaAsymSlim;
-constexpr Wavetable SyncWavetableSet::skipSaw;
-constexpr Wavetable SyncWavetableSet::triOdd;
-constexpr Wavetable SyncWavetableSet::newest_bounce;
-constexpr Wavetable SyncWavetableSet::block_test;
-constexpr Wavetable SyncWavetableSet::additive_pairs;
-constexpr Wavetable SyncWavetableSet::new_waves;
-constexpr Wavetable SyncWavetableSet::test_fm;
-constexpr Wavetable SyncWavetableSet::sinwavefold_257;
 constexpr Wavetable SyncWavetableSet::additive_tri_to_pulse;
+constexpr Wavetable SyncWavetableSet::block_test;
+constexpr Wavetable SyncWavetableSet::moogSquare;
 
 constexpr uint16_t SyncWavetableSet::moogSquareShiftAttackFamily[9][257];
 

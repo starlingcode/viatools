@@ -21,21 +21,21 @@ void ViaScanner::fillWavetableArray(void) {
 	wavetableArray[1][7] = &wavetableSet.block_test;
 }
 
-constexpr Wavetable ScannerWavetableSet::hyperbolic_shapers;
-constexpr Wavetable ScannerWavetableSet::circular_257;
-constexpr Wavetable ScannerWavetableSet::mountains;
-constexpr Wavetable ScannerWavetableSet::block_slope;
-constexpr Wavetable ScannerWavetableSet::rubberband;
-constexpr Wavetable ScannerWavetableSet::skipSaw;
-constexpr Wavetable ScannerWavetableSet::bitcrush;
 constexpr Wavetable ScannerWavetableSet::exciteBike;
-constexpr Wavetable ScannerWavetableSet::newest_bounce;
+constexpr Wavetable ScannerWavetableSet::hyperbolic_shapers;
+constexpr Wavetable ScannerWavetableSet::block_slope;
 constexpr Wavetable ScannerWavetableSet::moog5Square;
+constexpr Wavetable ScannerWavetableSet::circular_257;
 constexpr Wavetable ScannerWavetableSet::staircase;
-constexpr Wavetable ScannerWavetableSet::block_test;
-constexpr Wavetable ScannerWavetableSet::new_waves;
+constexpr Wavetable ScannerWavetableSet::bitcrush;
+constexpr Wavetable ScannerWavetableSet::rubberband;
 constexpr Wavetable ScannerWavetableSet::bessel;
 constexpr Wavetable ScannerWavetableSet::test_fm;
+constexpr Wavetable ScannerWavetableSet::skipSaw;
+constexpr Wavetable ScannerWavetableSet::new_waves;
+constexpr Wavetable ScannerWavetableSet::newest_bounce;
+constexpr Wavetable ScannerWavetableSet::mountains;
+constexpr Wavetable ScannerWavetableSet::block_test;
 constexpr Wavetable ScannerWavetableSet::half_sines;
 
 constexpr uint16_t ScannerWavetableSet::moog5SquareShiftAttackFamily[5][257];

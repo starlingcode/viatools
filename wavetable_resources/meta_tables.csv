@@ -10,16 +10,16 @@
 1,1,sharpLinSym,trad envelope sym
 1,2,circular_257,plataued sym
 1,3,quintic_outinAsym,plataued asym
-1,4,fixed_lump,lump 1
-1,5,moving_lump,lump 2
+1,4,moving_lump,lump 1
+1,5,fixed_lump,lump 2
 1,6,compressor,modeled dynamics
 1,7,fake_adsr,modeled dynamics
 2,0,new_waves,sequenced simple modulation, x
 2,1,euc_odd_sharp,sequenced simple modulation, x
-2,2,rubberband,physical system, x
-2,3,newest_bounce,physical system, x
+2,2,newest_bounce,physical system, x
+2,3,rubberband,physical system, x
 2,4,mountains,shapeshifting/waveshaping lfo
 2,5,half_sines,shapeshifting/waveshaping lfo
-2,6,newest_steps,stepped modulation
-2,7,block_test,stepped modulation
+2,6,block_test,stepped modulation
+2,7,newest_steps,stepped modulation
 3,0,drum,special
