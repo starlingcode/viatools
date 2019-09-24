@@ -9,7 +9,7 @@ You can also set it up on your host machine. Just be sure to install the necessa
 
 ## Usage
 
-See the [Via Development Environment Wiki] (https://github.com/starlingcode/via-dev-environment/wiki) for examples and tutorials.
+See the [Via Development Environment Wiki](https://github.com/starlingcode/via-dev-environment/wiki) for examples and tutorials.
 
 
 
