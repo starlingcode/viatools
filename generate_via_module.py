@@ -1,6 +1,7 @@
 import sys
 import os
 from shutil import copytree
+from shutil import rmtree
 
 
 def copy_and_rename(module_name, read_file, write_file):
@@ -25,6 +26,8 @@ module_name = str(input("Enter the module name in all lower case: "))
 
 firmware_source_path = firmware_project + "/" + module_name
 template_source_path = firmware_project + "/emptyvia"
+
+rmtree(firmware_source_path)
 
 copytree(firmware_project + "/emptyvia", firmware_source_path)
 
@@ -55,7 +58,7 @@ copy_and_rename(module_name, source, filepath)
 
 # module source
 filepath = firmware_project + "/hardware_drivers/Via/modules/" + module_name
-os.mkdir(filepath)
+os.makedirs(filepath, exist_ok=True)
 
 # ui handlers
 uifilepath = filepath + "/" + module_name + "_ui_implementation.cpp"
@@ -75,6 +78,6 @@ else:
 os.makedirs(rack_export, exist_ok=True)
 
 filepath = rack_export + "/" + module_name + ".cpp"
-source = os.path.realpath(__file__) + "/module_templates/emptyvia.cpp"
+source = os.path.dirname(os.path.realpath(__file__)) + "/module_templates/emptyvia.cpp"
 copy_and_rename(module_name, source, filepath)
 

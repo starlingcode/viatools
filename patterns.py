@@ -1,4 +1,5 @@
 import csv
+import os
 
 class Pattern:
 
@@ -8,6 +9,8 @@ class Pattern:
     pattern_dict = {}
     seq1_bank = []
     seq2_bank = []
+
+    project_path = os.path.dirname(os.path.realpath(__file__))
 
     # from https://github.com/brianhouse/bjorklund
     def bjorklund(self, steps, pulses):
@@ -57,12 +60,31 @@ class Pattern:
     def parse_csv_euclidean(self, bank_name, pattern_set):
         patterns = []
 
-        with open("pattern_resources/" + bank_name + ".csv", newline="\n") as csvfile:
+        with open(self.project_path + "/pattern_resources/" + bank_name + ".csv", newline="\n") as csvfile:
             reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+            rowcount = 0
             for row in reader:
-                if row[0] != "":
+                rowcount += 1
+                if row[0].isnumeric():
                     pattern = [bank_name + "_" + str(row[0]) + "_" + str(row[1]),
                                  tuple(self.bjorklund(row[1], row[0])), float(row[0]) / float(row[1])]
+                    pattern = tuple(pattern)
+                    patterns.append(pattern)
+                    pattern_set.add(pattern)
+                elif row[0] == "_" or row[0] == "^":
+                    rendered_pattern = []
+                    gates = 0
+                    steps = 0
+                    for item in row:
+                        if item == "^":
+                            gates += 1
+                            steps += 1
+                            rendered_pattern.append(1)
+                        elif item == "_":
+                            steps += 1
+                            rendered_pattern.append(0)
+                    pattern = [bank_name + "_custom_" + str(rowcount),
+                                 tuple(rendered_pattern), float(gates) / float(steps)]
                     pattern = tuple(pattern)
                     patterns.append(pattern)
                     pattern_set.add(pattern)
@@ -72,7 +94,7 @@ class Pattern:
 
     def read_data(self):
 
-        with open("pattern_resources/sequencer1banks.csv", newline="\n") as csvfile:
+        with open(self.project_path + "/pattern_resources/sequencer1banks.csv", newline="\n") as csvfile:
             reader = csv.reader(csvfile, delimiter=',', quotechar='|')
             for row in reader:
                 this_bank = []
@@ -82,7 +104,7 @@ class Pattern:
                     this_bank.append([row[0], results[0]])
                     self.seq1_bank.append(this_bank)
 
-        with open("pattern_resources/sequencer2banks.csv", newline="\n") as csvfile:
+        with open(self.project_path + "/pattern_resources/sequencer2banks.csv", newline="\n") as csvfile:
             reader = csv.reader(csvfile, delimiter=',', quotechar='|')
             for row in reader:
                 this_bank = []
@@ -94,10 +116,11 @@ class Pattern:
 
     def write_header(self):
 
-        text_file = open("generated_code/boolean_sequences.hpp", "w")
+        os.makedirs(self.project_path + "/generated_code", exist_ok=True)
+        text_file = open(self.project_path + "/generated_code/boolean_sequences.hpp", "w")
         text_file.truncate()
 
-        stub = open("pattern_resources/header_stub.txt", "r")
+        stub = open(self.project_path + "/pattern_resources/header_stub.txt", "r")
         text_file.write(stub.read())
 
         for pattern in self.all_patterns:
@@ -196,7 +219,7 @@ class Pattern:
 
     def write_gateseq_source(self):
 
-        text_file = open("generated_code/gateseq_pattern_init.cpp", "w")
+        text_file = open(self.project_path + "/generated_code/gateseq_pattern_init.cpp", "w")
         text_file.truncate()
 
         text_file.write('#include <gateseq.hpp>\n\n')
@@ -205,11 +228,11 @@ class Pattern:
         for j in self.seq1_bank:
             bank_name = str(j[0][0])
             index = self.seq1_bank.index(j)
-            text_file.write("   seq1PatternBank[" + str(index) + "] = &" + bank_name + "_bank;\n")
+            text_file.write("   seq1Banks[" + str(index) + "] = &" + bank_name + "_bank;\n")
         for j in self.seq2_bank:
             bank_name = str(j[0][0])
             index = self.seq2_bank.index(j)
-            text_file.write("   seq2PatternBank[" + str(index) + "] = &" + bank_name + "_bank;\n")
+            text_file.write("   seq2Banks[" + str(index) + "] = &" + bank_name + "_bank;\n")
         text_file.write("}\n")
 
         text_file.close()
