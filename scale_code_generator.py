@@ -1,4 +1,8 @@
 from scales import Scales
+import os
+
+if not os.path.isdir("generated_code"):
+    os.mkdir("generated_code")
 
 bot = Scales()
 

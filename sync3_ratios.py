@@ -34,31 +34,6 @@ class Sync3Ratios:
         return output
 
     scales = {}
-    #
-    # scales["perfect"] = [[[1, 32], [1, 16], [1, 12], [1, 8], [1, 6], [1, 4], [1, 3], [1, 2],
-    #                      [1, 1], [2, 1], [3, 1], [4, 1], [6, 1], [8, 1], [12, 1], [16, 1]], "doubled"]
-    #
-    # scales["simpleRhythms"] = [[[1, 32], [1, 16], [1, 8], [1, 6], [1, 4], [1, 3], [1, 2], [2, 3],
-    #                             [1, 1], [4, 3], [3, 2], [2, 1], [8, 3], [3, 1], [4, 1], [8, 1]], "doubled"]
-    #
-    # scales["ints"] = [[], "full set"]
-    #
-    # for integer in range(-16, 0):
-    #     scales["ints"][0].append([1, -integer])
-    #
-    # for integer in range(1, 17):
-    #     scales["ints"][0].append([integer, 1])
-    #
-    # scales["circleFifths"] = [[[1, 8], [16, 81], [1, 4], [8, 27], [4, 9], [1, 2], [2, 3], [1, 1],
-    #                             [1, 1], [3, 2], [2, 1], [9, 4], [27, 8], [4, 1], [81, 16], [8, 1]], "doubled"]
-    #
-    # scales["fourthsFifths"] = [[[1, 1], [4, 3], [3, 2], [16, 9], [2, 1], [9, 4], [8, 3], [3, 1]], "2octave"]
-    #
-    # scales["minorArp"] = [[[1, 1], [6, 5], [3, 2], [9, 5], [2, 1], [9, 4], [3, 1], [16, 5]], "2octave"]
-    #
-    # scales["evenOdds"] = [[[1, 1], [9, 8], [7, 6], [5, 4], [11, 8], [3, 2], [5, 3], [7, 4]], "octave"]
-    #
-    # scales["bP"] = [[[1, 1], [9, 7], [7, 5], [5, 3], [9, 5], [15, 7], [7, 3], [25, 9]], "tritave"]
 
     def load_scales(self):
 
@@ -79,6 +54,159 @@ class Sync3Ratios:
 
             self.scales[tag]["method"] = data[0][0]
 
+    def fill_octave(self, ratios):
+
+        numerators = []
+        denominators = []
+
+        for ratio in ratios:
+            if (ratio[0] % 4 == 0):
+                numerators.append(int(ratio[0] / 4))
+                denominators.append(int(ratio[1]))
+            elif (ratio[0] % 2 == 0):
+                numerators.append(int(ratio[0] / 2))
+                denominators.append(int(ratio[1] * 2))
+            else:
+                numerators.append(int(ratio[0]))
+                denominators.append(int(ratio[1] * 4))
+
+        for ratio in ratios:
+            if (ratio[0] % 2 == 0):
+                numerators.append(int(ratio[0] / 2))
+                denominators.append(int(ratio[1]))
+            else:
+                numerators.append(int(ratio[0]))
+                denominators.append(int(ratio[1] * 2))
+
+        for ratio in ratios:
+            numerators.append(int(ratio[0]))
+            denominators.append(int(ratio[1]))
+
+        for ratio in ratios:
+            if (ratio[1] % 2 == 0):
+                numerators.append(int(ratio[0]))
+                denominators.append(int(ratio[1] / 2))
+            else:
+                numerators.append(int(ratio[0] * 2))
+                denominators.append(int(ratio[1]))
+
+        return numerators, denominators
+
+    def fill_tritave(self, ratios):
+
+        numerators = []
+        denominators = []
+
+        for ratio in ratios:
+            if (ratio[0] % 9 == 0):
+                numerators.append(int(ratio[0] / 9))
+                denominators.append(int(ratio[1]))
+            elif (ratio[0] % 3 == 0):
+                numerators.append(int(ratio[0] / 3))
+                denominators.append(int(ratio[1] * 3))
+            else:
+                numerators.append(int(ratio[0]))
+                denominators.append(int(ratio[1] * 9))
+
+        for ratio in ratios:
+            if (ratio[0] % 3 == 0):
+                numerators.append(int(ratio[0] / 3))
+                denominators.append(int(ratio[1]))
+            else:
+                numerators.append(int(ratio[0]))
+                denominators.append(int(ratio[1] * 3))
+
+        for ratio in ratios:
+            numerators.append(int(ratio[0]))
+            denominators.append(int(ratio[1]))
+
+        for ratio in ratios:
+            if (ratio[1] % 3 == 0):
+                numerators.append(int(ratio[0]))
+                denominators.append(int(ratio[1] / 3))
+            else:
+                numerators.append(int(ratio[0] * 3))
+                denominators.append(int(ratio[1]))
+
+        return numerators, denominators
+
+    def fill_2octave(self, ratios):
+
+        numerators = []
+        denominators = []
+
+        for ratio in ratios:
+
+            if (ratio[0] % 16 == 0):
+                numerators.append(int(ratio[0] / 16))
+                denominators.append(int(ratio[1]))
+            elif (ratio[0] % 8 == 0):
+                numerators.append(int(ratio[0] / 8))
+                denominators.append(int(ratio[1] * 2))
+            elif (ratio[0] % 4 == 0):
+                numerators.append(int(ratio[0] / 4))
+                denominators.append(int(ratio[1] * 4))
+            elif (ratio[0] % 2 == 0):
+                numerators.append(int(ratio[0] / 2))
+                denominators.append(int(ratio[1] * 8))
+            else:
+                numerators.append(int(ratio[0]))
+                denominators.append(int(ratio[1] * 16))
+
+        for ratio in ratios:
+
+            if (ratio[0] % 4 == 0):
+                numerators.append(int(ratio[0] / 4))
+                denominators.append(int(ratio[1]))
+            elif (ratio[0] % 2 == 0):
+                numerators.append(int(ratio[0] / 2))
+                denominators.append(int(ratio[1] * 2))
+            else:
+                numerators.append(int(ratio[0]))
+                denominators.append(int(ratio[1] * 4))
+
+        for ratio in ratios:
+            numerators.append(int(ratio[0]))
+            denominators.append(int(ratio[1]))
+
+        for ratio in ratios:
+
+            if (ratio[1] % 4 == 0):
+                numerators.append(int(ratio[0]))
+                denominators.append(int(ratio[1] / 4))
+            elif (ratio[1] % 2 == 0):
+                numerators.append(int(ratio[0] * 2))
+                denominators.append(int(ratio[1] / 2))
+            else:
+                numerators.append(int(ratio[0] * 4))
+                denominators.append(int(ratio[1]))
+
+        return numerators, denominators
+
+    def fill_doubled(self, ratios):
+
+        numerators = []
+        denominators = []
+
+        for ratio in ratios:
+            numerators.append(int(ratio[0]))
+            denominators.append(int(ratio[1]))
+            numerators.append(int(ratio[0]))
+            denominators.append(int(ratio[1]))
+
+        return numerators, denominators
+
+    def fill_default(self, ratios):
+
+        numerators = []
+        denominators = []
+
+        for ratio in ratios:
+            numerators.append(int(ratio[0]))
+            denominators.append(int(ratio[1]))
+
+        return numerators, denominators
+
     def render(self):
 
         for scale in self.scales:
@@ -87,148 +215,31 @@ class Sync3Ratios:
 
             mode = self.scales[scale]["method"]
 
-            numerators = []
-            denominators = []
-
             if mode == "octave":
 
-                for ratio in ratios:
-                    if (ratio[0] % 4 == 0):
-                        numerators.append(int(ratio[0] / 4))
-                        denominators.append(int(ratio[1]))
-                    elif (ratio[0] % 2 == 0):
-                        numerators.append(int(ratio[0] / 2))
-                        denominators.append(int(ratio[1] * 2))
-                    else:
-                        numerators.append(int(ratio[0]))
-                        denominators.append(int(ratio[1] * 4))
-
-                for ratio in ratios:
-                    if (ratio[0] % 2 == 0):
-                        numerators.append(int(ratio[0]/2))
-                        denominators.append(int(ratio[1]))
-                    else:
-                        numerators.append(int(ratio[0]))
-                        denominators.append(int(ratio[1] * 2))
-
-                for ratio in ratios:
-                    numerators.append(int(ratio[0]))
-                    denominators.append(int(ratio[1]))
-
-                for ratio in ratios:
-                    if (ratio[1] % 2 == 0):
-                        numerators.append(int(ratio[0]))
-                        denominators.append(int(ratio[1]/2))
-                    else:
-                        numerators.append(int(ratio[0] * 2))
-                        denominators.append(int(ratio[1]))
+                numerators, denominators = self.fill_octave(ratios)
 
             elif mode == "tritave":
 
-                for ratio in ratios:
-                    if (ratio[0] % 9 == 0):
-                        numerators.append(int(ratio[0] / 9))
-                        denominators.append(int(ratio[1]))
-                    elif (ratio[0] % 3 == 0):
-                        numerators.append(int(ratio[0] / 3))
-                        denominators.append(int(ratio[1] * 3))
-                    else:
-                        numerators.append(int(ratio[0]))
-                        denominators.append(int(ratio[1] * 9))
-
-                for ratio in ratios:
-                    if (ratio[0] % 3 == 0):
-                        numerators.append(int(ratio[0]/3))
-                        denominators.append(int(ratio[1]))
-                    else:
-                        numerators.append(int(ratio[0]))
-                        denominators.append(int(ratio[1] * 3))
-
-                for ratio in ratios:
-                    numerators.append(int(ratio[0]))
-                    denominators.append(int(ratio[1]))
-
-                for ratio in ratios:
-                    if (ratio[1] % 3 == 0):
-                        numerators.append(int(ratio[0]))
-                        denominators.append(int(ratio[1]/3))
-                    else:
-                        numerators.append(int(ratio[0] * 3))
-                        denominators.append(int(ratio[1]))
+                numerators, denominators = self.fill_tritave(ratios)
 
             elif mode == "2octave":
 
-                for ratio in ratios:
-
-                    if (ratio[0] % 16 == 0):
-                        numerators.append(int(ratio[0] / 16))
-                        denominators.append(int(ratio[1]))
-                    elif (ratio[0] % 8 == 0):
-                        numerators.append(int(ratio[0] / 8))
-                        denominators.append(int(ratio[1] * 2))
-                    elif (ratio[0] % 4 == 0):
-                        numerators.append(int(ratio[0] / 4))
-                        denominators.append(int(ratio[1] * 4))
-                    elif (ratio[0] % 2 == 0):
-                        numerators.append(int(ratio[0] / 2))
-                        denominators.append(int(ratio[1] * 8))
-                    else:
-                        numerators.append(int(ratio[0]))
-                        denominators.append(int(ratio[1] * 16))
-
-                for ratio in ratios:
-
-                    if (ratio[0] % 4 == 0):
-                        numerators.append(int(ratio[0] / 4))
-                        denominators.append(int(ratio[1]))
-                    elif (ratio[0] % 2 == 0):
-                        numerators.append(int(ratio[0] / 2))
-                        denominators.append(int(ratio[1] * 2))
-                    else:
-                        numerators.append(int(ratio[0]))
-                        denominators.append(int(ratio[1] * 4))
-
-                for ratio in ratios:
-                    numerators.append(int(ratio[0]))
-                    denominators.append(int(ratio[1]))
-
-                for ratio in ratios:
-
-                    if (ratio[1] % 4 == 0):
-                        numerators.append(int(ratio[0]))
-                        denominators.append(int(ratio[1] / 4))
-                    elif (ratio[1] % 2 == 0):
-                        numerators.append(int(ratio[0] * 2))
-                        denominators.append(int(ratio[1] / 2))
-                    else:
-                        numerators.append(int(ratio[0] * 4))
-                        denominators.append(int(ratio[1]))
+                numerators, denominators = self.fill_2octave(ratios)
 
             elif mode == "doubled":
 
-                for ratio in ratios:
-                    numerators.append(int(ratio[0]))
-                    denominators.append(int(ratio[1]))
-                    numerators.append(int(ratio[0]))
-                    denominators.append(int(ratio[1]))
+                numerators, denominators = self.fill_doubled(ratios)
 
             else:
 
-                for ratio in ratios:
-                    numerators.append(int(ratio[0]))
-                    denominators.append(int(ratio[1]))
+                numerators, denominators = self.fill_default(ratios)
 
             precalcs = []
-
-            # self.write_line(scale)
 
             for index, denominator in enumerate(denominators):
                 precalc = int((2 ** 32) / denominator) % 4294967296
                 precalcs.append(precalc)
-                # self.write_line(numerators[index]/denominator, end=" ")
-                # self.write_line(numerators[index], end=" ")
-                # self.write_line(denominator, end=" ")
-                # self.write_line(precalc)
 
             ratios_used = set()
 
@@ -298,11 +309,21 @@ class Sync3Ratios:
         for scale in self.scales:
             self.write_line("\tstatic const struct Sync3Scale " + scale, end=";\n")
 
+        self.write_line("\n\tstatic const struct Sync3Scale * scales[8];", end="\n\n")
+        self.write_line("\tconst uint32_t * numerators = " + scale + ".numerators;", end="\n")
+        self.write_line("\tconst uint32_t * denominators = " + scale + ".denominators;", end="\n")
+        self.write_line("\tconst uint32_t * dividedPhases = " + scale + ".dividedPhases;", end="\n")
+        self.write_line("\tconst uint32_t * precalcs = " + scale + ".precalcs;", end="\n")
+
         self.write_line("\n/// INSERT SCALES", end="")
 
 import sys
 from shutil import copyfile
 import requests
+import os
+
+if not os.path.isdir("generated_code"):
+    os.mkdir("generated_code")
 
 worker = Sync3Ratios()
 worker.load_scales()

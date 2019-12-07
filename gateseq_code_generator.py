@@ -2,7 +2,10 @@ from patterns import Pattern
 
 import sys
 from shutil import copyfile
+import os
 
+if not os.path.isdir("generated_code"):
+    os.mkdir("generated_code")
 worker_bee = Pattern()
 
 worker_bee.generate_gateseq_code()
