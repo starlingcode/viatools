@@ -1,3 +1,8 @@
+import sys
+from shutil import copyfile
+import requests
+import os
+import struct
 
 def csv_to_array(file):
 
@@ -39,7 +44,7 @@ class Sync3Ratios:
 
         self.scales = {}
 
-        for line in self.csv_to_array("sync3scales/manifest.csv"):
+        for number, line in enumerate(self.csv_to_array("sync3scales/manifest.csv")):
 
             tag = line[0]
 
@@ -53,6 +58,8 @@ class Sync3Ratios:
                 self.scales[tag]["raw_ratios"].append([int(line[0]), int(line[1])])
 
             self.scales[tag]["method"] = data[0][0]
+
+            self.scales[tag]["index"] = number
 
     def fill_octave(self, ratios):
 
@@ -317,10 +324,33 @@ class Sync3Ratios:
 
         self.write_line("\n/// INSERT SCALES", end="")
 
-import sys
-from shutil import copyfile
-import requests
-import os
+    def pack_binary(self):
+        
+        structs = []
+        for tag in self.scales:
+            structs.append(self.scales[tag])
+
+        structs.sort(key=lambda x: x['index'])
+
+        packer = struct.Struct('<32I32I32I32II')
+        compiled_structs = []
+        for scale in structs:
+            pack = []
+            for number in scale['numerators']:
+                pack.append(number)
+            for number in scale['denominators']:
+                pack.append(number)
+            for number in scale['precalcs']:
+                pack.append(number) 
+            for number in scale['keys']:
+                pack.append(number)
+            pack.append(0)
+            compiled_structs.append(packer.pack(*pack))
+        with open('generated_code/sync3ratios.bin', 'wb') as outfile:
+            for chunk in compiled_structs:
+                outfile.write(chunk)
+
+############
 
 if not os.path.isdir("generated_code"):
     os.mkdir("generated_code")
@@ -332,6 +362,7 @@ worker.write_header()
 header = worker.text_out
 worker.write_source()
 source = worker.text_out
+worker.pack_binary()
 
 with open("generated_code/sync3_scales.cpp", "w") as source_file:
 
