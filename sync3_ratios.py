@@ -3,6 +3,7 @@ from shutil import copyfile
 import requests
 import os
 import struct
+import json
 
 def csv_to_array(file):
 
@@ -44,20 +45,21 @@ class Sync3Ratios:
 
         self.scales = {}
 
-        for number, line in enumerate(self.csv_to_array("sync3scales/manifest.csv")):
+        with open('sync3scales/manifest.json') as jsonfile:
+            manifest = json.load(jsonfile)
 
-            tag = line[0]
+        for number, line in enumerate(manifest['original']):
 
-            data = self.csv_to_array("sync3scales/" + tag + ".csv")
+            tag = line
 
+            with open('sync3scales/' + tag + '.json') as jsonfile:
+                scale = json.load(jsonfile)
+       
             self.scales[tag] = {}
 
-            self.scales[tag]["raw_ratios"] = []
+            self.scales[tag]["raw_ratios"] = scale['ratios']
 
-            for line in data[1:]:
-                self.scales[tag]["raw_ratios"].append([int(line[0]), int(line[1])])
-
-            self.scales[tag]["method"] = data[0][0]
+            self.scales[tag]["method"] = scale['method']
 
             self.scales[tag]["index"] = number
 
@@ -195,11 +197,17 @@ class Sync3Ratios:
         numerators = []
         denominators = []
 
-        for ratio in ratios:
-            numerators.append(int(ratio[0]))
-            denominators.append(int(ratio[1]))
-            numerators.append(int(ratio[0]))
-            denominators.append(int(ratio[1]))
+        if len(ratios) == 16:
+            for ratio in ratios:
+                numerators.append(int(ratio[0]))
+                denominators.append(int(ratio[1]))
+                numerators.append(int(ratio[0]))
+                denominators.append(int(ratio[1]))
+        else:
+                
+            for ratio in ratios:
+                numerators.append(int(ratio[0]))
+                denominators.append(int(ratio[1]))
 
         return numerators, denominators
 
@@ -234,7 +242,7 @@ class Sync3Ratios:
 
                 numerators, denominators = self.fill_2octave(ratios)
 
-            elif mode == "doubled":
+            elif mode == "fill":
 
                 numerators, denominators = self.fill_doubled(ratios)
 
