@@ -4,64 +4,104 @@ import requests
 import os
 import struct
 import json
+import numpy as np
 
-def csv_to_array(file):
+class Sync3Scales:
 
-    output = []
+    def __init__(self):
 
-    with open(file) as file_input:
+        self.fill_modes = {
+                        'octave': self.fill_octave,
+                        '2octave': self.fill_2octave,
+                        'tritave': self.fill_tritave,
+                        'expand': self.fill_expand
+                    }    
 
-        for line in file_input.readlines():
+        self.text_out = ''
+        self.scale_dir = './sync3/'
+        self.output_dir = './binaries/'
+        self.scales = {}        
+        self.scales_backup = {}
+        self.scale_set = []
+        self.scale_set_backup = []
 
-            line = line.rstrip("\n")
-
-            output.append(line.split(","))
-
-    return output
-
-class Sync3Ratios:
-
-    text_out = ""
-
-    def write_line(self, main, end="\n"):
-
-        self.text_out += main + end
-
-    def csv_to_array(self, file):
-
-        output = []
-
-        with open(file) as file_input:
-            for line in file_input.readlines():
-                line = line.rstrip("\n")
-
-                output.append(line.split(","))
-
-        return output
-
-    scales = {}
-
-    def load_scales(self):
+    def load_scale_set(self, slug='original'):
 
         self.scales = {}
 
-        with open('sync3scales/manifest.json') as jsonfile:
-            manifest = json.load(jsonfile)
+        with open(self.scale_dir + 'local_manifest.json') as jsonfile:
+            local_manifest = json.load(jsonfile)
 
-        for number, line in enumerate(manifest['original']):
+        with open(self.scale_dir + 'remote_manifest.json') as jsonfile:
+            remote_manifest = json.load(jsonfile)
+        
+        manifest = {**remote_manifest, **local_manifest}
 
-            tag = line
+        self.scale_set = manifest[slug]
+        self.scale_set_backup = manifest[slug]
 
-            with open('sync3scales/' + tag + '.json') as jsonfile:
-                scale = json.load(jsonfile)
-       
+        for number, tag in enumerate(manifest[slug]):
+            self.load_scale(tag, number, self.scale_dir + 'scales/') 
+            self.load_scale_backup(tag, number, self.scale_dir + 'scales/') 
+
+    def load_scale(self, tag, index, scale_path):
+        if self.scale_set[index] in self.scales:
+            self.scales.pop(self.scale_set[index])
+        self.scale_set[index] = tag
+        
+        with open(scale_path + tag + '.json') as jsonfile:    
+            scale = json.load(jsonfile)
             self.scales[tag] = {}
+            self.scales[tag]['seed_ratios'] = []
+            for ratio in scale['seed_ratios']:
+                self.add_seed_ratio(tag, ratio[0], ratio[1])
+            self.scales[tag]['fill_method'] = scale['fill_method']
+            self.scales[tag]['index'] = index
 
-            self.scales[tag]["raw_ratios"] = scale['ratios']
+    def load_scale_backup(self, tag, index, scale_path):
+        self.scale_set[index] = tag 
+        with open(scale_path + tag + '.json') as jsonfile:    
+            scale = json.load(jsonfile)
+            self.scales_backup[tag] = {}
+            self.scales_backup[tag]['seed_ratios'] = scale['seed_ratios']
+            self.scales_backup[tag]['fill_method'] = scale['fill_method']
+            self.scales_backup[tag]['index'] = index
 
-            self.scales[tag]["method"] = scale['method']
+    def save_scale(self, scale):
 
-            self.scales[tag]["index"] = number
+        with open(self.dir + scale + '.json', 'w') as jsonfile:
+            scale_output = scale
+            scale_output.pop('index')
+            scale_output.pop('numerators')
+            scale_output.pop('denominators')
+            scale_output.pop('precalcs')
+            scale_output.pop('keys')
+            json.dump(scale_output, jsonfile)
+
+    def save_scale_set(self, scale_set_slug):
+        
+        scale_sets = {}
+
+        with open(self.dir + self.manifest, 'r') as manifest_file: 
+            scale_sets = json.load(manifest_file)
+ 
+        scale_sets[scale_set_slug] = self.scale_set
+
+        with open(self.dir + self.manifest, 'w') as manifest_file: 
+            json.dump(manifest_file, scale_sets)
+
+        #TODO make scales object a list and add slug/filepath to dict
+    def add_seed_ratio(self, scale_id, numerator, denominator):
+        gcd = np.gcd(numerator, denominator)
+        ratio = [int(numerator/gcd), int(denominator/gcd)]
+        if ratio not in self.scales[scale_id]['seed_ratios']:
+            self.scales[scale_id]['seed_ratios'].append(ratio)
+            self.scales[scale_id]['seed_ratios'].sort(key=lambda x: x[0]/x[1])
+            return True
+        else:
+            return False
+
+# 
 
     def fill_octave(self, ratios):
 
@@ -192,7 +232,7 @@ class Sync3Ratios:
 
         return numerators, denominators
 
-    def fill_doubled(self, ratios):
+    def fill_expand(self, ratios):
 
         numerators = []
         denominators = []
@@ -203,11 +243,18 @@ class Sync3Ratios:
                 denominators.append(int(ratio[1]))
                 numerators.append(int(ratio[0]))
                 denominators.append(int(ratio[1]))
+            print(numerators)
         else:
                 
             for ratio in ratios:
                 numerators.append(int(ratio[0]))
                 denominators.append(int(ratio[1]))
+            #TODO: Dirty hack for ints set which has a doubled 1/1 in the middle
+            # That got bashed by the "unique seed ratios only"
+            # Maybe time for a custom mapping fill method
+            while len(numerators) < 32:
+                numerators.append(int(ratios[-1][0]))
+                denominators.append(int(ratios[-1][1]))
 
         return numerators, denominators
 
@@ -222,33 +269,17 @@ class Sync3Ratios:
 
         return numerators, denominators
 
+# Scale updating functions
+# TODO: render function per scale
     def render(self):
 
         for scale in self.scales:
 
-            ratios = self.scales[scale]["raw_ratios"]
+            ratios = self.scales[scale]['seed_ratios']
 
-            mode = self.scales[scale]["method"]
+            mode = self.scales[scale]['fill_method']
 
-            if mode == "octave":
-
-                numerators, denominators = self.fill_octave(ratios)
-
-            elif mode == "tritave":
-
-                numerators, denominators = self.fill_tritave(ratios)
-
-            elif mode == "2octave":
-
-                numerators, denominators = self.fill_2octave(ratios)
-
-            elif mode == "fill":
-
-                numerators, denominators = self.fill_doubled(ratios)
-
-            else:
-
-                numerators, denominators = self.fill_default(ratios)
+            numerators, denominators = self.fill_modes[mode](ratios)
 
             precalcs = []
 
@@ -273,76 +304,23 @@ class Sync3Ratios:
 
                 keys.append(key)
 
-            self.scales[scale]["numerators"] = numerators
-            self.scales[scale]["denominators"] = denominators
-            self.scales[scale]["precalcs"] = precalcs
-            self.scales[scale]["keys"] = keys
+            self.scales[scale]['numerators'] = numerators
+            self.scales[scale]['denominators'] = denominators
+            self.scales[scale]['precalcs'] = precalcs
+            self.scales[scale]['keys'] = keys
 
-    def write_source(self):
-
-        self.text_out = ""
-
-        self.write_line('#include "sync3.hpp"', end="\n\n")
-
-        for tag in self.scales:
-            
-            scale = self.scales[tag]
-
-            self.write_line("const ViaSync3::Sync3Scale ViaSync3::" + tag + " = {")
-            self.write_line("\t{", end="")
-            for number in scale["numerators"][0:-1]:
-                self.write_line(str(number), end=", ")
-            self.write_line(str(scale["numerators"][-1]) + "},")
-            self.write_line("\t{", end="")
-            for number in scale["denominators"][0:-1]:
-                self.write_line(str(number), end=", ")
-            self.write_line(str(scale["denominators"][-1]) + "},")
-            self.write_line("\t{", end="")
-            for number in scale["precalcs"][0:-1]:
-                self.write_line(str(number), end=", ")
-            self.write_line(str(scale["precalcs"][-1]) + "},")
-            self.write_line("\t{", end="")
-            for number in scale["keys"][0:-1]:
-                self.write_line(str(number), end=", ")
-            self.write_line(str(scale["keys"][-1]) + "},")
-            self.write_line("\t0")
-            self.write_line("};")
-
-            self.write_line('\n')
-
-        self.write_line("const struct ViaSync3::Sync3Scale * ViaSync3::scales[8] = {", end="")
-
-        for scale in self.scales:
-            self.write_line("&ViaSync3::" + scale, end=", ")
-        self.text_out = self.text_out.rstrip(", ")
-        self.write_line("", end="};")
-
-    def write_header(self):
-
-        self.text_out = "/// INSERT SCALES\n\n"
-
-        for scale in self.scales:
-            self.write_line("\tstatic const struct Sync3Scale " + scale, end=";\n")
-
-        self.write_line("\n\tstatic const struct Sync3Scale * scales[8];", end="\n\n")
-        self.write_line("\tconst uint32_t * numerators = " + scale + ".numerators;", end="\n")
-        self.write_line("\tconst uint32_t * denominators = " + scale + ".denominators;", end="\n")
-        self.write_line("\tconst uint32_t * dividedPhases = " + scale + ".dividedPhases;", end="\n")
-        self.write_line("\tconst uint32_t * precalcs = " + scale + ".precalcs;", end="\n")
-
-        self.write_line("\n/// INSERT SCALES", end="")
+# Export functions
 
     def pack_binary(self):
         
         structs = []
-        for tag in self.scales:
+        for tag in self.scale_set:
             structs.append(self.scales[tag])
-
-        structs.sort(key=lambda x: x['index'])
 
         packer = struct.Struct('<32I32I32I32II')
         compiled_structs = []
         for scale in structs:
+            print(len(scale['numerators']))
             pack = []
             for number in scale['numerators']:
                 pack.append(number)
@@ -354,51 +332,7 @@ class Sync3Ratios:
                 pack.append(number)
             pack.append(0)
             compiled_structs.append(packer.pack(*pack))
-        with open('generated_code/sync3ratios.bin', 'wb') as outfile:
+        with open(self.output_dir + 'sync3scales.bin', 'wb') as outfile:
             for chunk in compiled_structs:
                 outfile.write(chunk)
 
-############
-
-if not os.path.isdir("generated_code"):
-    os.mkdir("generated_code")
-
-worker = Sync3Ratios()
-worker.load_scales()
-worker.render()
-worker.write_header()
-header = worker.text_out
-worker.write_source()
-source = worker.text_out
-worker.pack_binary()
-
-with open("generated_code/sync3_scales.cpp", "w") as source_file:
-
-    source_file.write(source)
-
-# This should pull the file from github
-
-r = requests.get("https://raw.githubusercontent.com/starlingcode/Via/master/modules/inc/sync3.hpp")
-
-with open("sync3scales/sync3.hpp", "w") as template:
-
-    template.write(r.text)
-
-with open("sync3scales/sync3.hpp", "r") as template:
-
-    text = template.read()
-
-    sections = text.split("/// INSERT SCALES")
-
-    with open("generated_code/sync3.hpp", "w") as source_file:
-        source_file.write(sections[0] + header + sections[2])
-
-if (len(sys.argv)) > 1:
-
-    if sys.argv[1] == "copy":
-
-        copyfile("/vagrant/viatools/generated_code/sync3_scales.cpp",
-                 "/vagrant/via_hardware_executables/hardware_drivers/Via/modules/sync3/sync3_scales.cpp")
-
-        copyfile("/vagrant/viatools/generated_code/sync3.hpp",
-                 "/vagrant/via_hardware_executables/hardware_drivers/Via/modules/inc/sync3.hpp")

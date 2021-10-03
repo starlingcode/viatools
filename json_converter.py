@@ -1,15 +1,16 @@
 import os
 import json
-for root, dirs, files in os.walk('sync3scales'):
+import csv
+
+for root, dirs, files in os.walk('pattern_resources'):
     print(files)
-    for file in files:
-            with open('sync3scales/' + file) as jsonfile:
-                    print(file)
-                    data = json.load(jsonfile)
-                    print(data)
-            if 'method' in data:
-                    with open('sync3scales/' + file, 'w') as jsonfile:
-                            data['method'] = data['method'].replace('doubled','fill')
-                            data['method'] = data['method'].replace('full set','fill')
-                            print(data['method'])
-                            json.dump(data, jsonfile)
+    for file in [_file for _file in files if 'csv' in _file]:
+        json_out = []
+        with open(root + '/' + file) as csv_file:
+            reader = csv.reader(csv_file, delimiter=',', quotechar='|')
+            for row in reader:
+                json_out.append(row)
+        new_file = file.replace('.csv', '.json')  
+        with open(root + '/' + new_file, 'w') as out_file:
+            json.dump(json_out, out_file)         
+
