@@ -1,7 +1,3 @@
-import sys
-from shutil import copyfile
-import requests
-import os
 import struct
 import json
 import numpy as np
@@ -56,7 +52,7 @@ class Sync3Scales:
             for ratio in scale['seed_ratios']:
                 self.add_seed_ratio(tag, ratio[0], ratio[1])
             self.scales[tag]['fill_method'] = scale['fill_method']
-            self.scales[tag]['index'] = index
+            self.scales[tag]['taguu'] = index
 
     def load_scale_backup(self, tag, index, scale_path):
         self.scale_set[index] = tag 
@@ -67,7 +63,7 @@ class Sync3Scales:
             self.scales_backup[tag]['fill_method'] = scale['fill_method']
             self.scales_backup[tag]['index'] = index
 
-    def save_scale(self, scale):
+    def save_scale(self, scale_path):
 
         with open(self.dir + scale + '.json', 'w') as jsonfile:
             scale_output = scale
