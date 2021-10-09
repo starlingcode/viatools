@@ -26,7 +26,17 @@ class ViaResourceSet(ViaResource):
         self.resource_dir = resource_dir
         self.resource_set_dir = resource_set_dir
         self.init_resources()
-    
+        self.slug = slug
+   
+    def save_set(self, slug):
+        self.save(self.resource_set_dir + slug + '.json')
+        self.slug = slug 
+
+    def load_set(self, slug):
+        self.load(self.resource_set_dir + slug + '.json')
+        self.slug = slug
+        self.init_resources()
+
     def init_resources(self):
         self.resources = []
         for slug in self.data:
@@ -40,6 +50,11 @@ class ViaResourceSet(ViaResource):
 
     def replace_resource(self, slug, index):
         self.resources[index] = self.load_resource(slug)
+        self.data[index] = slug
+
+    def save_resource(self, slug, index):
+        self.resources[index].save(self.resource_dir + slug + '.json')
+        self.data[index] = slug
 
     def get_available_resource_sets(self):
         sets = []

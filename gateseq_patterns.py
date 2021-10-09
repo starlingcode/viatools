@@ -14,7 +14,7 @@ class GateseqPattern(ViaResource):
     def remove_data(self, index):
         self.data.pop(index)
 
-    def bake_data(self, index):
+    def bake(self):
         self.baked = []
         for recipe in self.data:
             self.baked.append(self.expand_sequence(recipe))
@@ -85,9 +85,9 @@ class GateseqPattern(ViaResource):
 
 class GateseqPatternSet(ViaResourceSet):
 
-    def __init__(self, resource_dir, output_dir, slug):
+    def __init__(self, resource_dir, slug):
         super().__init__(GateseqPattern, slug, resource_dir, resource_dir + 'patterns/')
-        self.output_dir = output_dir            
+        self.output_dir = resource_dir + 'binaries/'            
 
     def pack_binary(self):
         
@@ -95,10 +95,11 @@ class GateseqPatternSet(ViaResourceSet):
         compiled_structs = []
         binary_offset = 32 * 8
         for pattern in self.resources:
+            pattern.bake()
             pack = []
             for sequence in pattern.baked:
-                binary_offset += len(sequence)
                 pack.append(binary_offset)
+                binary_offset += len(sequence)
             for sequence in pattern.baked:
                 pack.append(len(sequence))
             compiled_structs.append(packer.pack(*pack))
@@ -107,6 +108,6 @@ class GateseqPatternSet(ViaResourceSet):
                 packer = struct.Struct('<%dI' % len(sequence))
                 compiled_structs.append(packer.pack(*sequence))
         
-        with open(self.output_dir + 'gateseqpatterns.bin', 'wb') as outfile:
+        with open(self.output_dir + self.slug + '.bin', 'wb') as outfile:
             for chunk in compiled_structs:
                 outfile.write(chunk)

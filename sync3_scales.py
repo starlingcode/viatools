@@ -1,321 +1,191 @@
 import struct
-import json
+import math
 import numpy as np
+from viatools.via_resource import ViaResource, ViaResourceSet
 
-class Sync3Scales:
 
-    def __init__(self):
+class Sync3Scale(ViaResource):
 
-        self.fill_modes = {
-                        'octave': self.fill_octave,
-                        '2octave': self.fill_2octave,
-                        'tritave': self.fill_tritave,
-                        'expand': self.fill_expand
+    def load(self, json_path):
+        super().load(json_path)
+        self.sort()
+
+    def add_data(self, recipe):
+        self.data['seed_ratios'].append(recipe)
+        self.sort()
+
+    def remove_data(self, index):
+        self.data['seed_ratios'].pop(index)
+
+    def bake(self):
+        self.baked = self.expand_scale(self.data)
+
+    def sort(self):
+        self.data['seed_ratios'].sort(key=self.get_decimal)
+    
+    def get_decimal(self, ratio):
+        return ratio[0]/ratio[1]
+
+    def expand_scale(self, recipe):
+
+        self.scale_size = 32
+
+        ratios = recipe['seed_ratios']
+        mode = recipe['fill_method']
+
+        baked = {}
+
+        self.expand_modes = {
+                        'octave': self.expand_octave,
+                        'tritave': self.expand_tritave,
+                        'expand': self.expand
                     }    
 
-        self.text_out = ''
-        self.scale_dir = './sync3/'
-        self.output_dir = './binaries/'
-        self.scales = {}        
-        self.scales_backup = {}
-        self.scale_set = []
-        self.scale_set_backup = []
+        self.expand_method = self.expand_even
 
-    def load_scale_set(self, slug='original'):
+        expanded = self.expand_modes[mode](ratios)
+        numerators = [ratio[0] for ratio in expanded]
+        denominators = [ratio[1] for ratio in expanded]
 
-        self.scales = {}
+        precalcs = []
+        for index, denominator in enumerate(denominators):
+            precalc = int((2 ** 32) / denominator) % 4294967296
+            precalcs.append(precalc)
 
-        with open(self.scale_dir + 'local_manifest.json') as jsonfile:
-            local_manifest = json.load(jsonfile)
+        ratios_used = set()
+        keys = []
+        key = 0
+        for index, numerator in enumerate(numerators):
+            ratio = (numerator, denominators[index])
+            if ratio not in ratios_used:
+                ratios_used.add(ratio)
+                key += 1
+            keys.append(key)
 
-        with open(self.scale_dir + 'remote_manifest.json') as jsonfile:
-            remote_manifest = json.load(jsonfile)
-        
-        manifest = {**remote_manifest, **local_manifest}
+        baked['numerators'] = numerators
+        baked['denominators'] = denominators
+        baked['precalcs'] = precalcs
+        baked['keys'] = keys
+        return baked
 
-        self.scale_set = manifest[slug]
-        self.scale_set_backup = manifest[slug]
+    def expand(self, ratios):
+        return self.expand_method(ratios, self.scale_size)
 
-        for number, tag in enumerate(manifest[slug]):
-            self.load_scale(tag, number, self.scale_dir + 'scales/') 
-            self.load_scale_backup(tag, number, self.scale_dir + 'scales/') 
+    def expand_octave(self, ratios):
+        return self.expand_tiled(ratios, 2)
 
-    def load_scale(self, tag, index, scale_path):
-        if self.scale_set[index] in self.scales:
-            self.scales.pop(self.scale_set[index])
-        self.scale_set[index] = tag
-        
-        with open(scale_path + tag + '.json') as jsonfile:    
-            scale = json.load(jsonfile)
-            self.scales[tag] = {}
-            self.scales[tag]['seed_ratios'] = []
-            for ratio in scale['seed_ratios']:
-                self.add_seed_ratio(tag, ratio[0], ratio[1])
-            self.scales[tag]['fill_method'] = scale['fill_method']
-            self.scales[tag]['taguu'] = index
+    def expand_tritave(self, ratios):
+        return self.expand_tiled(ratios, 3)
 
-    def load_scale_backup(self, tag, index, scale_path):
-        self.scale_set[index] = tag 
-        with open(scale_path + tag + '.json') as jsonfile:    
-            scale = json.load(jsonfile)
-            self.scales_backup[tag] = {}
-            self.scales_backup[tag]['seed_ratios'] = scale['seed_ratios']
-            self.scales_backup[tag]['fill_method'] = scale['fill_method']
-            self.scales_backup[tag]['index'] = index
+    def get_log(self, ratio, tile_size):
+        return math.log(ratio[0]/ratio[1], tile_size)
 
-    def save_scale(self, scale_path):
-
-        with open(self.dir + scale + '.json', 'w') as jsonfile:
-            scale_output = scale
-            scale_output.pop('index')
-            scale_output.pop('numerators')
-            scale_output.pop('denominators')
-            scale_output.pop('precalcs')
-            scale_output.pop('keys')
-            json.dump(scale_output, jsonfile)
-
-    def save_scale_set(self, scale_set_slug):
-        
-        scale_sets = {}
-
-        with open(self.dir + self.manifest, 'r') as manifest_file: 
-            scale_sets = json.load(manifest_file)
- 
-        scale_sets[scale_set_slug] = self.scale_set
-
-        with open(self.dir + self.manifest, 'w') as manifest_file: 
-            json.dump(manifest_file, scale_sets)
-
-        #TODO make scales object a list and add slug/filepath to dict
-    def add_seed_ratio(self, scale_id, numerator, denominator):
-        gcd = np.gcd(numerator, denominator)
-        ratio = [int(numerator/gcd), int(denominator/gcd)]
-        if ratio not in self.scales[scale_id]['seed_ratios']:
-            self.scales[scale_id]['seed_ratios'].append(ratio)
-            self.scales[scale_id]['seed_ratios'].sort(key=lambda x: x[0]/x[1])
-            return True
+    def expand_tiled(self, ratios, tile_size):
+        gt_1 = []
+        lt_1 = []
+        for ratio in ratios:
+            dec = self.get_decimal(ratio)
+            if dec < 1:
+                lt_1.append(ratio)
+            elif dec > 1:
+                gt_1.append(ratio)
+        if lt_1 == []:
+            gt_1.insert(0, [1,1])
+            top = self.get_log(gt_1[-1], tile_size)
+            if top.is_integer():
+                top -= 1
+            log_range = int(math.trunc(top + 1))
+            knob_high = self.expand_method(gt_1, self.scale_size/4)
+            cv_high = self.transpose_ratios(knob_high, [tile_size**log_range, 1])
+            knob_low = self.transpose_ratios(knob_high, [1, tile_size**log_range])
+            cv_low = self.transpose_ratios(knob_high, [1, tile_size**(log_range*2)])
+        elif gt_1 == []:
+            lt_1.append([1,1])
+            bottom = self.get_log(lt_1[0], tile_size)
+            if bottom.is_integer():
+                bottom += 1
+            log_range = abs(int(math.trunc(bottom)))
+            knob_low = self.expand_method(lt_1, self.scale_size/4)
+            cv_low = self.transpose_ratios(knob_low, [1, tile_size**log_range])
+            knob_high = self.transpose_ratios(knob_low, [tile_size**log_range, 1])
+            cv_high = self.transpose_ratios(knob_low, [tile_size**(log_range*2), 1])
         else:
-            return False
+            gt_1.insert(0, [1,1])
+            top = self.get_log(gt_1[-1], tile_size)
+            if top.is_integer():
+                top -= 1
+            log_range = int(math.trunc(top))
+            knob_high = self.expand_method(gt_1, self.scale_size/4)
+            knob_low = self.transpose_ratios(knob_high, [1, tile_size**log_range])
+            cv_low = self.transpose_ratios(knob_high, [1, tile_size**(log_range*2)])
+            lt_1.append([1,1])
+            bottom = self.get_log(lt_1[0], tile_size)
+            if bottom.is_integer():
+                bottom += 1
+            log_range = abs(int(math.trunc(bottom)))
+            knob_low = self.expand_method(lt_1, self.scale_size/4)
+            cv_high = self.transpose_ratios(knob_low, [tile_size**(log_range*2), 1])
+        
+        return  cv_low + knob_low + knob_high + cv_high
 
-# 
-
-    def fill_octave(self, ratios):
-
-        numerators = []
-        denominators = []
-
+    def transpose_ratios(self, ratios, factor):
+        out = []
         for ratio in ratios:
-            if (ratio[0] % 4 == 0):
-                numerators.append(int(ratio[0] / 4))
-                denominators.append(int(ratio[1]))
-            elif (ratio[0] % 2 == 0):
-                numerators.append(int(ratio[0] / 2))
-                denominators.append(int(ratio[1] * 2))
-            else:
-                numerators.append(int(ratio[0]))
-                denominators.append(int(ratio[1] * 4))
+            num = ratio[0] * factor[0]
+            den = ratio[1] * factor[1]
+            gcd = np.gcd(num, den)
+            out.append([int(num/gcd), int(den/gcd)])
+        return out
 
+    def expand_log(self, ratios, out_size):
+        logs = []
         for ratio in ratios:
-            if (ratio[0] % 2 == 0):
-                numerators.append(int(ratio[0] / 2))
-                denominators.append(int(ratio[1]))
-            else:
-                numerators.append(int(ratio[0]))
-                denominators.append(int(ratio[1] * 2))
+            logs.append(self.get_log(ratio, 2))
+        min_log = logs[0] 
+        max_log = logs[-1]
+        out_map = np.linspace(min_log, max_log, int(out_size))
+        out = []        
+        ratio_to_add = 0
+        for notch in out_map:
+            if notch > logs[ratio_to_add]:
+                ratio_to_add += 1
+            out.append(ratios[ratio_to_add])
+        return out
 
-        for ratio in ratios:
-            numerators.append(int(ratio[0]))
-            denominators.append(int(ratio[1]))
+    def expand_even(self, ratios, out_size):
+        relative_indices = []
+        for idx in range(0, len(ratios)):
+            rel = idx * (out_size/len(ratios))
+            rel += (out_size - 1) - (len(ratios) - 1) * (out_size/len(ratios))
+            relative_indices.append(rel)
+        out = []        
+        ratio_to_add = 0
+        for notch in range(0, int(out_size)):
+            print(ratio_to_add)
+            out.append(ratios[ratio_to_add])
+            if notch >= relative_indices[ratio_to_add]:
+                ratio_to_add += 1
+        return out
+            
+class Sync3ScaleSet(ViaResourceSet):
 
-        for ratio in ratios:
-            if (ratio[1] % 2 == 0):
-                numerators.append(int(ratio[0]))
-                denominators.append(int(ratio[1] / 2))
-            else:
-                numerators.append(int(ratio[0] * 2))
-                denominators.append(int(ratio[1]))
+    def __init__(self, resource_dir, slug):
+        super().__init__(Sync3Scale, slug, resource_dir, resource_dir + 'scales/')
+        self.output_dir = resource_dir + 'binaries/'            
+        self.scale_size = 32
+        self.slug = slug
 
-        return numerators, denominators
-
-    def fill_tritave(self, ratios):
-
-        numerators = []
-        denominators = []
-
-        for ratio in ratios:
-            if (ratio[0] % 9 == 0):
-                numerators.append(int(ratio[0] / 9))
-                denominators.append(int(ratio[1]))
-            elif (ratio[0] % 3 == 0):
-                numerators.append(int(ratio[0] / 3))
-                denominators.append(int(ratio[1] * 3))
-            else:
-                numerators.append(int(ratio[0]))
-                denominators.append(int(ratio[1] * 9))
-
-        for ratio in ratios:
-            if (ratio[0] % 3 == 0):
-                numerators.append(int(ratio[0] / 3))
-                denominators.append(int(ratio[1]))
-            else:
-                numerators.append(int(ratio[0]))
-                denominators.append(int(ratio[1] * 3))
-
-        for ratio in ratios:
-            numerators.append(int(ratio[0]))
-            denominators.append(int(ratio[1]))
-
-        for ratio in ratios:
-            if (ratio[1] % 3 == 0):
-                numerators.append(int(ratio[0]))
-                denominators.append(int(ratio[1] / 3))
-            else:
-                numerators.append(int(ratio[0] * 3))
-                denominators.append(int(ratio[1]))
-
-        return numerators, denominators
-
-    def fill_2octave(self, ratios):
-
-        numerators = []
-        denominators = []
-
-        for ratio in ratios:
-
-            if (ratio[0] % 16 == 0):
-                numerators.append(int(ratio[0] / 16))
-                denominators.append(int(ratio[1]))
-            elif (ratio[0] % 8 == 0):
-                numerators.append(int(ratio[0] / 8))
-                denominators.append(int(ratio[1] * 2))
-            elif (ratio[0] % 4 == 0):
-                numerators.append(int(ratio[0] / 4))
-                denominators.append(int(ratio[1] * 4))
-            elif (ratio[0] % 2 == 0):
-                numerators.append(int(ratio[0] / 2))
-                denominators.append(int(ratio[1] * 8))
-            else:
-                numerators.append(int(ratio[0]))
-                denominators.append(int(ratio[1] * 16))
-
-        for ratio in ratios:
-
-            if (ratio[0] % 4 == 0):
-                numerators.append(int(ratio[0] / 4))
-                denominators.append(int(ratio[1]))
-            elif (ratio[0] % 2 == 0):
-                numerators.append(int(ratio[0] / 2))
-                denominators.append(int(ratio[1] * 2))
-            else:
-                numerators.append(int(ratio[0]))
-                denominators.append(int(ratio[1] * 4))
-
-        for ratio in ratios:
-            numerators.append(int(ratio[0]))
-            denominators.append(int(ratio[1]))
-
-        for ratio in ratios:
-
-            if (ratio[1] % 4 == 0):
-                numerators.append(int(ratio[0]))
-                denominators.append(int(ratio[1] / 4))
-            elif (ratio[1] % 2 == 0):
-                numerators.append(int(ratio[0] * 2))
-                denominators.append(int(ratio[1] / 2))
-            else:
-                numerators.append(int(ratio[0] * 4))
-                denominators.append(int(ratio[1]))
-
-        return numerators, denominators
-
-    def fill_expand(self, ratios):
-
-        numerators = []
-        denominators = []
-
-        if len(ratios) == 16:
-            for ratio in ratios:
-                numerators.append(int(ratio[0]))
-                denominators.append(int(ratio[1]))
-                numerators.append(int(ratio[0]))
-                denominators.append(int(ratio[1]))
-            print(numerators)
-        else:
-                
-            for ratio in ratios:
-                numerators.append(int(ratio[0]))
-                denominators.append(int(ratio[1]))
-            #TODO: Dirty hack for ints set which has a doubled 1/1 in the middle
-            # That got bashed by the "unique seed ratios only"
-            # Maybe time for a custom mapping fill method
-            while len(numerators) < 32:
-                numerators.append(int(ratios[-1][0]))
-                denominators.append(int(ratios[-1][1]))
-
-        return numerators, denominators
-
-    def fill_default(self, ratios):
-
-        numerators = []
-        denominators = []
-
-        for ratio in ratios:
-            numerators.append(int(ratio[0]))
-            denominators.append(int(ratio[1]))
-
-        return numerators, denominators
-
-# Scale updating functions
-# TODO: render function per scale
-    def render(self):
-
-        for scale in self.scales:
-
-            ratios = self.scales[scale]['seed_ratios']
-
-            mode = self.scales[scale]['fill_method']
-
-            numerators, denominators = self.fill_modes[mode](ratios)
-
-            precalcs = []
-
-            for index, denominator in enumerate(denominators):
-                precalc = int((2 ** 32) / denominator) % 4294967296
-                precalcs.append(precalc)
-
-            ratios_used = set()
-
-            keys = []
-
-            key = 0
-
-            for index, numerator in enumerate(numerators):
-
-                ratio = (numerator, denominators[index])
-
-                if ratio not in ratios_used:
-
-                    ratios_used.add(ratio)
-                    key += 1
-
-                keys.append(key)
-
-            self.scales[scale]['numerators'] = numerators
-            self.scales[scale]['denominators'] = denominators
-            self.scales[scale]['precalcs'] = precalcs
-            self.scales[scale]['keys'] = keys
-
-# Export functions
+    def bake(self):
+        for resource in self.resources:
+            resource.bake()
 
     def pack_binary(self):
-        
-        structs = []
-        for tag in self.scale_set:
-            structs.append(self.scales[tag])
-
-        packer = struct.Struct('<32I32I32I32II')
+        sz = self.scale_size
+        packer = struct.Struct('<%dI%dI%dI%dII' % (sz, sz, sz, sz))
         compiled_structs = []
-        for scale in structs:
+        for resource in self.resources:
+            resource.bake()
+            scale = resource.baked
             print(len(scale['numerators']))
             pack = []
             for number in scale['numerators']:
@@ -328,7 +198,7 @@ class Sync3Scales:
                 pack.append(number)
             pack.append(0)
             compiled_structs.append(packer.pack(*pack))
-        with open(self.output_dir + 'sync3scales.bin', 'wb') as outfile:
+        with open(self.output_dir + self.slug + '.bin', 'wb') as outfile:
             for chunk in compiled_structs:
                 outfile.write(chunk)
 
