@@ -104,7 +104,7 @@ class Sync3Scale(ViaResource):
             bottom = self.get_log(lt_1[0], tile_size)
             if bottom.is_integer():
                 bottom += 1
-            log_range = abs(int(math.trunc(bottom)))
+            log_range = abs(int(math.trunc(bottom - 1)))
             knob_low = self.expand_method(lt_1, self.scale_size/4)
             cv_low = self.transpose_ratios(knob_low, [1, tile_size**log_range])
             knob_high = self.transpose_ratios(knob_low, [tile_size**log_range, 1])
@@ -114,17 +114,16 @@ class Sync3Scale(ViaResource):
             top = self.get_log(gt_1[-1], tile_size)
             if top.is_integer():
                 top -= 1
-            log_range = int(math.trunc(top))
-            knob_high = self.expand_method(gt_1, self.scale_size/4)
-            knob_low = self.transpose_ratios(knob_high, [1, tile_size**log_range])
-            cv_low = self.transpose_ratios(knob_high, [1, tile_size**(log_range*2)])
+            top_log_range = int(math.trunc(top + 1))
             lt_1.append([1,1])
             bottom = self.get_log(lt_1[0], tile_size)
             if bottom.is_integer():
                 bottom += 1
-            log_range = abs(int(math.trunc(bottom)))
+            bottom_log_range = abs(int(math.trunc(bottom - 1)))
+            knob_high = self.expand_method(gt_1, self.scale_size/4)
+            cv_low = self.transpose_ratios(knob_high, [1, tile_size**(top_log_range + bottom_log_range)])
             knob_low = self.expand_method(lt_1, self.scale_size/4)
-            cv_high = self.transpose_ratios(knob_low, [tile_size**(log_range*2), 1])
+            cv_high = self.transpose_ratios(knob_low, [tile_size**(top_log_range + bottom_log_range), 1])
         
         return  cv_low + knob_low + knob_high + cv_high
 
@@ -161,7 +160,6 @@ class Sync3Scale(ViaResource):
         out = []        
         ratio_to_add = 0
         for notch in range(0, int(out_size)):
-            print(ratio_to_add)
             out.append(ratios[ratio_to_add])
             if notch >= relative_indices[ratio_to_add]:
                 ratio_to_add += 1

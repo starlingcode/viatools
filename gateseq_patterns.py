@@ -4,8 +4,13 @@ from viatools.via_resource import ViaResource, ViaResourceSet
 class GateseqPattern(ViaResource):
 
     def load(self, json_path):
+        self.pattern_size = 16
         super().load(json_path)
         self.sort()
+
+    def save(self, json_path):
+        self.pad_to_length()
+        super().save(json_path)
 
     def add_data(self, recipe):
         self.data.append(recipe)
@@ -25,6 +30,28 @@ class GateseqPattern(ViaResource):
     def get_density(self, recipe):
         pattern = self.expand_sequence(recipe)
         return pattern.count(1)/len(pattern)
+
+    def pad_to_length(self):
+
+        if self.data == []:
+            self.data = [[0,1],[1,1]]
+
+        if len(self.data) < self.pattern_size:
+            out_size = self.pattern_size
+            #TODO copied from sync3_scales.py 
+            relative_indices = []
+            for idx in range(0, len(self.data)):
+                rel = idx * (out_size/len(self.data))
+                rel += (out_size - 1) - (len(self.data) - 1) * (out_size/len(self.data))
+                relative_indices.append(rel)
+            new_data = []
+            to_add = 0
+            for notch in range(0, int(out_size)):
+                print(new_data)
+                new_data.append(self.data[to_add])
+                if notch >= relative_indices[to_add]:
+                    to_add += 1
+            self.data = new_data
 
     def expand_sequence(self, recipe):
         if str(recipe[0]).isdigit():
@@ -83,6 +110,7 @@ class GateseqPattern(ViaResource):
         sequence = sequence.replace('^', '1')
         return sequence
 
+
 class GateseqPatternSet(ViaResourceSet):
 
     def __init__(self, resource_dir, slug):
@@ -91,9 +119,9 @@ class GateseqPatternSet(ViaResourceSet):
 
     def pack_binary(self):
         
-        packer = struct.Struct('<16I16I')
+        packer = struct.Struct('<%dI%dI' % (self.set_size, self.set_size))
         compiled_structs = []
-        binary_offset = 32 * 8
+        binary_offset = self.set_size * 2 * 8
         for pattern in self.resources:
             pattern.bake()
             pack = []
@@ -111,3 +139,5 @@ class GateseqPatternSet(ViaResourceSet):
         with open(self.output_dir + self.slug + '.bin', 'wb') as outfile:
             for chunk in compiled_structs:
                 outfile.write(chunk)
+
+                
