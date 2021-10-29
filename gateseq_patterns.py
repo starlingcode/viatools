@@ -116,12 +116,13 @@ class GateseqPatternSet(ViaResourceSet):
     def __init__(self, resource_dir, slug):
         super().__init__(GateseqPattern, slug, resource_dir, resource_dir + 'patterns/')
         self.output_dir = resource_dir + 'binaries/'            
+        self.pattern_size = 16
 
     def pack_binary(self):
         
-        packer = struct.Struct('<%dI%dI' % (self.set_size, self.set_size))
+        packer = struct.Struct('<%dI%dI' % (self.pattern_size, self.pattern_size))
         compiled_structs = []
-        binary_offset = self.set_size * 2 * 8
+        binary_offset = self.pattern_size * 2 * 8
         for pattern in self.resources:
             pattern.bake()
             pack = []
