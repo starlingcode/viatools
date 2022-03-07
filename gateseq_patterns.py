@@ -118,8 +118,9 @@ class GateseqPatternSet(ViaResourceSet):
         self.output_dir = resource_dir + 'binaries/'            
         self.pattern_size = 16
 
-    def pack_binary(self):
-        
+    def pack_binary(self, write_dir=None): 
+        if not write_dir:
+            write_dir = self.output_dir
         packer = struct.Struct('<%dI%dI' % (self.pattern_size, self.pattern_size))
         compiled_structs = []
         binary_offset = self.pattern_size * 2 * 8
@@ -137,8 +138,10 @@ class GateseqPatternSet(ViaResourceSet):
                 packer = struct.Struct('<%dI' % len(sequence))
                 compiled_structs.append(packer.pack(*sequence))
         
-        with open(self.output_dir + self.slug + '.bin', 'wb') as outfile:
+        resource_path = write_dir + self.slug + '.gateseq'
+
+        with open(resource_path, 'wb') as outfile:
             for chunk in compiled_structs:
                 outfile.write(chunk)
 
-                
+        return resource_path   
