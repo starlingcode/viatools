@@ -1,9 +1,0 @@
-#ifndef SCANNER_TABLES
-#define SCANNER_TABLES
-
-#include "tables.hpp"
-
-class ScannerWavetableSet: public WavetableSet {
-
-public:
-

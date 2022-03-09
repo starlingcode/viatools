@@ -1,9 +1,0 @@
-#ifndef SYNC_TABLES
-#define SYNC_TABLES
-
-#include "tables.hpp"
-
-class SyncWavetableSet: public WavetableSet {
-
-public:
-

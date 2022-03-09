@@ -1,8 +1,0 @@
-#ifndef META_TABLES
-#define META_TABLES
-
-#include "tables.hpp"
-
-class MetaWavetableSet: public WavetableSet {
-
-public:
