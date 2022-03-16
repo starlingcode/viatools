@@ -24,7 +24,33 @@ class Wavetable(ViaResource):
     # recipe is [attack_table_slug, release_table_slug]
     def update_data(self, recipe):
         self.data = recipe
-        self.sort()
+    
+    def expand(self):
+
+        with open(self.slope_file) as slopejson:
+            slopes = json.load(slopejson)
+            attack_table = slopes[self.data[0]]
+            release_table = slopes[self.data[1]]
+
+        tables = []
+
+        for index, table in enumerate(attack_table):
+
+            full_table = []
+
+            for sample in table[:256]:
+                full_table.append(int(sample))
+
+            release = release_table[index][1:]
+
+            release.reverse()
+
+            for sample in release:
+                full_table.append(int(sample))
+
+            tables.append(full_table)
+        
+        return tables
 
 class WavetableSet(ViaResourceSet):
 
@@ -51,7 +77,7 @@ class WavetableSet(ViaResourceSet):
 
         # 'compile' slopes and store offsets in units of 16 bit half words
         offset = 0
-        packer = struct.Struct('<257h')
+        packer = struct.Struct('<257H')
         compiled_slopes = []
         slope_data = {}
         for slope_set in slope_sets_used:
