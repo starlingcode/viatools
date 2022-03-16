@@ -26,6 +26,28 @@ class Osc3Scale(ViaResource):
     def bake(self):
         self.baked = self.expand_scale(self.data)
 
+    def pad_to_length(self):
+
+        if self.data['chords'] == []:
+            self.data['chords'] = [[0,0]]
+
+        if len(self.data['chords']) < 16:
+            out_size = 16
+            #TODO copied from sync3_scales.py 
+            relative_indices = []
+            for idx in range(0, len(self.data['chords'])):
+                rel = idx * (out_size/len(self.data['chords']))
+                rel += (out_size - 1) - (len(self.data['chords']) - 1) * (out_size/len(self.data['chords']))
+                relative_indices.append(rel)
+            new_data = []
+            to_add = 0
+            for notch in range(0, int(out_size)):
+                print(new_data)
+                new_data.append(self.data['chords'][to_add])
+                if notch >= relative_indices[to_add]:
+                    to_add += 1
+            self.data['chords'] = new_data
+
     def expand_scale(self, data):
         baked = {}
 
