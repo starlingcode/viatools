@@ -4,10 +4,11 @@ import json
 
 class Wavetable(ViaResource):
 
-    def __init__(self, table_file, slug, slope_file):
+    def __init__(self, table_file, slug, slope_file, max_table_size):
         self.slug = slug
         self.load(table_file)
         self.slope_file = slope_file
+        self.max_table_size = max_table_size
 
     def load(self, json_path): 
         with open(json_path) as json_file:
@@ -34,6 +35,11 @@ class Wavetable(ViaResource):
 
         tables = []
 
+        if len(attack_table) > self.max_table_size:
+            read_table = attack_table[0:self.max_table_size]
+        else:
+            read_table = attack_table
+
         for index, table in enumerate(attack_table):
 
             full_table = []
@@ -54,14 +60,18 @@ class Wavetable(ViaResource):
 
 class WavetableSet(ViaResourceSet):
 
-    def __init__(self, resource_dir, slug, table_file, slope_file):
+    def __init__(self, resource_dir, slug, table_file, slope_file, size_limit_data=None):
+        if size_limit_data:
+            self.max_table_size = size_limit_data['table_size']
+        else:
+            self.max_table_size = 9            
         self.table_file = table_file
         self.slope_file = slope_file
         super().__init__(Wavetable, slug, resource_dir, None)
         self.output_dir = resource_dir + 'binaries/'            
 
     def load_resource(self, slug):
-        return Wavetable(self.table_file, slug, self.slope_file)
+        return Wavetable(self.table_file, slug, self.slope_file, self.max_table_size)
 
     def pack_binary(self, write_dir=None): 
         if not write_dir:
@@ -83,8 +93,11 @@ class WavetableSet(ViaResourceSet):
         for slope_set in slope_sets_used:
             slope_data[slope_set] = {}
             slope_data[slope_set]['offset'] = offset
-            slope_data[slope_set]['size'] = len(slope_dict[slope_set])
-            for slope in slope_dict[slope_set]:
+            slope_read = slope_dict[slope_set] 
+            if len(slope_read) > self.max_table_size:
+                slope_read = slope_read[0:self.max_table_size]
+            slope_data[slope_set]['size'] = len(slope_read)
+            for slope in slope_read:
                 offset += 257
                 compiled_slopes.append(packer.pack(*slope))
 
@@ -97,7 +110,7 @@ class WavetableSet(ViaResourceSet):
             pack.append(slope_data[slope]['offset'])
             slope = table.data[1]
             pack.append(slope_data[slope]['offset'])
-            pack.append(257)
+            pack.append(256)
             pack.append(slope_data[slope]['size'])
             compiled_structs.append(packer.pack(*pack))
         
