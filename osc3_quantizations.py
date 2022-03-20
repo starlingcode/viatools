@@ -4,7 +4,7 @@ import numpy as np
 from viatools.via_resource import ViaResource, ViaResourceSet
 
 
-class Osc3Scale(ViaResource):
+class Osc3Quantization(ViaResource):
 
     def load(self, json_path):
         super().load(json_path)
@@ -118,10 +118,10 @@ class Osc3Scale(ViaResource):
         
         return baked
 
-class Osc3ScaleSet(ViaResourceSet):
+class Osc3QuantizationSet(ViaResourceSet):
 
     def __init__(self, resource_dir, slug):
-        super().__init__(Osc3Scale, slug, resource_dir, resource_dir + 'scales/')
+        super().__init__(Osc3Quantization, slug, resource_dir, resource_dir + 'scales/')
         self.output_dir = resource_dir + 'binaries/'            
         self.slug = slug
 
