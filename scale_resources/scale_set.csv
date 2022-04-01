@@ -1,0 +1,16 @@
+integerRatios,0,good
+even_integers,0,good
+mult_three_integers,0,good
+odd_integers,0,good
+modal_tetrads,3,good
+seventhTetradsMinimalProgression,3,good
+impressionist,2,good
+bohlenPeirce,2,good
+modesofroot,1,needs eval
+tetrad_inversions,1,needs sorting
+harmonic_entropy,1,
+bohlenPeircevoct,0,needs paring and full scale
+rhythm_integers,0,good
+no_triplets,0,needs eval
+triplets,0,needs eval
+poly_div_resets,0,NEEDS WORK
