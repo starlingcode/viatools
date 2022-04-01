@@ -8,6 +8,10 @@ class Sync3Scale(ViaResource):
 
     def load(self, json_path):
         super().load(json_path)
+        self.sorted = True
+        if 'sorted' in self.data:
+            if self.data['sorted'] is False:
+                self.sorted = False
         self.sort()
 
     def add_data(self, recipe):
@@ -17,11 +21,17 @@ class Sync3Scale(ViaResource):
     def remove_data(self, index):
         self.data['seed_ratios'].pop(index)
 
+    def update_sorted(self, is_sorted):
+        self.data['sorted'] = is_sorted
+        self.sorted = is_sorted
+        self.sort()
+
     def bake(self):
         self.baked = self.expand_scale(self.data)
 
     def sort(self):
-        self.data['seed_ratios'].sort(key=self.get_decimal)
+        if self.sorted:
+            self.data['seed_ratios'].sort(key=self.get_decimal)
     
     def get_decimal(self, ratio):
         return ratio[0]/ratio[1]
