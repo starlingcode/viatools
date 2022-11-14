@@ -121,7 +121,7 @@ class Osc3Quantization(ViaResource):
 class Osc3QuantizationSet(ViaResourceSet):
 
     def __init__(self, resource_dir, slug):
-        super().__init__(Osc3Quantization, slug, resource_dir, resource_dir + 'scales/')
+        super().__init__(Osc3Quantization, slug, resource_dir, resource_dir + 'quantizations/')
         self.output_dir = resource_dir + 'binaries/'            
         self.slug = slug
 
