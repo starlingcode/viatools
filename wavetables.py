@@ -63,14 +63,16 @@ class WavetableSet(ViaResourceSet):
     def __init__(self, resource_dir, slug, table_file, slope_file, size_limit_data=None):
         if size_limit_data:
             self.max_table_size = size_limit_data['table_size']
+            self.max_memory_footprint = size_limit_data['memory_footprint']
         else:
-            self.max_table_size = 9            
+            self.max_table_size = 9
+            self.max_memory_footprint = 160000            
         self.table_file = table_file
         self.slope_file = slope_file
         super().__init__(Wavetable, slug, resource_dir, None)
         self.output_dir = resource_dir + 'binaries/'
         self.memory_footprint = self.get_memory_footprint()
-        print("Memory footprint is :" + str(self.memory_footprint))            
+                
 
     def load_resource(self, slug):
         return Wavetable(self.table_file, slug, self.slope_file, self.max_table_size)

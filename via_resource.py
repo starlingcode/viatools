@@ -9,7 +9,11 @@ class ViaResource:
 
     def load(self, json_path): 
         with open(json_path) as json_file:
-            self.data = json.load(json_file)
+            data = json.load(json_file)
+            if 'title' in data and 'data' in data:
+                self.data = data['data']
+            else:
+                self.data = data 
 
     def save(self, save_path):
         with open(save_path, 'w') as save_file:
