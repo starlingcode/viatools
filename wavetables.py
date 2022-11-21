@@ -68,22 +68,23 @@ class WavetableSet(ViaResourceSet):
         self.table_file = table_file
         self.slope_file = slope_file
         super().__init__(Wavetable, slug, resource_dir, None)
-        self.output_dir = resource_dir + 'binaries/'            
+        self.output_dir = resource_dir + 'binaries/'
+        self.memory_footprint = self.get_memory_footprint()
+        print("Memory footprint is :" + str(self.memory_footprint))            
 
     def load_resource(self, slug):
         return Wavetable(self.table_file, slug, self.slope_file, self.max_table_size)
 
-    def pack_binary(self, write_dir=None): 
-        if not write_dir:
-            write_dir = self.output_dir
-
+    def prepare_binary(self):
         with open(self.slope_file) as jsonfile:
             slope_dict = json.load(jsonfile)
 
         slope_sets_used = set()
         for table in self.resources:
             slope_sets_used.add(table.data[0]) 
-            slope_sets_used.add(table.data[1]) 
+            slope_sets_used.add(table.data[1])
+
+        outsize = 0 
 
         # 'compile' slopes and store offsets in units of 16 bit half words
         offset = 0
@@ -100,6 +101,7 @@ class WavetableSet(ViaResourceSet):
             for slope in slope_read:
                 offset += 257
                 compiled_slopes.append(packer.pack(*slope))
+                outsize += 257*2
 
         # 'compile' table def structs using above slope offsets
         compiled_structs = []
@@ -113,6 +115,18 @@ class WavetableSet(ViaResourceSet):
             pack.append(256)
             pack.append(slope_data[slope]['size'])
             compiled_structs.append(packer.pack(*pack))
+            outsize += 16
+
+        return compiled_structs, compiled_slopes, outsize
+
+    def get_memory_footprint(self):
+        return(self.prepare_binary()[2])
+
+    def pack_binary(self, write_dir=None): 
+        if not write_dir:
+            write_dir = self.output_dir
+
+        compiled_structs, compiled_slopes, outsize = self.prepare_binary()
         
         resource_path = write_dir + self.slug + '.' + self.output_dir.split('/')[-2] + 'tables'
 
