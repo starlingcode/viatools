@@ -60,13 +60,23 @@ class ViaResourceSet(ViaResource):
         self.resources[index].save(self.resource_dir + slug + '.json')
         self.data[index] = slug
 
+    def make_title_maps(self, slugs, slug_path):
+        slug_to_title = {}
+        title_to_slug = {}
+        for slug in slugs:
+            with open(slug_path + slug + '.json') as thefile:
+                title = json.load(thefile)['title']
+                slug_to_title[slug] = title
+                title_to_slug[title] = slug
+        return slug_to_title, title_to_slug
+
     def get_available_resource_sets(self):
         sets = []
         for root, dirs, files in os.walk(self.resource_set_dir):
             for file in files:
                 sets.append(file.replace('.json', ''))
             break
-        return sets
+        return self.make_title_maps(sets, self.resource_set_dir)
 
     def get_available_resources(self):
         resources = []
@@ -74,4 +84,7 @@ class ViaResourceSet(ViaResource):
             for file in files:
                 resources.append(file.replace('.json', ''))
             break
-        return resources
+        return self.make_title_maps(resources, self.resource_dir)
+
+    
+
