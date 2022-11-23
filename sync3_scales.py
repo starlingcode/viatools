@@ -18,6 +18,9 @@ class Sync3Scale(ViaResource):
         self.data['seed_ratios'].append(recipe)
         self.sort()
 
+    def reorder_data(self, idx_to_move, destination):
+        self.data['seed_ratios'].insert(destination, self.data['seed_ratios'].pop(idx_to_move))
+
     def remove_data(self, index):
         self.data['seed_ratios'].pop(index)
 
