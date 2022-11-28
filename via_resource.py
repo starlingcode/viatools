@@ -7,13 +7,33 @@ class ViaResource:
         if json_path:
             self.load(json_path)
 
-    def load(self, json_path): 
-        with open(json_path) as json_file:
-            data = json.load(json_file)
-            if 'title' in data and 'data' in data:
-                self.data = data['data']
-            else:
-                self.data = data 
+    def validate(self, json_path):
+        try: 
+            with open(json_path) as json_file:
+                data = json.load(json_file)
+                if 'title' not in data:
+                    print("Can't find a title field!")
+                    return False
+        except:
+            print("Error loading " + str(json_path))
+            return False
+
+        return True 
+
+    def load(self, json_path):
+        try: 
+            with open(json_path) as json_file:
+                data = json.load(json_file)
+        except:
+            print("Error loading " + str(json_path))
+            return False
+
+        if 'title' in data and 'data' in data:
+            self.data = data['data']
+        else:
+            self.data = data 
+
+        return True 
 
     def save(self, save_path):
         with open(save_path, 'w') as save_file:
@@ -70,21 +90,21 @@ class ViaResourceSet(ViaResource):
                 title_to_slug[title] = slug
         return slug_to_title, title_to_slug
 
-    def get_available_resource_sets(self):
-        sets = []
-        for root, dirs, files in os.walk(self.resource_set_dir):
-            for file in files:
-                sets.append(file.replace('.json', ''))
-            break
-        return self.make_title_maps(sets, self.resource_set_dir)
-
-    def get_available_resources(self):
+    def get_available_resources(self, search_dir=None):
+        if not search_dir:
+            search_dir = self.resource_dir
         resources = []
-        for root, dirs, files in os.walk(self.resource_dir):
-            for file in files:
-                resources.append(file.replace('.json', ''))
+        for root, dirs, files in os.walk(search_dir):
+            for file in [x for x in files if ".json" in x]:
+                if self.validate(os.path.join(root, file)):
+                    resources.append(file.replace('.json', ''))
+                else:
+                    print("Bad file at " + os.path.join(root, file))
             break
-        return self.make_title_maps(resources, self.resource_dir)
+        return self.make_title_maps(resources, search_dir)
+
+    def get_available_resource_sets(self):
+        return self.get_available_resources(self.resource_set_dir)
 
     
 

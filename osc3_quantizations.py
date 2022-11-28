@@ -6,9 +6,6 @@ from viatools.via_resource import ViaResource, ViaResourceSet
 
 class Osc3Quantization(ViaResource):
 
-    def load(self, json_path):
-        super().load(json_path)
-
     def add_chord(self, chord):
         self.data['chords'].append(chord)
 

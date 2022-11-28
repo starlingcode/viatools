@@ -5,8 +5,10 @@ class GateseqPattern(ViaResource):
 
     def load(self, json_path):
         self.pattern_size = 16
-        super().load(json_path)
+        if not super().load(json_path):
+            return False
         self.sort()
+        return True
 
     def save(self, json_path):
         self.pad_to_length()

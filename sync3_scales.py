@@ -7,12 +7,15 @@ from viatools.via_resource import ViaResource, ViaResourceSet
 class Sync3Scale(ViaResource):
 
     def load(self, json_path):
-        super().load(json_path)
+        if not super().load(json_path):
+            return False
         self.sorted = True
         if 'sorted' in self.data:
             if self.data['sorted'] is False:
                 self.sorted = False
         self.sort()
+        return True
+
 
     def add_data(self, recipe):
         self.data['seed_ratios'].append(recipe)
