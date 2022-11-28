@@ -28,10 +28,7 @@ class ViaResource:
             print("Error loading " + str(json_path))
             return False
 
-        if 'title' in data and 'data' in data:
-            self.data = data['data']
-        else:
-            self.data = data 
+        self.data = data 
 
         return True 
 
@@ -40,9 +37,6 @@ class ViaResource:
             json.dump(self.data, save_file)
     
 class ViaResourceSet(ViaResource):
-    
-    # self.data is a list of slugs
-    # self.resources is a list of resources loaded from those slugs
 
     def __init__(self, resource_type, slug, resource_set_dir, resource_dir):
         super().__init__(resource_set_dir + slug + '.json')
@@ -63,7 +57,7 @@ class ViaResourceSet(ViaResource):
 
     def init_resources(self):
         self.resources = []
-        for slug in self.data:
+        for slug in self.data['slug_list']:
             self.add_resource(self.load_resource(slug))
     
     def add_resource(self, resource):
@@ -74,11 +68,11 @@ class ViaResourceSet(ViaResource):
 
     def replace_resource(self, slug, index):
         self.resources[index] = self.load_resource(slug)
-        self.data[index] = slug
+        self.data['slug_list'][index] = slug
 
     def save_resource(self, slug, index):
         self.resources[index].save(self.resource_dir + slug + '.json')
-        self.data[index] = slug
+        self.data['slug_list'][index] = slug
 
     def make_title_maps(self, slugs, slug_path):
         slug_to_title = {}
