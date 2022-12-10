@@ -15,19 +15,19 @@ class GateseqPattern(ViaResource):
         super().save(json_path)
 
     def add_data(self, recipe):
-        self.data.append(recipe)
+        self.data['data'].append(recipe)
         self.sort()
 
     def remove_data(self, index):
-        self.data.pop(index)
+        self.data['data'].pop(index)
 
     def bake(self):
         self.baked = []
-        for recipe in self.data:
+        for recipe in self.data['data']:
             self.baked.append(self.expand_sequence(recipe))
 
     def sort(self):
-        self.data.sort(key=self.get_density)
+        self.data['data'].sort(key=self.get_density)
 
     def get_density(self, recipe):
         pattern = self.expand_sequence(recipe)
@@ -35,22 +35,22 @@ class GateseqPattern(ViaResource):
 
     def pad_to_length(self):
 
-        if self.data == []:
-            self.data = [[0,1],[1,1]]
+        if self.data['data'] == []:
+            self.data['data'] = [[0,1],[1,1]]
 
-        if len(self.data) < self.pattern_size:
+        if len(self.data['data']) < self.pattern_size:
             out_size = self.pattern_size
             #TODO copied from sync3_scales.py 
             relative_indices = []
-            for idx in range(0, len(self.data)):
-                rel = idx * (out_size/len(self.data))
-                rel += (out_size - 1) - (len(self.data) - 1) * (out_size/len(self.data))
+            for idx in range(0, len(self.data['data'])):
+                rel = idx * (out_size/len(self.data['data']))
+                rel += (out_size - 1) - (len(self.data['data']) - 1) * (out_size/len(self.data['data']))
                 relative_indices.append(rel)
             new_data = []
             to_add = 0
             for notch in range(0, int(out_size)):
                 print(new_data)
-                new_data.append(self.data[to_add])
+                new_data.append(self.data['data'][to_add])
                 if notch >= relative_indices[to_add]:
                     to_add += 1
             self.data = new_data
