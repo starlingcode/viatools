@@ -97,6 +97,7 @@ class ViaResourceSet(ViaResource):
             break
         return self.make_title_maps(resources, search_dir)
 
+
     def get_available_resource_sets(self):
         return self.get_available_resources(self.resource_set_dir)
 

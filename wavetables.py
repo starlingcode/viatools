@@ -24,14 +24,14 @@ class Wavetable(ViaResource):
 
     # recipe is [attack_table_slug, release_table_slug]
     def update_data(self, recipe):
-        self.data = recipe
+        self.data['slopes'] = recipe
     
     def expand(self):
 
         with open(self.slope_file) as slopejson:
             slopes = json.load(slopejson)
-            attack_table = slopes[self.data[0]]
-            release_table = slopes[self.data[1]]
+            attack_table = slopes[self.data['slopes'][0]]['samples']
+            release_table = slopes[self.data['slopes'][1]]['samples']
 
         tables = []
 
@@ -83,8 +83,8 @@ class WavetableSet(ViaResourceSet):
 
         slope_sets_used = set()
         for table in self.resources:
-            slope_sets_used.add(table.data[0]) 
-            slope_sets_used.add(table.data[1])
+            slope_sets_used.add(table.data['slopes'][0]) 
+            slope_sets_used.add(table.data['slopes'][1])
 
         outsize = 0 
 
@@ -96,7 +96,7 @@ class WavetableSet(ViaResourceSet):
         for slope_set in slope_sets_used:
             slope_data[slope_set] = {}
             slope_data[slope_set]['offset'] = offset
-            slope_read = slope_dict[slope_set] 
+            slope_read = slope_dict[slope_set]['samples'] 
             if len(slope_read) > self.max_table_size:
                 slope_read = slope_read[0:self.max_table_size]
             slope_data[slope_set]['size'] = len(slope_read)
@@ -110,9 +110,9 @@ class WavetableSet(ViaResourceSet):
         for table in self.resources:
             packer = struct.Struct('<IIII')
             pack = []
-            slope = table.data[0]
+            slope = table.data['slopes'][0]
             pack.append(slope_data[slope]['offset'])
-            slope = table.data[1]
+            slope = table.data['slopes'][1]
             pack.append(slope_data[slope]['offset'])
             pack.append(256)
             pack.append(slope_data[slope]['size'])
@@ -136,4 +136,18 @@ class WavetableSet(ViaResourceSet):
             for chunk in compiled_structs + compiled_slopes:
                 outfile.write(chunk)
 
-        return resource_path   
+        return resource_path
+
+    def get_available_resources(self, search_dir=None):
+        slug_to_title = {}
+        title_to_slug = {}
+        with open(self.table_file) as thefile:
+            table_dict = json.load(thefile)
+            for table_slug in table_dict:
+                table_title = table_dict[table_slug]['title']
+                slug_to_title[table_slug] = table_title
+                title_to_slug[table_title] = table_slug
+        return slug_to_title, title_to_slug
+
+    def get_available_resource_sets(self):
+        return super().get_available_resources(self.resource_set_dir)   
