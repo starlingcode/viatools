@@ -44,7 +44,7 @@ class Wavetable(ViaResource):
 
             full_table = []
 
-            for sample in table[:256]:
+            for sample in table[:-1]:
                 full_table.append(int(sample))
 
             release = release_table[index][1:]
