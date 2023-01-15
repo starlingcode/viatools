@@ -46,7 +46,9 @@ class ViaResourceSet(ViaResource):
         self.init_resources()
         self.slug = slug
    
-    def save_set(self, slug):
+    def save_set(self, slug, description):
+        self.data['title'] = slug
+        self.data['description'] = description
         self.save(self.resource_set_dir + slug + '.json')
         self.slug = slug 
 
@@ -70,7 +72,9 @@ class ViaResourceSet(ViaResource):
         self.resources[index] = self.load_resource(slug)
         self.data['slug_list'][index] = slug
 
-    def save_resource(self, slug, index):
+    def save_resource(self, slug, index, description):
+        self.resources[index].data['title'] = slug
+        self.resources[index].data['description'] = description
         self.resources[index].save(self.resource_dir + slug + '.json')
         self.data['slug_list'][index] = slug
 
