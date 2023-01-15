@@ -49,11 +49,10 @@ class GateseqPattern(ViaResource):
             new_data = []
             to_add = 0
             for notch in range(0, int(out_size)):
-                print(new_data)
                 new_data.append(self.data['data'][to_add])
                 if notch >= relative_indices[to_add]:
                     to_add += 1
-            self.data = new_data
+            self.data['data'] = new_data
 
     def expand_sequence(self, recipe):
         if str(recipe[0]).isdigit():
