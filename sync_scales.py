@@ -72,7 +72,6 @@ class SyncScaleSet(ViaResourceSet):
         for resource in self.resources:
             resource.bake()
             scale = resource.baked
-            print(len(scale['numerators']))
             pack = []
             for number in scale['numerators']:
                 pack.append(number)
@@ -158,8 +157,6 @@ class Scale:
 
             # add the pitch set to the global pitch set that we are collecting
             self.global_pitch_set = self.global_pitch_set | pitch_set
-
-            print(scale_tags)
 
             # the "scale holder" array translates this data to the code generation routine below
             self.scale_holder.append([full_scale, scale_tags, num_scales, scale_parser[4]])
@@ -577,8 +574,6 @@ class Scale:
 
             subtile = []
 
-        # print(tiles)
-
         # use those tiles to map out a 1vOct space across 128 indices (10 and 2/3 octaves)
         # precalculate the ratio to fix48
         # calculate the fundamental divisor if it was not specified in the scale CSV
@@ -698,8 +693,6 @@ class Scale:
                 ratio_table.append(ratio_subset)
                 ratio_subset = []
 
-        # print(ratio_table)
-
         num_scales = len(scale_tags)
         pitch_set = set([])
         full_scale = []
@@ -807,8 +800,6 @@ class Scale:
                     stored_row = []
                     row_counter = "skip"
 
-        # print(ratio_table)
-
         num_scales = len(scale_tags)
         pitch_set = set([])
         full_scale = []
@@ -867,8 +858,6 @@ class Scale:
             full_scale.append(full_row)
             full_row = []
             raw_ratios.append(raw_ratio_row)
-
-        # print(raw_ratios)
 
         return [full_scale, pitch_set, scale_tags, num_scales, raw_ratios]
 
@@ -923,8 +912,6 @@ class Scale:
                 ratio_subset = []
                 stored_row = []
 
-        # print(ratio_table)
-
         num_scales = len(scale_tags)
         pitch_set = set([])
         full_scale = []
@@ -983,7 +970,5 @@ class Scale:
             full_scale.append(full_row)
             full_row = []
             raw_ratios.append(raw_ratio_row)
-
-        # print(raw_ratios)
 
         return [full_scale, pitch_set, scale_tags, num_scales, raw_ratios]

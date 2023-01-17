@@ -202,7 +202,6 @@ class Sync3ScaleSet(ViaResourceSet):
         for resource in self.resources:
             resource.bake()
             scale = resource.baked
-            print(len(scale['numerators']))
             pack = []
             for number in scale['numerators']:
                 pack.append(number)

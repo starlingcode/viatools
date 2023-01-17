@@ -21,6 +21,7 @@ class Osc3Quantization(ViaResource):
             self.data['notes'].remove(note)
 
     def bake(self):
+        self.pad_to_length()
         self.baked = self.expand_scale(self.data)
 
     def pad_to_length(self):
@@ -39,7 +40,6 @@ class Osc3Quantization(ViaResource):
             new_data = []
             to_add = 0
             for notch in range(0, int(out_size)):
-                print(new_data)
                 new_data.append(self.data['chords'][to_add])
                 if notch >= relative_indices[to_add]:
                     to_add += 1
@@ -53,23 +53,18 @@ class Osc3Quantization(ViaResource):
         exp_offsets = [] 
         for note in data['notes']:
             exp_offsets.append(2.0**(note/12.0))
-        print(exp_offsets)
         degrees = []
         for pitch_class in range(0, 12):
             exp_offset = 2.0**(pitch_class/12.0)
-            print(exp_offset)
             min_diff_index = 0
             min_diff = 100
             for idx, offset in enumerate(exp_offsets):
                 diff = abs(offset - exp_offset)
-                print(diff)
                 if diff < min_diff:
                     min_diff = diff
                     min_diff_index = idx
             degrees.append(min_diff_index) 
         baked['degrees'] = degrees
-        print(degrees)
-        print('Degrees length: %d' % len(degrees))
 
         scale_out = []
         scale12 = []
@@ -82,8 +77,6 @@ class Osc3Quantization(ViaResource):
                 index_note = 0
             scale_out.append(index_octave + scale12[index_note])
         baked['scale'] = scale_out
-        print(scale_out)
-        print('Degrees length: %d' % len(scale_out))
         
         intervals = []
         notes = data['notes']
@@ -99,8 +92,6 @@ class Osc3Quantization(ViaResource):
         for i in range(0, 37 - len(intervals)):
             intervals.append(0)
         baked['intervals'] = intervals
-        print(intervals)
-        print('Degrees length: %d' % len(intervals))
 
         chords = []
         for chord in data['chords']:
@@ -110,8 +101,6 @@ class Osc3Quantization(ViaResource):
         chords.append(chord[0])
         chords.append(chord[1])
         baked['chords'] = chords
-        print(chords)
-        print('Degrees length: %d' % len(chords))
         
         return baked
 
