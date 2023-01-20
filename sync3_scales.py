@@ -16,21 +16,64 @@ class Sync3Scale(ViaResource):
         self.sort()
         return True
 
-
+    # reciple: [numerator, denominator]
     def add_data(self, recipe):
         self.data['seed_ratios'].append(recipe)
         self.sort()
+        insert_idx = len(self.data['seed_ratios']) - 1
+        return insert_idx
 
     def reorder_data(self, idx_to_move, destination):
         self.data['seed_ratios'].insert(destination, self.data['seed_ratios'].pop(idx_to_move))
 
     def remove_data(self, index):
-        self.data['seed_ratios'].pop(index)
+        return self.data['seed_ratios'].pop(index)
+
+    def clear_data(self):
+        old_data = self.data['seed_ratios']
+        self.data['seed_ratios'] = [[1,1]]
+        return old_data
+
+    def reload_data(self, data_copy):
+        self.data['seed_ratios'] = []
+        for ratio in data_copy:
+            self.data['seed_ratios'].append(ratio)
+
+    def get_data(self):
+        data = []
+        for ratio in self.data['seed_ratios']:
+            data.append(ratio)
+        return data
 
     def update_sorted(self, is_sorted):
         self.data['sorted'] = is_sorted
         self.sorted = is_sorted
+        old_order = []
+        for ratio in self.data['seed_ratios']:
+            old_order.append(ratio)
         self.sort()
+        return old_order
+
+    def check_fill_ok(self):
+        scale_size = 32
+        seed_ratios = self.data['seed_ratios']
+        lt_1 = []
+        gt_1 = []
+        for ratio in seed_ratios:
+            if ratio[0]/ratio[1] < 1:
+                lt_1.append(ratio)
+            elif ratio[0]/ratio[1] > 1:
+                gt_1.append(ratio)
+        if len(lt_1) > scale_size/4 or len(gt_1) > scale_size/4:
+            return False
+        else:
+            return True
+
+    def set_fill(self, fill):
+        self.data['fill_method'] = fill
+
+    def get_fill(self):
+        return self.data['fill_method']
 
     def bake(self):
         self.baked = self.expand_scale(self.data)
