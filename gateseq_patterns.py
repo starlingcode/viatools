@@ -21,12 +21,16 @@ class GateseqPattern(ViaResource):
     def remove_data(self, index):
         self.data['data'].pop(index)
 
+    def get_length(self, seq_idx):
+        self.bake()
+        return len(self.baked)
+
     def update_length(self, seq_idx, length):
         if self.is_euclidean_recipe(self.data['data'][seq_idx]):
             self.data['data'][seq_idx] = self.euclidean_to_bool(self.data['data'][seq_idx])
         current_length = len(self.data['data'][seq_idx])
-        if len(current_length) >= length:
-            self.data['data'][seq_idx] = self.data['data'][seq_idx][:length]
+        if current_length >= length:
+            self.data['data'][seq_idx] = self.data['data'][seq_idx][0:length]
         else:
             for i in range(current_length, length):
                 self.data['data'][seq_idx].append(False)
@@ -143,7 +147,7 @@ class GateseqPattern(ViaResource):
         expanded = self.expand_euclidean(recipe[0], recipe[1])
         new_seq = []
         for step in expanded:
-            if step == '1':
+            if step == 1:
                 new_seq.append(True)
             else:
                 new_seq.append(False)
