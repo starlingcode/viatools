@@ -21,6 +21,26 @@ class GateseqPattern(ViaResource):
     def remove_data(self, index):
         self.data['data'].pop(index)
 
+    def update_length(self, seq_idx, length):
+        if self.is_euclidean_recipe(self.data['data'][seq_idx]):
+            self.data['data'][seq_idx] = self.euclidean_to_bool(self.data['data'][seq_idx])
+        current_length = len(self.data['data'][seq_idx])
+        if len(current_length) >= length:
+            self.data['data'][seq_idx] = self.data['data'][seq_idx][:length]
+        else:
+            for i in range(current_length, length):
+                self.data['data'][seq_idx].append(False)
+        #TODO sorted/unsorted
+        self.sort()
+
+    def update_step(self, seq_idx, step_idx, state):
+        if self.is_euclidean_recipe(self.data['data'][seq_idx]):
+            print("Converting!")
+            self.data['data'][seq_idx] = self.euclidean_to_bool(self.data['data'][seq_idx])
+        self.data['data'][seq_idx][step_idx] = state
+        #TODO sorted/unsorted
+        self.sort()
+
     def bake(self):
         self.baked = []
         for recipe in self.data['data']:
@@ -54,11 +74,24 @@ class GateseqPattern(ViaResource):
                     to_add += 1
             self.data['data'] = new_data
 
-    def expand_sequence(self, recipe):
+    def get_name(self, idx):
+        sequence = self.data['data'][idx]
+        if self.is_euclidean_recipe(sequence):
+            return '%s/%s' % (sequence[0], sequence[1])
+        else:
+            return '!%s/%s!' % (str(sequence.count(True)), str(len(sequence)))
+
+    def is_euclidean_recipe(self, recipe):
         if str(recipe[0]).isdigit():
+            return True
+        else:
+            return False
+
+    def expand_sequence(self, recipe):
+        if self.is_euclidean_recipe(recipe):
             sequence = self.expand_euclidean(recipe[0], recipe[1])
-        elif '_' in recipe[0] or '^' in recipe[0]: 
-            sequence = self.expand_text(recipe[0], recipe[1])
+        else: 
+            sequence = self.expand_bool(recipe)
         int_sequence = []
         for step in sequence:
             int_sequence.append(int(step))
@@ -106,9 +139,24 @@ class GateseqPattern(ViaResource):
         sequence = sequence[i:] + sequence[0:i]
         return sequence
 
-    def expand_text(self, recipe):
-        sequence = recipe[0].replace('_', '0')
-        sequence = sequence.replace('^', '1')
+    def euclidean_to_bool(self, recipe):
+        expanded = self.expand_euclidean(recipe[0], recipe[1])
+        new_seq = []
+        for step in expanded:
+            if step == '1':
+                new_seq.append(True)
+            else:
+                new_seq.append(False)
+        return new_seq
+
+
+    def expand_bool(self, recipe):
+        sequence = []
+        for step in recipe:
+            if step is True:
+                sequence.append(1)
+            else:
+                sequence.append(0)
         return sequence
 
 
