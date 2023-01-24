@@ -17,11 +17,14 @@ class Sync3Scale(ViaResource):
         return True
 
     # reciple: [numerator, denominator]
-    def add_data(self, recipe):
-        self.data['seed_ratios'].append(recipe)
-        self.sort()
-        insert_idx = len(self.data['seed_ratios']) - 1
-        return insert_idx
+    def add_data(self, recipe, idx=None):
+        if idx:
+            self.data['seed_ratios'].insert(idx, chord)
+        else:
+            self.data['seed_ratios'].append(recipe)
+            self.sort()
+            insert_idx = len(self.data['seed_ratios']) - 1
+            return insert_idx
 
     def reorder_data(self, idx_to_move, destination):
         self.data['seed_ratios'].insert(destination, self.data['seed_ratios'].pop(idx_to_move))

@@ -6,11 +6,25 @@ from viatools.via_resource import ViaResource, ViaResourceSet
 
 class Osc3Quantization(ViaResource):
 
-    def add_chord(self, chord):
-        self.data['chords'].append(chord)
+    def add_chord(self, chord, idx=None):
+        if idx:
+            self.data['chords'].insert(chord, idx)
+            return idx
+        else:
+            self.data['chords'].append(chord)
+            insert_idx = len(self.data['chords']) - 1
+            return insert_idx
 
     def remove_chord(self, index):
-        self.data['chords'].pop(index)
+        return self.data['chords'].pop(index)
+
+    def reorder_chords(self, idx_to_move, destination):
+        self.data['chords'].insert(destination, self.data['chords'].pop(idx_to_move))
+
+    def clear_chords(self):
+        old_data = self.data['chords']
+        self.data['chords'] = [[0,0]]
+        return old_data
 
     def add_note(self, note):
         if note not in self.data['notes']:
