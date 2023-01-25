@@ -14,9 +14,24 @@ class GateseqPattern(ViaResource):
         self.pad_to_length()
         super().save(json_path)
 
-    def add_data(self, recipe):
-        self.data['data'].append(recipe)
-        self.sort()
+    def add_data(self, recipe, idx=None):
+        if idx:
+            self.data['data'].insert(idx, chord)
+        else:
+            self.data['data'].append(recipe)
+            self.sort()
+            insert_idx = len(self.data['data']) - 1
+            return insert_idx
+
+    def clear_data(self):
+        old_data = self.data['data']
+        self.data['data'] = [[1,1]]
+        return old_data
+
+    def reload_data(self, data_copy):
+        self.data['data'] = []
+        for ratio in data_copy:
+            self.data['data'].append(ratio)
 
     def remove_data(self, index):
         self.data['data'].pop(index)
@@ -24,6 +39,9 @@ class GateseqPattern(ViaResource):
     def get_length(self, seq_idx):
         self.bake()
         return len(self.baked)
+
+    def get_recipe(self, seq_idx):
+        return self.data['data'][seq_idx]
 
     def update_length(self, seq_idx, length):
         if self.is_euclidean_recipe(self.data['data'][seq_idx]):
@@ -34,15 +52,23 @@ class GateseqPattern(ViaResource):
         else:
             for i in range(current_length, length):
                 self.data['data'][seq_idx].append(False)
+        save_me = self.data['data'][seq_idx]
         #TODO sorted/unsorted
         self.sort()
+        return self.data['data'].index(save_me)
 
     def update_step(self, seq_idx, step_idx, state):
         if self.is_euclidean_recipe(self.data['data'][seq_idx]):
             print("Converting!")
             self.data['data'][seq_idx] = self.euclidean_to_bool(self.data['data'][seq_idx])
         self.data['data'][seq_idx][step_idx] = state
+        save_me = self.data['data'][seq_idx]
         #TODO sorted/unsorted
+        self.sort()
+        return self.data['data'].index(save_me)
+
+    def reload_recipe(self, seq_idx, recipe):
+        self.data['data'][seq_idx] = recipe
         self.sort()
 
     def bake(self):

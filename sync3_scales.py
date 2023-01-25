@@ -19,7 +19,7 @@ class Sync3Scale(ViaResource):
     # reciple: [numerator, denominator]
     def add_data(self, recipe, idx=None):
         if idx:
-            self.data['seed_ratios'].insert(idx, chord)
+            self.data['seed_ratios'].insert(idx, recipe)
         else:
             self.data['seed_ratios'].append(recipe)
             self.sort()

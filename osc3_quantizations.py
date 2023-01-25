@@ -8,7 +8,7 @@ class Osc3Quantization(ViaResource):
 
     def add_chord(self, chord, idx=None):
         if idx:
-            self.data['chords'].insert(chord, idx)
+            self.data['chords'].insert(idx, chord)
             return idx
         else:
             self.data['chords'].append(chord)
