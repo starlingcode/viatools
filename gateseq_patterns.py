@@ -59,7 +59,6 @@ class GateseqPattern(ViaResource):
 
     def update_step(self, seq_idx, step_idx, state):
         if self.is_euclidean_recipe(self.data['data'][seq_idx]):
-            print("Converting!")
             self.data['data'][seq_idx] = self.euclidean_to_bool(self.data['data'][seq_idx])
         self.data['data'][seq_idx][step_idx] = state
         save_me = self.data['data'][seq_idx]

@@ -68,6 +68,9 @@ class ViaResourceSet(ViaResource):
     def load_resource(self, slug):
         return self.resource_type(self.resource_dir + slug + '.json')
 
+    def restore_resource(self, idx):
+        self.resources[idx]=self.load_resource(self.data['slug_list'][idx])
+
     def replace_resource(self, slug, index):
         self.resources[index] = self.load_resource(slug)
         self.data['slug_list'][index] = slug
