@@ -40,6 +40,7 @@ class ViaResourceSet(ViaResource):
 
     def __init__(self, resource_type, slug, resource_set_dir, resource_dir):
         super().__init__(resource_set_dir + slug + '.json')
+        self.get_clean_set()
         self.resource_type = resource_type
         self.resource_dir = resource_dir
         self.resource_set_dir = resource_set_dir
@@ -51,11 +52,29 @@ class ViaResourceSet(ViaResource):
         self.data['description'] = description
         self.save(self.resource_set_dir + slug + '.json')
         self.slug = slug 
+        self.get_clean_set()
 
     def load_set(self, slug):
         self.load(self.resource_set_dir + slug + '.json')
+        self.get_clean_set()
         self.slug = slug
         self.init_resources()
+
+    def is_clean(self):
+        if self.data['slug_list'] == self.clean_set:
+            return True
+        else:
+            return False
+
+    def restore(self):
+        self.data['slug_list'] = []
+        for slug in self.clean_set:
+            self.data['slug_list'].append(slug)
+
+    def get_clean_set(self):
+        self.clean_set = []
+        for slug in self.data['slug_list']:
+            self.clean_set.append(slug)
 
     def init_resources(self):
         self.resources = []

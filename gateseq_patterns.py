@@ -16,7 +16,7 @@ class GateseqPattern(ViaResource):
 
     def add_data(self, recipe, idx=None):
         if idx:
-            self.data['data'].insert(idx, chord)
+            self.data['data'].insert(idx, recipe)
         else:
             self.data['data'].append(recipe)
             self.sort()
