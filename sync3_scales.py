@@ -239,7 +239,9 @@ class Sync3ScaleSet(ViaResourceSet):
         for resource in self.resources:
             resource.bake()
 
-    def pack_binary(self, write_dir=None, title=self.slug):
+    def pack_binary(self, write_dir=None, title=None):
+        if not title:
+            title=self.slug
         if not write_dir:
             write_dir = self.output_dir
         sz = self.scale_size

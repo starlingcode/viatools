@@ -71,6 +71,7 @@ class GateseqPattern(ViaResource):
         self.sort()
 
     def bake(self):
+        self.pad_to_length()
         self.baked = []
         for recipe in self.data['data']:
             self.baked.append(self.expand_sequence(recipe))
@@ -101,7 +102,7 @@ class GateseqPattern(ViaResource):
                 new_data.append(self.data['data'][to_add])
                 if notch >= relative_indices[to_add]:
                     to_add += 1
-            self.data['data'] = new_data
+            self.data['expanded_data'] = new_data
 
     def get_name(self, idx):
         sequence = self.data['data'][idx]
@@ -196,7 +197,9 @@ class GateseqPatternSet(ViaResourceSet):
         self.output_dir = resource_dir + 'binaries/'            
         self.pattern_size = 16
 
-    def pack_binary(self, write_dir=None, title=self.slug): 
+    def pack_binary(self, write_dir=None, title=None):
+        if not title:
+            title=self.slug 
         if not write_dir:
             write_dir = self.output_dir
         packer = struct.Struct('<%dI%dI' % (self.pattern_size, self.pattern_size))

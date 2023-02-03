@@ -124,7 +124,9 @@ class WavetableSet(ViaResourceSet):
     def get_memory_footprint(self):
         return(self.prepare_binary()[2])
 
-    def pack_binary(self, write_dir=None, title=self.slug): 
+    def pack_binary(self, write_dir=None, title=None):
+        if not title:
+            title=self.slug 
         if not write_dir:
             write_dir = self.output_dir
 

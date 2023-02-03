@@ -57,7 +57,7 @@ class Osc3Quantization(ViaResource):
                 new_data.append(self.data['chords'][to_add])
                 if notch >= relative_indices[to_add]:
                     to_add += 1
-            self.data['chords'] = new_data
+            self.data['expanded_chords'] = new_data
 
     def expand_scale(self, data):
         baked = {}
@@ -108,7 +108,7 @@ class Osc3Quantization(ViaResource):
         baked['intervals'] = intervals
 
         chords = []
-        for chord in data['chords']:
+        for chord in data['expanded_chords']:
             chords.append(chord[0])
             chords.append(chord[1])
         # Double the last chord
@@ -129,7 +129,9 @@ class Osc3QuantizationSet(ViaResourceSet):
         for resource in self.resources:
             resource.bake()
 
-    def pack_binary(self, write_dir=None, title=self.slug):
+    def pack_binary(self, write_dir=None, title=None):
+        if not title:
+            title=self.slug
         if not write_dir:
             write_dir = self.output_dir
         packer = struct.Struct('<%dI%dI%dI%dI' % (128, 37, 12, 34))
