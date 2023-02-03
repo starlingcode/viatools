@@ -129,7 +129,7 @@ class Osc3QuantizationSet(ViaResourceSet):
         for resource in self.resources:
             resource.bake()
 
-    def pack_binary(self, write_dir=None):
+    def pack_binary(self, write_dir=None, title=self.slug):
         if not write_dir:
             write_dir = self.output_dir
         packer = struct.Struct('<%dI%dI%dI%dI' % (128, 37, 12, 34))
@@ -148,7 +148,7 @@ class Osc3QuantizationSet(ViaResourceSet):
                 pack.append(number & 0xFFFFFFFF)
             compiled_structs.append(packer.pack(*pack))
 
-        resource_path = write_dir + self.slug + '.osc3'
+        resource_path = write_dir + title + '.osc3'
 
         with open(resource_path, 'wb') as outfile:
             for chunk in compiled_structs:

@@ -239,7 +239,7 @@ class Sync3ScaleSet(ViaResourceSet):
         for resource in self.resources:
             resource.bake()
 
-    def pack_binary(self, write_dir=None):
+    def pack_binary(self, write_dir=None, title=self.slug):
         if not write_dir:
             write_dir = self.output_dir
         sz = self.scale_size
@@ -260,7 +260,7 @@ class Sync3ScaleSet(ViaResourceSet):
             pack.append(0)
             compiled_structs.append(packer.pack(*pack))
 
-        resource_path = write_dir + self.slug + '.sync3'
+        resource_path = write_dir + title + '.sync3'
 
         with open(resource_path, 'wb') as outfile:
             for chunk in compiled_structs:

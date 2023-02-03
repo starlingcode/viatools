@@ -124,13 +124,13 @@ class WavetableSet(ViaResourceSet):
     def get_memory_footprint(self):
         return(self.prepare_binary()[2])
 
-    def pack_binary(self, write_dir=None): 
+    def pack_binary(self, write_dir=None, title=self.slug): 
         if not write_dir:
             write_dir = self.output_dir
 
         compiled_structs, compiled_slopes, outsize = self.prepare_binary()
         
-        resource_path = write_dir + self.slug + '.' + self.output_dir.split('/')[-2] + 'tables'
+        resource_path = write_dir + title + '.' + self.output_dir.split('/')[-2] + 'tables'
 
         with open(resource_path, 'wb') as outfile:
             for chunk in compiled_structs + compiled_slopes:
