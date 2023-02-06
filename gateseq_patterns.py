@@ -7,6 +7,10 @@ class GateseqPattern(ViaResource):
         self.pattern_size = 16
         if not super().load(json_path):
             return False
+        self.sorted = True
+        if 'sorted' in self.data:
+            if self.data['sorted'] is False:
+                self.sorted = False
         self.sort()
         return True
 
@@ -28,6 +32,9 @@ class GateseqPattern(ViaResource):
         self.data['data'] = [[1,1]]
         return old_data
 
+    def reorder_data(self, idx_to_move, destination):
+        self.data['data'].insert(destination, self.data['data'].pop(idx_to_move))
+
     def reload_data(self, data_copy):
         self.data['data'] = []
         for ratio in data_copy:
@@ -39,6 +46,12 @@ class GateseqPattern(ViaResource):
     def get_length(self, seq_idx):
         self.bake()
         return len(self.baked)
+
+    def get_data(self):
+        data = []
+        for recipe in self.data['data']:
+            data.append(recipe)
+        return data
 
     def get_recipe(self, seq_idx):
         return self.data['data'][seq_idx]
@@ -76,8 +89,18 @@ class GateseqPattern(ViaResource):
         for recipe in self.data['data']:
             self.baked.append(self.expand_sequence(recipe))
 
+    def update_sorted(self, is_sorted):
+        self.data['sorted'] = is_sorted
+        self.sorted = is_sorted
+        old_order = []
+        for pattern in self.data['data']:
+            old_order.append(pattern)
+        self.sort()
+        return old_order
+
     def sort(self):
-        self.data['data'].sort(key=self.get_density)
+        if self.sorted:
+            self.data['data'].sort(key=self.get_density)
 
     def get_density(self, recipe):
         pattern = self.expand_sequence(recipe)
