@@ -25,6 +25,9 @@ class Wavetable(ViaResource):
     # recipe is [attack_table_slug, release_table_slug]
     def update_data(self, recipe):
         self.data['slopes'] = recipe
+
+    def get_memory_footprint(self):
+        return(len(self.expand()) * 514 * 2) # 514 samples per waveform in table, two bytes per sample
     
     def expand(self):
 
