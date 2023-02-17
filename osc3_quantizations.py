@@ -40,6 +40,8 @@ class Osc3Quantization(ViaResource):
 
     def pad_to_length(self):
 
+        self.data['expanded_chords'] = []
+
         if self.data['chords'] == []:
             self.data['chords'] = [[0,0]]
 
@@ -51,13 +53,14 @@ class Osc3Quantization(ViaResource):
                 rel = idx * (out_size/len(self.data['chords']))
                 rel += (out_size - 1) - (len(self.data['chords']) - 1) * (out_size/len(self.data['chords']))
                 relative_indices.append(rel)
-            new_data = []
             to_add = 0
             for notch in range(0, int(out_size)):
-                new_data.append(self.data['chords'][to_add])
+                self.data['expanded_chords'].append(self.data['chords'][to_add])
                 if notch >= relative_indices[to_add]:
                     to_add += 1
-            self.data['expanded_chords'] = new_data
+        else:
+            for chord in self.data['chords']:
+                self.data['expanded_chords'].append(chord)
 
     def expand_scale(self, data):
         baked = {}

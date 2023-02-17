@@ -108,6 +108,8 @@ class GateseqPattern(ViaResource):
 
     def pad_to_length(self):
 
+        self.data['expanded_data'] = []
+
         if self.data['data'] == []:
             self.data['data'] = [[0,1],[1,1]]
 
@@ -119,13 +121,14 @@ class GateseqPattern(ViaResource):
                 rel = idx * (out_size/len(self.data['data']))
                 rel += (out_size - 1) - (len(self.data['data']) - 1) * (out_size/len(self.data['data']))
                 relative_indices.append(rel)
-            new_data = []
             to_add = 0
             for notch in range(0, int(out_size)):
-                new_data.append(self.data['data'][to_add])
+                self.data['expanded_data'].append(self.data['data'][to_add])
                 if notch >= relative_indices[to_add]:
                     to_add += 1
-            self.data['expanded_data'] = new_data
+        else:
+            for pattern in self.data['data']:
+                self.data['expanded_data'].append(pattern)
 
     def get_name(self, idx):
         sequence = self.data['data'][idx]
