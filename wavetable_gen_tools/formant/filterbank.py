@@ -92,7 +92,7 @@ name = "fbank9"
 OldRange = (max(spread1) - min(spread1))
 
 for each spread in spread1:
-	newspread
+    newspread
   
 NewRange = (NewMax - NewMin)  
 NewValue = (((OldValue - OldMin) * NewRange) / OldRange) + NewMin
@@ -185,45 +185,45 @@ text_file = open("comb1.txt", "a")
 
 limits = [24, 48]
 for limit in limits:
-	for j in xrange(1, limit+1):
-		for i in xrange(1,int(j+1)):
-   		 	harm = np.cos(map(lambda x: x*w0T*float(i), n))
-    			sig = sig + harm
-		print(i)
-		sig = sig/np.max(sig)    
-	speech = signal.filtfilt([1],A,sig);
-#		plt.plot(n[0:256], sig[0:256])
-	out = speech[4864:5121]
-	#plt.plot(out[0:257])
-	out = np.add(out, abs(np.min(out)))
-	out = np.multiply(out, 1/(np.max(out)))
-	out = np.multiply(out, -1)
-	out = out + 1
-	out = np.multiply(out, 32767)
-	plt.plot(out[0:257])
-	out = np.int0(out)
+    for j in xrange(1, limit+1):
+        for i in xrange(1,int(j+1)):
+                harm = np.cos(map(lambda x: x*w0T*float(i), n))
+                sig = sig + harm
+        print(i)
+        sig = sig/np.max(sig)    
+    speech = signal.filtfilt([1],A,sig);
+#        plt.plot(n[0:256], sig[0:256])
+    out = speech[4864:5121]
+    #plt.plot(out[0:257])
+    out = np.add(out, abs(np.min(out)))
+    out = np.multiply(out, 1/(np.max(out)))
+    out = np.multiply(out, -1)
+    out = out + 1
+    out = np.multiply(out, 32767)
+    plt.plot(out[0:257])
+    out = np.int0(out)
 # symmetric
-	text_file.write('static const uint16_t ')
-	text_file.write(name)
-	text_file.write(str(limit))
-	text_file.write('Atk')
-	text_file.write('[129] = {')
-	for x in xrange(0, 129):
-        	text_file.write(str(out[x]))
-        	if x != 128:
-               		text_file.write(', ')
-	text_file.write('};\n')
+    text_file.write('static const uint16_t ')
+    text_file.write(name)
+    text_file.write(str(limit))
+    text_file.write('Atk')
+    text_file.write('[129] = {')
+    for x in xrange(0, 129):
+            text_file.write(str(out[x]))
+            if x != 128:
+                       text_file.write(', ')
+    text_file.write('};\n')
 """# decay
-	text_file.write('static const uint16_t ')
-	text_file.write(name)
-	text_file.write(str(limit))
-	text_file.write('Rls')
-	text_file.write('[129] = {')
-	for x in reversed(xrange(128, 257)):
-       		text_file.write(str(out[x]))
-       		if x != 128:
-               		text_file.write(', ')
-	text_file.write('};\n')
+    text_file.write('static const uint16_t ')
+    text_file.write(name)
+    text_file.write(str(limit))
+    text_file.write('Rls')
+    text_file.write('[129] = {')
+    for x in reversed(xrange(128, 257)):
+               text_file.write(str(out[x]))
+               if x != 128:
+                       text_file.write(', ')
+    text_file.write('};\n')
 """
 plt.show()
 

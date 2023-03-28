@@ -139,11 +139,11 @@ n = (map(float,range(0,(nsamps))))
 # Synthesize bandlimited impulse train
 
 for j in xrange(1, nharm+1):
-	for i in xrange(1,int(j+1)):
- 	 	harm = np.cos(map(lambda x: x*w0T*float(i), n))
-  		sig = sig + harm
-	print(i)
-	sig = sig/np.max(sig)
+    for i in xrange(1,int(j+1)):
+          harm = np.cos(map(lambda x: x*w0T*float(i), n))
+          sig = sig + harm
+    print(i)
+    sig = sig/np.max(sig)
 sig = (sig * -1) + 1
 speech = np.zeros(nsamps)
 speech = signal.lfilter([1],A,sig);
@@ -169,7 +169,7 @@ text_file.write(name + "Atk, ")
 for x in xrange(0, table_size):
         text_file.write(str(out[x]))
         if x != table_size:
-               	text_file.write(', ')
+                   text_file.write(', ')
 
 text_file.write('\n')
 # decay
@@ -177,9 +177,9 @@ text_file.write('\n')
 text_file.write(name + "Rls, ")
 
 for x in reversed(xrange(table_size, output_samples + 1)):
-       	text_file.write(str(out[x]))
-       	if x != table_size:
-               	text_file.write(', ')
+           text_file.write(str(out[x]))
+           if x != table_size:
+                   text_file.write(', ')
 
 text_file.write('\n')
 
