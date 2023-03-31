@@ -23,8 +23,8 @@ class Sync3Scale(ViaResource):
             self.sort()
         else:
             self.data['seed_ratios'].append(recipe)
-            self.sort()
-            insert_idx = len(self.data['seed_ratios']) - 1
+            insert_idx = self.sort(recipe)
+            self.reorder_data(len(self.data['seed_ratios']) - 1, insert_idx)
             return insert_idx
 
     def reorder_data(self, idx_to_move, destination):
@@ -87,12 +87,14 @@ class Sync3Scale(ViaResource):
     def bake(self):
         self.baked = self.expand_scale(self.data)
 
-    def sort(self):
+    def sort(self, recipe=None):
         self.data['sorted_ratios'] = []
         for ratio in self.data['seed_ratios']:
             self.data['sorted_ratios'].append(ratio)
         if self.sorted:
-            self.data['seed_ratios'].sort(key=self.get_decimal)
+            self.data['sorted_ratios'].sort(key=self.get_decimal)
+        if recipe:
+            return self.data['sorted_ratios'].index(recipe)
     
     def get_decimal(self, ratio):
         return ratio[0]/ratio[1]
