@@ -99,8 +99,11 @@ class GateseqPattern(ViaResource):
         return old_order
 
     def sort(self):
+        self.data['sorted_patterns'] = []
+        for ratio in self.data['data']:
+            self.data['sorted_patterns'].append(ratio)
         if self.sorted:
-            self.data['data'].sort(key=self.get_density)
+            self.data['sorted_patterns'].sort(key=self.get_decimal)
 
     def get_density(self, recipe):
         pattern = self.expand_sequence(recipe)
@@ -110,8 +113,8 @@ class GateseqPattern(ViaResource):
 
         self.data['expanded_data'] = []
 
-        if self.data['data'] == []:
-            self.data['data'] = [[0,1],[1,1]]
+        if self.data['sorted_patterns'] == []:
+            self.data['sorted_patterns'] = [[0,1],[1,1]]
 
         if len(self.data['data']) < self.pattern_size:
             out_size = self.pattern_size

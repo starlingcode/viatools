@@ -20,6 +20,7 @@ class Sync3Scale(ViaResource):
     def add_data(self, recipe, idx=None):
         if idx:
             self.data['seed_ratios'].insert(idx, recipe)
+            self.sort()
         else:
             self.data['seed_ratios'].append(recipe)
             self.sort()
@@ -28,23 +29,28 @@ class Sync3Scale(ViaResource):
 
     def reorder_data(self, idx_to_move, destination):
         self.data['seed_ratios'].insert(destination, self.data['seed_ratios'].pop(idx_to_move))
+        self.sort()
 
     def remove_data(self, index):
-        return self.data['seed_ratios'].pop(index)
+        removed_idx = self.data['seed_ratios'].pop(index)
+        self.sort()
+        return removed_idx
 
     def clear_data(self):
         old_data = self.data['seed_ratios']
         self.data['seed_ratios'] = [[1,1]]
+        self.sort()
         return old_data
 
     def reload_data(self, data_copy):
         self.data['seed_ratios'] = []
         for ratio in data_copy:
             self.data['seed_ratios'].append(ratio)
+        self.sort()
 
     def get_data(self):
         data = []
-        for ratio in self.data['seed_ratios']:
+        for ratio in self.data['sorted_ratios']:
             data.append(ratio)
         return data
 
@@ -82,6 +88,9 @@ class Sync3Scale(ViaResource):
         self.baked = self.expand_scale(self.data)
 
     def sort(self):
+        self.data['sorted_ratios'] = []
+        for ratio in self.data['seed_ratios']:
+            self.data['sorted_ratios'].append(ratio)
         if self.sorted:
             self.data['seed_ratios'].sort(key=self.get_decimal)
     
@@ -92,7 +101,7 @@ class Sync3Scale(ViaResource):
 
         self.scale_size = 32
 
-        ratios = recipe['seed_ratios']
+        ratios = recipe['sorted_ratios']
         mode = recipe['fill_method']
 
         baked = {}
