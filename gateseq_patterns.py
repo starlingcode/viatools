@@ -99,14 +99,19 @@ class GateseqPattern(ViaResource):
         return old_order
 
     def sort(self):
-        self.data['sorted_patterns'] = []
-        for ratio in self.data['data']:
-            self.data['sorted_patterns'].append(ratio)
+        pattern_sort = []
+        for idx, ratio in enumerate(self.data['data']):
+            pattern_sort.append((ratio, idx))
         if self.sorted:
-            self.data['sorted_patterns'].sort(key=self.get_decimal)
+            pattern_sort.sort(key=self.get_density)
+        self.data['sorted_patterns'] = []
+        self.data['unsorted_indices'] = []
+        for pattern in pattern_sort:
+            self.data['sorted_patterns'].append(pattern[0])
+            self.data['unsorted_indices'].append(pattern[1])
 
     def get_density(self, recipe):
-        pattern = self.expand_sequence(recipe)
+        pattern = self.expand_sequence(recipe[0])
         return pattern.count(1)/len(pattern)
 
     def pad_to_length(self):
@@ -116,25 +121,25 @@ class GateseqPattern(ViaResource):
         if self.data['sorted_patterns'] == []:
             self.data['sorted_patterns'] = [[0,1],[1,1]]
 
-        if len(self.data['data']) < self.pattern_size:
+        if len(self.data['sorted_patterns']) < self.pattern_size:
             out_size = self.pattern_size
             #TODO copied from sync3_scales.py 
             relative_indices = []
-            for idx in range(0, len(self.data['data'])):
-                rel = idx * (out_size/len(self.data['data']))
-                rel += (out_size - 1) - (len(self.data['data']) - 1) * (out_size/len(self.data['data']))
+            for idx in range(0, len(self.data['sorted_patterns'])):
+                rel = idx * (out_size/len(self.data['sorted_patterns']))
+                rel += (out_size - 1) - (len(self.data['sorted_patterns']) - 1) * (out_size/len(self.data['sorted_patterns']))
                 relative_indices.append(rel)
             to_add = 0
             for notch in range(0, int(out_size)):
-                self.data['expanded_data'].append(self.data['data'][to_add])
+                self.data['expanded_data'].append(self.data['sorted_patterns'][to_add])
                 if notch >= relative_indices[to_add]:
                     to_add += 1
         else:
-            for pattern in self.data['data']:
+            for pattern in self.data['sorted_patterns']:
                 self.data['expanded_data'].append(pattern)
 
     def get_name(self, idx):
-        sequence = self.data['data'][idx]
+        sequence = self.data['sorted_patterns'][idx]
         if self.is_euclidean_recipe(sequence):
             return '%s/%s' % (sequence[0], sequence[1])
         else:
