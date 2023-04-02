@@ -21,6 +21,7 @@ class GateseqPattern(ViaResource):
     def add_data(self, recipe, idx=None):
         if idx:
             self.data['data'].insert(idx, recipe)
+            self.sort()
         else:
             self.data['data'].append(recipe)
             self.sort()
@@ -30,18 +31,22 @@ class GateseqPattern(ViaResource):
     def clear_data(self):
         old_data = self.data['data']
         self.data['data'] = [[1,1]]
+        self.sort()
         return old_data
 
     def reorder_data(self, idx_to_move, destination):
         self.data['data'].insert(destination, self.data['data'].pop(idx_to_move))
+        self.sort()
 
     def reload_data(self, data_copy):
         self.data['data'] = []
         for ratio in data_copy:
             self.data['data'].append(ratio)
+        self.sort()
 
     def remove_data(self, index):
         self.data['data'].pop(index)
+        self.sort()
 
     def get_length(self, seq_idx):
         self.bake()
